@@ -1,6 +1,5 @@
-//
-// Created by shimon on 11/2/17.
-//
+/*shimon cohen*/
+/*315383133*/
 
 #include "Point.h"
 

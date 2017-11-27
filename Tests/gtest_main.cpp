@@ -1,7 +1,6 @@
 // 315383133 Shimon Cohen
 
 #include "gtest/gtest.h"
-#include "BoardTest.h"
 
 GTEST_API_ int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);

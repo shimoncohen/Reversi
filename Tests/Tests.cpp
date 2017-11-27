@@ -1,4 +1,5 @@
-
+/*shimon cohen*/
+/*315383133*/
 
 #include "gtest/gtest.h"
 #include "Game.h"
@@ -14,6 +15,7 @@ TEST(ReversiTests, TestingConsoleBoard__Test) {
     Board *board = new ConsoleBoard(SIZE);
     EXPECT_EQ('o', board->checkCell(2,2));
     EXPECT_NE('x', board->checkCell(2,2));
+    delete board;
 }
 
 /*
@@ -106,4 +108,5 @@ TEST(ReversiTests, TestingAIPlayer__Test) {
     delete aiMove;
     delete player;
     delete board;
+    delete gameLogic;
 }
