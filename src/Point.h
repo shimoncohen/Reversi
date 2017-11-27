@@ -42,6 +42,13 @@ public:
      * operation: returnes the points y value.
     */
     int getY();
+    /*
+	 * function name: operator ==.
+	 * input: two Point objects.
+	 * output: a boolean value indicating if Points are equal.
+     * operation: returns 1 if points are equal, 0 otherwise.
+    */
+    friend bool operator ==(Point &point1, Point &point2);
 };
 
 

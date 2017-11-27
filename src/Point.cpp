@@ -23,3 +23,10 @@ int Point::getX() {
 int Point::getY() {
     return y;
 }
+
+bool operator ==(Point &board1, Point &board2) {
+    if(board1.getX() == board2.getX() && board1.getY() == board2.getY()) {
+        return true;
+    }
+    return false;
+}

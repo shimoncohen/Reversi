@@ -1,6 +1,6 @@
 #ifndef EX3_BOARDTEST_H
 #define EX3_BOARDTEST_H
 
-#include "Game.h"
+#include "ConsoleBoard.h"
 
 #endif //EX3_BOARDTEST_H

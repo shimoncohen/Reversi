@@ -2,14 +2,9 @@
 /*315383133*/
 
 #include "AIPlayer.h"
-#include <stdlib.h>
 
 AIPlayer::AIPlayer(type type1) {
     playerType = type1;
-}
-
-AIPlayer::~AIPlayer() {
-
 }
 
 int* AIPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves) {
@@ -25,12 +20,6 @@ int* AIPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves
             myMove[1] = moves[i].getY();
         }
     }
-//    if(myMove[0] == 0 || myMove[1] == 0) {
-//        myMove[0] == -1;
-//        myMove[1] == -1;
-//    }
-    // print AI's move.
-    cout << myMove[0] << " " << myMove[1] << endl;
     return myMove;
 }
 

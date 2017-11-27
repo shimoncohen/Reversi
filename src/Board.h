@@ -49,7 +49,7 @@ public:
 	friend ostream &operator <<(ostream &out, Board &board1);
     /*
 	 * function name: operator ==.
-	 * input: a board object.
+	 * input: two board object.
 	 * output: a boolean value indicating if boards are equal.
      * operation: returns 1 if boards are equal, 0 otherwise.
     */
