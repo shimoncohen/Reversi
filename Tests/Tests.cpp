@@ -12,7 +12,7 @@ TEST(ReversiTests, TestingConsoleBoard__Test) {
     /*
      * Testing ConsoleBoard.
      */
-    Board *board = new ConsoleBoard(SIZE);
+    Board *board = new Board(SIZE);
     EXPECT_EQ('o', board->checkCell(2,2));
     EXPECT_NE('x', board->checkCell(2,2));
     delete board;
@@ -25,7 +25,7 @@ TEST(ReversiTests, TestingGameLogic__Test) {
     /*
      * Testing GameLogics moves.
      */
-    Board *board = new ConsoleBoard(SIZE);
+    Board *board = new Board(SIZE);
     GameLogic *gameLogic = new StandartGameLogic();
     vector<Point> correctMoves;
     Point *move = new Point(1, 2);
@@ -86,7 +86,7 @@ TEST(ReversiTests, TestingAIPlayer__Test) {
      * testing AIPlayer.
      */
     // check if AIPlayer chooses correct option in a given situation.
-    Board *board = new ConsoleBoard(SIZE);
+    Board *board = new Board(SIZE);
     GameLogic *gameLogic = new StandartGameLogic();
     vector<Point> correctMoves;
     vector<Point> availableMoves;
