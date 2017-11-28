@@ -7,9 +7,12 @@ AIPlayer::AIPlayer(type type1) {
     playerType = type1;
 }
 
+AIPlayer::~AIPlayer() {
+
+}
+
 int* AIPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves) {
-    Board *simulator = new ConsoleBoard(board);
-    //string *finalDecision = new string[2];
+    Board *simulator = new Board(board);
     int i = 0, minGrade = simulator->getSize() * simulator->getSize(), currentMinGrade;
     int *myMove = new int[2];
     for(i; i < moves.size(); i++) {
@@ -20,12 +23,13 @@ int* AIPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves
             myMove[1] = moves[i].getY();
         }
     }
+    delete simulator;
     return myMove;
 }
 
 int AIPlayer::checkMove(GameLogic &gameLogic, Board &board, Point point) {
-    Board *opponentSimulator = new ConsoleBoard(board);
-    int i = 0, minGrade = opponentSimulator->getSize() * opponentSimulator->getSize(), currentMinGrade;
+    Board *opponentSimulator = new Board(board);
+    int minGrade = opponentSimulator->getSize() * opponentSimulator->getSize(), currentMinGrade;
     vector<Point> opponentsMoves;
     gameLogic.changeTiles(playerType, point.getX(), point.getY(), *opponentSimulator);
     if(playerType == blackPlayer) {
@@ -34,61 +38,44 @@ int AIPlayer::checkMove(GameLogic &gameLogic, Board &board, Point point) {
         opponentsMoves = gameLogic.availableMoves(*opponentSimulator, blackPlayer);
     }
     if(opponentsMoves.size() == 0) {
+        delete opponentSimulator;
         return -1;
     }
-    for(i; i < opponentsMoves.size(); i++) {
+    for(int i = 0; i < opponentsMoves.size(); i++) {
         currentMinGrade = gradeMove(gameLogic, board, opponentsMoves[i]);
         if(minGrade > currentMinGrade) {
             minGrade = currentMinGrade;
         }
     }
+    delete opponentSimulator;
     return minGrade;
 }
 
-//int AIPlayer::checkOpponentsMove(GameLogic &gameLogic, Board &board, Point move) {
-//    Board *b = new ConsoleBoard(board);
-//    vector<Point> playerMoves;
-//    int i = 0, minGrade = b->getSize() * b->getSize(), currentMinGrade;
-//    if(playerType == black) {
-//        gameLogic.changeTiles(whitePlayer, move.getX(), move.getY(), *b);
-//        playerMoves = gameLogic.availableMoves(*b, blackPlayer);
-//    } else if(playerType == white) {
-//        gameLogic.changeTiles(blackPlayer, move.getX(), move.getY(), *b);
-//        playerMoves = gameLogic.availableMoves(*b, whitePlayer);
-//    }
-//    for(i; i < playerMoves.size(); i++) {
-//        currentMinGrade = gradeMove(gameLogic, *b, playerMoves[i]);
-//        if(currentMinGrade < minGrade) {
-//            minGrade = currentMinGrade;
-//        }
-//    }
-//    return minGrade;
-//}
-
-int AIPlayer::gradeMove(GameLogic &gamLogic, Board &board, Point move) {
+int AIPlayer::gradeMove(GameLogic &gameLogic, Board &board, Point move) {
     //coping the board
-    Board *b = new ConsoleBoard(board);
+    Board *tempBoard = new Board(board);
     int countPlayer = 0, countOther = 0;
     ///making the move on the new board
-    gamLogic.changeTiles(playerType, move.getX(), move.getY(), *b);
+    gameLogic.changeTiles(playerType, move.getX(), move.getY(), *tempBoard);
     //counting the x's and the o's on the board
-    for(int i = 0; i < b->getSize(); i++) {
-        for(int j = 0; j < b->getSize(); j++) {
+    for(int i = 0; i < tempBoard->getSize(); i++) {
+        for(int j = 0; j < tempBoard->getSize(); j++) {
             if(playerType == blackPlayer) {
-                if(b->checkCell(i, j) == 'x') {
+                if(tempBoard->checkCell(i, j) == 'x') {
                     countPlayer++;
-                } else if(b->checkCell(i, j) == 'o') {
+                } else if(tempBoard->checkCell(i, j) == 'o') {
                     countOther++;
                 }
             } else if(playerType == whitePlayer) {
-                if(b->checkCell(i, j) == 'o') {
+                if(tempBoard->checkCell(i, j) == 'o') {
                     countPlayer++;
-                } else if(b->checkCell(i, j) == 'x') {
+                } else if(tempBoard->checkCell(i, j) == 'x') {
                     countOther++;
                 }
             }
         }
     }
-    //giving rate to the move
+    delete tempBoard;
+    //giving a grade to the move
     return countOther - countPlayer;
 }

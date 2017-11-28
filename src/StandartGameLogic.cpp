@@ -7,14 +7,18 @@
 void StandartGameLogic::changeTiles(type type, int x, int y, Board &board) {
     char o;
     if(type == blackPlayer) {
-        o = 'x';//players piece, to search for valid flips.
+        //players piece, to search for valid flips.
+        o = 'x';
     } else {
         o = 'o';
     }
-    for(int i = -1; i <= 1; i++) {//go over the board cells.
+    //go over the board cells.
+    for(int i = -1; i <= 1; i++) {
         for(int k = -1; k <= 1; k++) {
-            if ((i != 0 || k != 0) && validMove(board, x, y, i, k, o, 0)) {//if the cell is a valid move.
-                flipTiles(o, x + i, y + k, i, k, board);//flip all of the tiles for each valid move.
+            //if the cell is a valid move.
+            if ((i != 0 || k != 0) && validMove(board, x, y, i, k, o, 0)) {
+                //flip all of the tiles for each valid move.
+                flipTiles(o, x + i, y + k, i, k, board);
             }
         }
     }
@@ -47,7 +51,8 @@ vector<Point> StandartGameLogic::availableMoves(Board &board, type type1) {
                     }
                 }
                 if(exists) {
-                    options.push_back(Point(i + 1, k + 1));//add the cell as a valid move.
+                    //add the cell as a valid move.
+                    options.push_back(Point(i + 1, k + 1));
                 }
             }
         }

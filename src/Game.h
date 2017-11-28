@@ -10,7 +10,7 @@
 #include "Point.h"
 #include "HumanPlayer.h"
 #include "AIPlayer.h"
-#include "ConsoleBoard.h"
+#include "Board.h"
 
 /*
  * A game played.

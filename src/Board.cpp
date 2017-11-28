@@ -1,9 +1,9 @@
 /*shimon cohen*/
 /*315383133*/
 
-#include "ConsoleBoard.h"
+#include "Board.h"
 
-ConsoleBoard::ConsoleBoard(int size) {
+Board::Board(int size) {
     boardSize = size;
     board = new boardChar*[size];
     for(int i = 0; i < size; i++) {
@@ -20,17 +20,17 @@ ConsoleBoard::ConsoleBoard(int size) {
     board[size / 2][size / 2] = white;
 }
 
-ConsoleBoard::ConsoleBoard(Board &board1) {
+Board::Board(Board &board1) {
     boardSize = board1.getSize();
-    board = new boardChar*[boardSize];
-    for(int i = 0; i < boardSize; i++) {
+    board = new boardChar *[boardSize];
+    for (int i = 0; i < boardSize; i++) {
         board[i] = new boardChar[boardSize];
     }
-    for(int i = 0; i < boardSize; i++) {
-        for(int j = 0; j < boardSize; j++) {
-            if(board1.checkCell(i, j) == black) {
+    for (int i = 0; i < boardSize; i++) {
+        for (int j = 0; j < boardSize; j++) {
+            if (board1.checkCell(i, j) == black) {
                 board[i][j] = black;
-            } else if(board1.checkCell(i, j) == white) {
+            } else if (board1.checkCell(i, j) == white) {
                 board[i][j] = white;
             } else {
                 board[i][j] = space;
@@ -39,14 +39,14 @@ ConsoleBoard::ConsoleBoard(Board &board1) {
     }
 }
 
-ConsoleBoard::~ConsoleBoard() {
+Board::~Board() {
     for(int i = 0; i < boardSize; i++) {
         delete[] board[i];
     }
     delete[] board;
 }
 
-void ConsoleBoard::print() {
+void Board::print() {
     if(boardSize > 9) {
         cout << "  ";
     } else {
@@ -94,23 +94,23 @@ void ConsoleBoard::print() {
     }
 }
 
-int ConsoleBoard::getSize() {
+int Board::getSize() {
     return boardSize;
 }
 
-char ConsoleBoard::checkCell(const int x, const int y) {
-    if(x < 0 || x >= boardSize || y < 0 || y >= boardSize) {//if the cell is out of the boards bounds.
+char Board::checkCell(const int x, const int y) {
+    if (x < 0 || x >= boardSize || y < 0 || y >= boardSize) {//if the cell is out of the boards bounds.
         return space;
     }
-    if(board[x][y] == black) {
+    if (board[x][y] == black) {
         return 'x';
-    } else if(board[x][y] == white) {
+    } else if (board[x][y] == white) {
         return 'o';
     }
     return ' ';
 }
 
-void ConsoleBoard::putTile(const int x, const int y, const char type) {
+void Board::putTile(const int x, const int y, const char type) {
     if(type == 'x') {
         board[x][y] = black;
     } else if(type == 'o') {

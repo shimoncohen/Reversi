@@ -8,6 +8,10 @@ Point::Point(int x1, int y1) {
     y = y1;
 }
 
+Point::~Point() {
+
+}
+
 int* Point::getPoint() {
     int* temp = new int[2];
     temp[0] = x;

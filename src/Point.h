@@ -20,6 +20,13 @@ public:
     */
     Point(int x1, int y1);
     /*
+	 * function name: ~Point.
+	 * input: none.
+	 * output: none.
+     * operation: destructor.
+    */
+    ~Point();
+    /*
 	 * function name: getPoint.
 	 * input: none.
 	 * output: an array of ints.

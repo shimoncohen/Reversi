@@ -11,7 +11,7 @@ HumanPlayer::HumanPlayer(type type1) {
 }
 
 HumanPlayer::~HumanPlayer() {
-    
+
 }
 
 int* HumanPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves) {
@@ -45,7 +45,5 @@ int* HumanPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &mo
         choice[1] *= 10;
         choice[1] += temp2[i] - 48;
     }
-//    choice[0] = x;
-//    choice[1] = y;
     return choice;
 }

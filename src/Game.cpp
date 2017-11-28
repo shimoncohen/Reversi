@@ -5,7 +5,7 @@
 
 Game::Game(int boardSize, GameLogic* newGameLogic, Player* first, Player* second) {
     gameLogic = newGameLogic;
-    board = new ConsoleBoard(boardSize);
+    board = new Board(boardSize);
     firstPlayer = first;
     secondPlayer = second;
     turn = 0;
@@ -22,7 +22,8 @@ void Game::runGame() {
     vector<Point> options;
     doOneTurn(options);
     int blackPieces = 0, whitePieces = 0;
-    for(int i = 0; i < board->getSize(); i++) {//counts the black and white pieces on the board.
+    //counts the black and white pieces on the board.
+    for(int i = 0; i < board->getSize(); i++) {
         for(int k = 0; k < board->getSize(); k++) {
             if(board->checkCell(i, k) == 'x') {
                 blackPieces++;
@@ -31,7 +32,8 @@ void Game::runGame() {
             }
         }
     }
-    if(blackPieces > whitePieces) {//declares the winner depending by the amount of pieces each player has on the board.
+    //declares the winner depending by the amount of pieces each player has on the board.
+    if(blackPieces > whitePieces) {
         cout << "X wins!" << endl;
     } else if(whitePieces > blackPieces) {
         cout << "O wins!" << endl;
@@ -43,7 +45,8 @@ void Game::runGame() {
 void Game::doOneTurn(vector<Point> options) {
     bool noMoreTurns = false;
     Player *current;
-    while(true) {//runs the players turns untill there is a winner.
+    //runs the players turns untill there is a winner.
+    while(true) {
         string xTest, yTest;
         int x = 0, y = 0;
         int *temp;
@@ -54,7 +57,8 @@ void Game::doOneTurn(vector<Point> options) {
             options = gameLogic->availableMoves(*board, whitePlayer);
             current = secondPlayer;
         }
-        if (options.size() == 0) {//if the current player has no available moves.
+        //if the current player has no available moves.
+        if (options.size() == 0) {
             if(noMoreTurns) {
                 break;
             }
@@ -70,18 +74,21 @@ void Game::doOneTurn(vector<Point> options) {
             cout << "O: it's your move." << endl;
         }
         cout << "Your possible moves: ";
-        for (int k = 0; k < options.size(); k++) {//print all move options.
+        //print all move options.
+        for (int k = 0; k < options.size(); k++) {
             if(k != 0) {
                 cout << ",";
             }
             cout << "(" << options[k].getX() << "," << options[k].getY() << ")";
         }
         cout << endl << endl;
-        while (true) {//let the player make a move.
+        //let the player make a move.
+        while (true) {
             bool valid = true;
             cout << "Please enter your move row col: ";
-            Board *copyBoard = new ConsoleBoard(*board);
+            Board *copyBoard = new Board(*board);
             temp = current->makeMove(*gameLogic, *copyBoard, options);
+            delete copyBoard;
             x = temp[0];
             y = temp[1];
             if (x > 0 && y > 0 && x <= board->getSize() && y <= board->getSize()) {
@@ -97,7 +104,8 @@ void Game::doOneTurn(vector<Point> options) {
                 y = 0;
                 continue;
             }
-            if (valid) {//checks if the move was declared valid.
+            //checks if the move was declared valid.
+            if (valid) {
                 cout << "invalid move!" << endl << endl;
                 x = 0;
                 y = 0;
@@ -117,6 +125,8 @@ void Game::doOneTurn(vector<Point> options) {
             gameLogic->changeTiles(whitePlayer, x, y, *board);
             turn = 0;
         }
+        noMoreTurns = false;
+        delete temp;
     }
     cout << *board;
 }
