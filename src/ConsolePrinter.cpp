@@ -35,8 +35,10 @@ void ConsolePrinter::printMove(char playerType, int x, int y) {
 }
 
 void ConsolePrinter::printInvalidMove(char outIn) {
+    // if char is i then the invalid move is in the board.
     if(outIn == 'i') {
         cout << "invalid move!" << endl << endl;
+        // else the invalid move was out of the board boundaries
     } else if(outIn == 'o') {
         cout << "ERROR: move out of board boundries" << endl << endl;
     }
@@ -44,6 +46,7 @@ void ConsolePrinter::printInvalidMove(char outIn) {
 
 void ConsolePrinter::printPossibleMoves(vector<Point> possibleMoves) {
     cout << "Your possible moves: ";
+    // go over the vector and print the points it contains.
     for (int k = 0; k < possibleMoves.size(); k++) {
         if(k != 0) {
             cout << ",";
@@ -53,8 +56,10 @@ void ConsolePrinter::printPossibleMoves(vector<Point> possibleMoves) {
 }
 
 void ConsolePrinter::printWinMessage(char winner) {
+    // if the char is t then the game ended in a tie.
     if(winner == 't') {
         cout << "it's a tie!" << endl;
+        // else print the winner message.
     } else {
         cout << winner << " wins!" << endl;
     }
