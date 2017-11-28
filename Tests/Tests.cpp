@@ -51,7 +51,7 @@ TEST(ReversiTests, TestingGameLogic__Test) {
     EXPECT_TRUE(equal);
 
     // check if logic changes tiles correctly.
-    Board *board1 = new ConsoleBoard(SIZE);
+    Board *board1 = new Board(SIZE);
     // insert wanted board tile values.
     board1->putTile(0, 0, 'o');
     board1->putTile(0, 1, 'o');
@@ -102,6 +102,7 @@ TEST(ReversiTests, TestingAIPlayer__Test) {
     gameLogic->changeTiles(whitePlayer, 0, 2, *board);
     gameLogic->changeTiles(blackPlayer, 1, 3, *board);
     availableMoves = gameLogic->availableMoves(*board, whitePlayer);
+    cout << "AI's move: ";
     int *aiMove = player->makeMove(*gameLogic, *board, availableMoves);
     aiMove[0] == 3 && aiMove[1] == 1 ? equal = true : equal = false;
     EXPECT_TRUE(equal);

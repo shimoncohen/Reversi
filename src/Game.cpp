@@ -45,6 +45,7 @@ void Game::runGame() {
 void Game::doOneTurn(vector<Point> options) {
     bool noMoreTurns = false;
     Player *current;
+    char playerType = ' ';
     //runs the players turns untill there is a winner.
     while(true) {
         string xTest, yTest;
@@ -53,9 +54,11 @@ void Game::doOneTurn(vector<Point> options) {
         if (turn == 0) {
             options = gameLogic->availableMoves(*board, blackPlayer);
             current = firstPlayer;
+            playerType = 'x';
         } else {
             options = gameLogic->availableMoves(*board, whitePlayer);
             current = secondPlayer;
+            playerType = 'o';
         }
         //if the current player has no available moves.
         if (options.size() == 0) {
@@ -113,6 +116,7 @@ void Game::doOneTurn(vector<Point> options) {
                 break;
             }
         }
+        cout << endl << playerType << " played " << x << " " << y << endl;
         x -= 1;
         y -= 1;
         if (turn == 0) {
