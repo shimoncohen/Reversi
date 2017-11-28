@@ -1,4 +1,5 @@
-# Alon Vita 311233431
+# Shimon Cohen 315383133
+# Nadav Spitzer 302228275
 
 CXX = g++
 #CXXFLAGS = -std=c++0x

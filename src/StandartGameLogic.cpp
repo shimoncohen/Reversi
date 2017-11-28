@@ -1,5 +1,5 @@
-/*shimon cohen*/
-/*315383133*/
+// 315383133 shimon cohen
+// 302228275 Nadav Spitzer
 
 #include "StandartGameLogic.h"
 

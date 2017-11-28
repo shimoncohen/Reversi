@@ -1,6 +1,5 @@
-//
-// Created by shimon on 11/5/17.
-//
+// 315383133 shimon cohen
+// 302228275 Nadav Spitzer
 
 #include <cstdio>
 #include <cstdlib>

@@ -1,5 +1,5 @@
-/*shimon cohen*/
-/*315383133*/
+// 315383133 shimon cohen
+// 302228275 Nadav Spitzer
 
 #include "Board.h"
 
@@ -9,7 +9,8 @@ Board::Board(int size) {
     for(int i = 0; i < size; i++) {
         board[i] = new boardChar[size];
     }
-    for(int i = 0; i < size; i++) {//fill the board cells with spaces to indicate free spaces.
+    //fill the board cells with spaces to indicate free spaces.
+    for(int i = 0; i < size; i++) {
         for(int k = 0; k < size; k++) {
             board[i][k] = space;
         }
@@ -23,9 +24,11 @@ Board::Board(int size) {
 Board::Board(Board &board1) {
     boardSize = board1.getSize();
     board = new boardChar *[boardSize];
+    // initialize cells.
     for (int i = 0; i < boardSize; i++) {
         board[i] = new boardChar[boardSize];
     }
+    // copy the given boards cell values to current board.
     for (int i = 0; i < boardSize; i++) {
         for (int j = 0; j < boardSize; j++) {
             if (board1.checkCell(i, j) == black) {
@@ -47,6 +50,7 @@ Board::~Board() {
 }
 
 void Board::print() {
+    // print the board with all of the line and column numbers and dividers between cells.
     if(boardSize > 9) {
         cout << "  ";
     } else {
@@ -99,9 +103,11 @@ int Board::getSize() {
 }
 
 char Board::checkCell(const int x, const int y) {
-    if (x < 0 || x >= boardSize || y < 0 || y >= boardSize) {//if the cell is out of the boards bounds.
-        return space;
+    //if the cell is out of the boards bounds.
+    if (x < 0 || x >= boardSize || y < 0 || y >= boardSize) {
+        return ' ';
     }
+    // return the cells value.
     if (board[x][y] == black) {
         return 'x';
     } else if (board[x][y] == white) {
@@ -111,6 +117,7 @@ char Board::checkCell(const int x, const int y) {
 }
 
 void Board::putTile(const int x, const int y, const char type) {
+    // put a value in the cell according to type.
     if(type == 'x') {
         board[x][y] = black;
     } else if(type == 'o') {
@@ -121,6 +128,8 @@ void Board::putTile(const int x, const int y, const char type) {
 }
 
 ostream &operator <<(ostream &out, Board &board1) {
+    // print the board to the stream with all
+    // of the line and column numbers and dividers between cells.
     if(board1.getSize() > 9) {
         out << "  ";
     } else {
@@ -171,12 +180,15 @@ ostream &operator <<(ostream &out, Board &board1) {
 
 bool operator ==(Board &board1, Board &board2) {
     int i = 0, k = 0;
+    // go over the board and compare each cell.
     for(i; i < board1.getSize(); i++) {
         for(k; k < board1.getSize(); k++) {
+            // if even one cell is diffrent return false.
             if(board1.checkCell(i,k) != board2.checkCell(i, k)) {
                 return false;
             }
         }
     }
+    // if all cells in both boards are the same return true.
     return true;
 }
