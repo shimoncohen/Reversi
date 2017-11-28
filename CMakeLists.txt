@@ -15,7 +15,7 @@ set(SOURCE_FILES src/Board.h src/StandartGameLogic.cpp src/StandartGameLogic.h s
 
 set(TEST_FILES Tests/Tests.cpp src/Board.cpp)
 
-add_executable(game ${SOURCE_FILES} src/main.cpp)
+add_executable(game ${SOURCE_FILES} src/main.cpp src/Printer.h src/ConsolePrinter.cpp src/ConsolePrinter.h)
 add_executable(tests ${SOURCE_FILES} ${TEST_FILES} Tests/gtest_main.cpp)
 
 target_link_libraries(tests gtest gtest_main gmock)

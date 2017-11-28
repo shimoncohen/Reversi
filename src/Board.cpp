@@ -76,7 +76,7 @@ void Board::print() {
         }
         cout << "| ";
         for(int k = 0; k < boardSize; k++) {
-            cout << board[i][k];
+            cout << checkCell(i, k);
             if(k > 7) {
                 cout << " |  ";
             } else {

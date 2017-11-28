@@ -20,6 +20,7 @@ Game::~Game() {
 
 void Game::runGame() {
     vector<Point> options;
+    Printer *printer = new ConsolePrinter();
     doOneTurn(options);
     int blackPieces = 0, whitePieces = 0;
     //counts the black and white pieces on the board.
@@ -34,17 +35,19 @@ void Game::runGame() {
     }
     //declares the winner depending by the amount of pieces each player has on the board.
     if(blackPieces > whitePieces) {
-        cout << "X wins!" << endl;
+        printer->printWinMessage('X');
     } else if(whitePieces > blackPieces) {
-        cout << "O wins!" << endl;
+        printer->printWinMessage('O');
     } else {
-        cout << "it's a tie!" << endl;
+        printer->printWinMessage('t');
     }
+    delete printer;
 }
 
 void Game::doOneTurn(vector<Point> options) {
     bool noMoreTurns = false;
     Player *current;
+    Printer *printer = new ConsolePrinter();
     char playerType = ' ';
     //runs the players turns untill there is a winner.
     while(true) {
@@ -70,25 +73,19 @@ void Game::doOneTurn(vector<Point> options) {
             turn %= 2;
             continue;
         }
-        cout << *board;
+        board->print();
         if (turn == 0) {
-            cout << "X: it's your move." << endl;
+            printer->printTurn('X');
         } else {
-            cout << "O: it's your move." << endl;
+            printer->printTurn('O');
         }
-        cout << "Your possible moves: ";
         //print all move options.
-        for (int k = 0; k < options.size(); k++) {
-            if(k != 0) {
-                cout << ",";
-            }
-            cout << "(" << options[k].getX() << "," << options[k].getY() << ")";
-        }
+        printer->printPossibleMoves(options);
         cout << endl << endl;
         //let the player make a move.
         while (true) {
             bool valid = true;
-            cout << "Please enter your move row col: ";
+            printer->requestMove();
             Board *copyBoard = new Board(*board);
             temp = current->makeMove(*gameLogic, *copyBoard, options);
             delete copyBoard;
@@ -102,21 +99,21 @@ void Game::doOneTurn(vector<Point> options) {
                     }
                 }
             } else {
-                cout << "ERROR: move out of board boundries" << endl << endl;
+                printer->printInvalidMove('o');
                 x = 0;
                 y = 0;
                 continue;
             }
             //checks if the move was declared valid.
             if (valid) {
-                cout << "invalid move!" << endl << endl;
+                printer->printInvalidMove('i');
                 x = 0;
                 y = 0;
             } else {
                 break;
             }
         }
-        cout << endl << playerType << " played " << x << " " << y << endl;
+        printer->printMove(playerType, x, y);
         x -= 1;
         y -= 1;
         if (turn == 0) {
@@ -132,5 +129,6 @@ void Game::doOneTurn(vector<Point> options) {
         noMoreTurns = false;
         delete temp;
     }
+    delete printer;
     cout << *board;
 }

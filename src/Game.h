@@ -11,6 +11,7 @@
 #include "HumanPlayer.h"
 #include "AIPlayer.h"
 #include "Board.h"
+#include "ConsolePrinter.h"
 
 /*
  * A game played.
