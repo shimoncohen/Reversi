@@ -7,6 +7,7 @@
 
 #include "Player.h"
 #include "Board.h"
+#include "ConsolePrinter.h"
 
 class AIPlayer : public Player {
 private:

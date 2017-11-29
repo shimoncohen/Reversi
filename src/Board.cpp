@@ -31,9 +31,9 @@ Board::Board(Board &board1) {
     // copy the given boards cell values to current board.
     for (int i = 0; i < boardSize; i++) {
         for (int j = 0; j < boardSize; j++) {
-            if (board1.checkCell(i, j) == black) {
+            if (board1.checkCell(i, j) == 'x') {
                 board[i][j] = black;
-            } else if (board1.checkCell(i, j) == white) {
+            } else if (board1.checkCell(i, j) == 'o') {
                 board[i][j] = white;
             } else {
                 board[i][j] = space;

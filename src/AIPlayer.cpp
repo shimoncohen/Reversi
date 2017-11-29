@@ -14,6 +14,7 @@ AIPlayer::~AIPlayer() {
 int* AIPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves) {
     // copy board to simulate AI player's moves
     Board *simulator = new Board(board);
+    ConsolePrinter printer;
     //set grade to maximum value
     int i = 0, minGrade = simulator->getSize() * simulator->getSize(), currentMinGrade;
     int *myMove = new int[2];
@@ -28,17 +29,22 @@ int* AIPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves
         }
     }
     delete simulator;
-    cout << myMove[0] << " " << myMove[1] << endl;
+    printer.printPoint(myMove);
     return myMove;
 }
 
 int AIPlayer::checkMove(GameLogic &gameLogic, Board &board, Point point) {
     // copy board to simulate opponent's moves
     Board *opponentSimulator = new Board(board);
-    int minGrade = opponentSimulator->getSize() * opponentSimulator->getSize(), currentMinGrade;
+    int maxGrade = 0, currentMaxGrade;
     // vector of opponents moves
     vector<Point> opponentsMoves;
-    gameLogic.changeTiles(playerType, point.getX(), point.getY(), *opponentSimulator);
+    if(playerType == blackPlayer) {
+        opponentSimulator->putTile(point.getX() - 1, point.getY() - 1, 'x');
+    } else {
+        opponentSimulator->putTile(point.getX() - 1, point.getY() - 1, 'o');
+    }
+    gameLogic.changeTiles(playerType, point.getX() - 1, point.getY() - 1, *opponentSimulator);
     // check opponents possible moves according to his type
     if(playerType == blackPlayer) {
         opponentsMoves = gameLogic.availableMoves(*opponentSimulator, whitePlayer);
@@ -52,22 +58,30 @@ int AIPlayer::checkMove(GameLogic &gameLogic, Board &board, Point point) {
     }
     // if the opponent had possible moves then check all the moves and grade each one
     for(int i = 0; i < opponentsMoves.size(); i++) {
-        currentMinGrade = gradeMove(gameLogic, board, opponentsMoves[i]);
+        currentMaxGrade = gradeMove(gameLogic, *opponentSimulator, opponentsMoves[i]);
         // save the lowest grade
-        if(minGrade > currentMinGrade) {
-            minGrade = currentMinGrade;
+        if(currentMaxGrade > maxGrade) {
+            maxGrade = currentMaxGrade;
         }
     }
     delete opponentSimulator;
-    return minGrade;
+    return maxGrade;
 }
 
 int AIPlayer::gradeMove(GameLogic &gameLogic, Board &board, Point move) {
     //coping the board
     Board *tempBoard = new Board(board);
     int countPlayer = 0, countOther = 0;
+    type otherPlayerType;
     ///making the move on the new board
-    gameLogic.changeTiles(playerType, move.getX(), move.getY(), *tempBoard);
+    if(playerType == blackPlayer) {
+        otherPlayerType = whitePlayer;
+        tempBoard->putTile(move.getX() - 1, move.getY() - 1, 'o');
+    } else {
+        otherPlayerType = blackPlayer;
+        tempBoard->putTile(move.getX() - 1, move.getY() - 1, 'x');
+    }
+    gameLogic.changeTiles(otherPlayerType, move.getX() - 1, move.getY() - 1, *tempBoard);
     //counting the x's and the o's on the board
     for(int i = 0; i < tempBoard->getSize(); i++) {
         for(int j = 0; j < tempBoard->getSize(); j++) {

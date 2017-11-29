@@ -10,6 +10,9 @@
 #include <vector>
 using namespace std;
 
+/*
+ * in charge of all printing in the game.
+ */
 class Printer {
 public:
     /*
@@ -54,6 +57,13 @@ public:
      * operation: prints a message asking the player to enter a move.
     */
     virtual void requestMove() = 0;
+    /*
+     * function name: printPoint.
+     * input: the point to print.
+     * output: none.
+     * operation: prints a given point.
+    */
+    virtual void printPoint(int* point) = 0;
     /*
      * function name: printMove.
      * input: the player who made the move and the x and y values of the move.

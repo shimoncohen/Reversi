@@ -34,6 +34,10 @@ void ConsolePrinter::printMove(char playerType, int x, int y) {
     cout << endl << playerType << " played " << x << " " << y << endl;
 }
 
+void ConsolePrinter::printPoint(int* point) {
+    cout << point[0] << " " << point[1] << endl;
+}
+
 void ConsolePrinter::printInvalidMove(char outIn) {
     // if char is i then the invalid move is in the board.
     if(outIn == 'i') {
