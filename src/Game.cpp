@@ -73,7 +73,7 @@ void Game::doOneTurn(vector<Point> options) {
             turn %= 2;
             continue;
         }
-        board->print();
+        printer->printBoard(board);
         if (turn == 0) {
             printer->printTurn('X');
         } else {
@@ -81,7 +81,6 @@ void Game::doOneTurn(vector<Point> options) {
         }
         //print all move options.
         printer->printPossibleMoves(options);
-        cout << endl << endl;
         //let the player make a move.
         while (true) {
             bool valid = true;
@@ -129,6 +128,6 @@ void Game::doOneTurn(vector<Point> options) {
         noMoreTurns = false;
         delete temp;
     }
+    printer->printBoard(board);
     delete printer;
-    cout << *board;
 }

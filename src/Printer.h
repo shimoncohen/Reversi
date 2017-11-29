@@ -7,6 +7,7 @@
 #include <iostream>
 #include "Enum.h"
 #include "Point.h"
+#include "Board.h"
 #include <vector>
 using namespace std;
 
@@ -64,6 +65,13 @@ public:
      * operation: prints a given point.
     */
     virtual void printPoint(int* point) = 0;
+    /*
+     * function name: printBoard.
+     * input: the board to print.
+     * output: none.
+     * operation: prints a given board.
+    */
+    virtual void printBoard(Board *board) const = 0;
     /*
      * function name: printMove.
      * input: the player who made the move and the x and y values of the move.

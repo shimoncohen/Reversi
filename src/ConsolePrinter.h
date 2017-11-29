@@ -16,6 +16,7 @@ public:
     void requestMove();
     void printMove(char playerType, int x, int y);
     void printPoint(int* point);
+    void printBoard(Board *board) const;
     void printInvalidMove(char outIn);
     void printPossibleMoves(vector<Point> possibleMoves);
     void printWinMessage(char winner);

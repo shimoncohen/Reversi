@@ -38,6 +38,10 @@ void ConsolePrinter::printPoint(int* point) {
     cout << point[0] << " " << point[1] << endl;
 }
 
+void ConsolePrinter::printBoard(Board *board) const {
+    cout << *board;
+}
+
 void ConsolePrinter::printInvalidMove(char outIn) {
     // if char is i then the invalid move is in the board.
     if(outIn == 'i') {
@@ -57,6 +61,7 @@ void ConsolePrinter::printPossibleMoves(vector<Point> possibleMoves) {
         }
         cout << "(" << possibleMoves[k].getX() << "," << possibleMoves[k].getY() << ")";
     }
+    cout << endl << endl;
 }
 
 void ConsolePrinter::printWinMessage(char winner) {
