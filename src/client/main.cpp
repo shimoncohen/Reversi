@@ -1,7 +1,7 @@
 // 315383133 shimon cohen
 // 302228275 Nadav Spitzer
 
-#include "Game.h"
+#include "LocalGame.h"
 
 int main() {
 	int size, choice = 0;
@@ -36,9 +36,10 @@ int main() {
             break;
     }
     //create a game object and give it a board, players and a logic to play by.
-    Game g(size, gameLogic, first, second);
+    Game *g = new LocalGame(size, gameLogic, first, second);
 	printer->startGameMessage();
-	g.runGame();
+	g->runGame();
     delete printer;
+    delete g;
 	return 0;
 }

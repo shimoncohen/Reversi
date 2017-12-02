@@ -2,7 +2,7 @@
 /*315383133*/
 
 #include "gtest/gtest.h"
-#include "Game.h"
+#include "client/LocalGame.h"
 #define SIZE 4
 
 /*

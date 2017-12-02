@@ -1,23 +1,13 @@
-// 315383133 shimon cohen
-// 302228275 Nadav Spitzer
+//
+// Created by shimon on 12/3/17.
+//
 
-#ifndef EX1_GAME_H
-#define EX1_GAME_H
+#ifndef ADVANCEDPROGRAMMING1_SERVERGAME_H
+#define ADVANCEDPROGRAMMING1_SERVERGAME_H
 
-#include "GameLogic.h"
-#include "Player.h"
-#include "StandartGameLogic.h"
-#include "Point.h"
-#include "HumanPlayer.h"
-#include "AIPlayer.h"
-#include "Board.h"
-#include "ConsolePrinter.h"
+#include "Game.h"
 
-/*
- * A game played.
- * manages the game itself, like the players turns and acts acoording to the game logic given to it.
- */
-class Game {
+class ServerGame : public Game {
 private:
     GameLogic* gameLogic;//the logic the game plays by.
     Board* board;//the game board.
@@ -26,26 +16,26 @@ private:
     int turn;
 public:
     /*
-	 * function name: Game.
+	 * function name: ServerGame.
 	 * input: the boards size, the gameLogic the game should play by, and the two players.
 	 * output: none.
      * operation: constructor.
     */
-    Game(int boardSize, GameLogic* gameLogic, Player* first, Player* second);
+    ServerGame(int boardSize, GameLogic* newGameLogic, Player* first, Player* second);
     /*
-	 * function name: ~Game.
+	 * function name: ~ServerGame.
 	 * input: none.
 	 * output: none.
      * operation: deconstructor.
     */
-    ~Game();
+    ~ServerGame();
     /*
 	 * function name: runGame.
 	 * input: none.
 	 * output: none.
      * operation: runs the game.
     */
-    void runGame();
+    virtual void runGame() = 0;
     /*
 	 * function name: doOneTurn.
 	 * input: a vector of the current player valid moves.
@@ -53,8 +43,8 @@ public:
      * operation: runs a whole turn.
      *            runs a players turn.
     */
-    void doOneTurn(vector<Point> v);
+    virtual void doOneTurn(vector<Point> v) = 0;
 };
 
 
-#endif //EX1_GAME_H
+#endif //ADVANCEDPROGRAMMING1_SERVERGAME_H

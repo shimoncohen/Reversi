@@ -1,9 +1,9 @@
 // 315383133 shimon cohen
 // 302228275 Nadav Spitzer
 
-#include "Game.h"
+#include "LocalGame.h"
 
-Game::Game(int boardSize, GameLogic* newGameLogic, Player* first, Player* second) {
+LocalGame::LocalGame(int boardSize, GameLogic* newGameLogic, Player* first, Player* second) {
     gameLogic = newGameLogic;
     board = new Board(boardSize);
     firstPlayer = first;
@@ -11,14 +11,14 @@ Game::Game(int boardSize, GameLogic* newGameLogic, Player* first, Player* second
     turn = 0;
 }
 
-Game::~Game() {
+LocalGame::~LocalGame() {
     delete board;
     delete firstPlayer;
     delete secondPlayer;
     delete gameLogic;
 }
 
-void Game::runGame() {
+void LocalGame::runGame() {
     vector<Point> options;
     Printer *printer = new ConsolePrinter();
     doOneTurn(options);
@@ -44,7 +44,7 @@ void Game::runGame() {
     delete printer;
 }
 
-void Game::doOneTurn(vector<Point> options) {
+void LocalGame::doOneTurn(vector<Point> options) {
     bool noMoreTurns = false;
     Player *current;
     Printer *printer = new ConsolePrinter();
