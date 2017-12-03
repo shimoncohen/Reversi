@@ -70,6 +70,13 @@ public:
     */
     void putTile(const int x, const int y, const char type);
     /*
+	 * function name: toString.
+	 * input: none.
+	 * output: a string representing the board.
+     * operation: returns a tring representing the board.
+    */
+    string toString();
+    /*
 	 * function name: operator <<.
 	 * input: a stream and a board object.
 	 * output: a stream we write the board in to.

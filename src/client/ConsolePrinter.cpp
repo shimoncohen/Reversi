@@ -4,14 +4,14 @@
 #include "ConsolePrinter.h"
 
 void ConsolePrinter::printGameOpenning() {
-    cout << "Reversi!" << endl << "Welcome to the game menu" << endl << "which mode would you like to play?" << endl;
-    cout << "1) Player VS Player" << endl << "2) Player VS Computer(AI)" << endl;
+    cout << "Welcome to Reversi!" << endl << endl << "Choose an opponent type:" << endl;
+    cout << "1. a human local player" << endl << "2. an AI player" << endl << "3. a remote player" << endl;
 }
 
 void ConsolePrinter::printInvalidGameMode() {
     cout << "Invalid option." << endl << endl;
     cout << "which mode would you like to play?" << endl;
-    cout << "1) Player VS Player" << endl << "2) Player VS Computer(AI)" << endl;
+    cout << "1. a human local player" << endl << "2. an AI player" << endl << "3. a remote player" << endl;
 }
 
 void ConsolePrinter::boardSizeMessage() {

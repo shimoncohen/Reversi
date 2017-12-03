@@ -5,7 +5,14 @@
 #ifndef ADVANCEDPROGRAMMING1_SERVERGAME_H
 #define ADVANCEDPROGRAMMING1_SERVERGAME_H
 
-#include "Game.h"
+#include "LocalGame.h"
+#include "ServerPlayer.h"
+
+typedef struct {
+    Board *board;
+    int x;
+    int y;
+}info;
 
 class ServerGame : public Game {
 private:
@@ -35,7 +42,7 @@ public:
 	 * output: none.
      * operation: runs the game.
     */
-    virtual void runGame() = 0;
+    void runGame();
     /*
 	 * function name: doOneTurn.
 	 * input: a vector of the current player valid moves.
@@ -43,7 +50,7 @@ public:
      * operation: runs a whole turn.
      *            runs a players turn.
     */
-    virtual void doOneTurn(vector<Point> v) = 0;
+    void doOneTurn(vector<Point> v);
 };
 
 

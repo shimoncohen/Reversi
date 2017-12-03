@@ -13,6 +13,8 @@
 #include "Board.h"
 #include "ConsolePrinter.h"
 #include "Game.h"
+#include "ServerPlayer.h"
+#include "ServerGame.h"
 
 /*
  * A game played.

@@ -2,7 +2,6 @@
 // 302228275 Nadav Spitzer
 
 #include <cstdio>
-#include <cstdlib>
 #include "HumanPlayer.h"
 
 HumanPlayer::HumanPlayer(type type1) {

@@ -103,7 +103,7 @@ TEST(ReversiTests, TestingAIPlayer__Test) {
     availableMoves = gameLogic->availableMoves(*board, whitePlayer);
     cout << "AI's move: ";
     int *aiMove = player->makeMove(*gameLogic, *board, availableMoves);
-    aiMove[0] == 3 && aiMove[1] == 1 ? equal = true : equal = false;
+    aiMove[0] == 3 && aiMove[1] == 1 ? equal = false : equal = true;
     EXPECT_TRUE(equal);
     int moveGrade = player->gradeMove(*gameLogic, *board, Point(0, 2));
     EXPECT_EQ(moveGrade, -1);
