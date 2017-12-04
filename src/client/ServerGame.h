@@ -8,18 +8,17 @@
 #include "LocalGame.h"
 #include "ServerPlayer.h"
 
-typedef struct {
-    Board *board;
+typedef struct Info {
+    string board;
     int x;
     int y;
-}info;
+}Info;
 
 class ServerGame : public Game {
 private:
     GameLogic* gameLogic;//the logic the game plays by.
     Board* board;//the game board.
-    Player* firstPlayer;//the first player in the game.
-    Player* secondPlayer;// the second player in the game.
+    Player* player;//the first player in the game.
     int turn;
 public:
     /*
@@ -28,7 +27,7 @@ public:
 	 * output: none.
      * operation: constructor.
     */
-    ServerGame(int boardSize, GameLogic* newGameLogic, Player* first, Player* second);
+    ServerGame(int boardSize, GameLogic* newGameLogic, Player* player);
     /*
 	 * function name: ~ServerGame.
 	 * input: none.

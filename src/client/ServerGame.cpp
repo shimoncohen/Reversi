@@ -3,18 +3,16 @@
 
 #include "ServerGame.h"
 
-ServerGame::ServerGame(int boardSize, GameLogic* newGameLogic, Player* first, Player* second) {
+ServerGame::ServerGame(int boardSize, GameLogic* newGameLogic, Player* current) {
     gameLogic = newGameLogic;
     board = new Board(boardSize);
-    firstPlayer = first;
-    secondPlayer = second;
+    player = current;
     turn = 0;
 }
 
 ServerGame::~ServerGame() {
     delete board;
-    delete firstPlayer;
-    delete secondPlayer;
+    delete player;
     delete gameLogic;
 }
 
@@ -22,18 +20,15 @@ void ServerGame::runGame() {
     vector<Point> options;
     Printer *printer = new ConsolePrinter();
     try {
-        ((ServerPlayer*)firstPlayer)->connectToServer();
-    } catch (const char *msg) {
-        cout << "Failed to connect to server. Reason:" << msg << endl;
-        return;
-    }
-    try {
-        ((ServerPlayer*)secondPlayer)->connectToServer();
+        ((ServerPlayer*)player)->connectToServer();
     } catch (const char *msg) {
         cout << "Failed to connect to server. Reason:" << msg << endl;
         return;
     }
     doOneTurn(options);
+    /*
+     * end of game: TODO
+     */
     int blackPieces = 0, whitePieces = 0;
     //counts the black and white pieces on the board.
     for(int i = 0; i < board->getSize(); i++) {
@@ -61,7 +56,7 @@ void ServerGame::doOneTurn(vector<Point> options) {
     Player *current;
     Printer *printer = new ConsolePrinter();
     char playerType = ' ';
-    info resivedInfo;
+    Info recivedInfo;
     //runs the players turns untill there is a winner.
     while(true) {
         string xTest, yTest;
@@ -69,17 +64,19 @@ void ServerGame::doOneTurn(vector<Point> options) {
         int *temp;
         if (turn == 0) {
             options = gameLogic->availableMoves(*board, blackPlayer);
-            current = firstPlayer;
+            current = player;
             playerType = 'x';
         } else {
             options = gameLogic->availableMoves(*board, whitePlayer);
-            current = secondPlayer;
+            current = player;
             playerType = 'o';
         }
-        resivedInfo = ((ServerPlayer*)current)->getMove();
+        recivedInfo = ((ServerPlayer*)current)->getMove();
+        board->extractBoardFromString(recivedInfo.board);
+        cout << *board;
         /*
          *
-         *
+         * TODO
          * assign board.
          * play move on board.
          * print board.
@@ -94,6 +91,9 @@ void ServerGame::doOneTurn(vector<Point> options) {
             noMoreTurns = true;
             turn += 1;
             turn %= 2;
+            /* TODO
+             * no moves
+             */
             continue;
         }
         printer->printBoard(board);
@@ -152,7 +152,7 @@ void ServerGame::doOneTurn(vector<Point> options) {
         delete temp;
         cout << "Sending move: " << x << " " << y << endl;
         try {
-            ((ServerPlayer *) secondPlayer)->sendMove(*board, x, y);
+            ((ServerPlayer *) player)->sendMove(*board, x, y);
         } catch (const char *msg) {
             cout << "Failed to send exercise to server.Reason: " << msg << endl;
         }

@@ -11,7 +11,7 @@ class ServerPlayer : public Player {
 public:
     ServerPlayer(const char *serverIP, int serverPort, type type1);
     void connectToServer();
-    info getMove();
+    struct Info getMove();
     void sendMove(Board &board, int x, int y);
     int* makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves);
 private:

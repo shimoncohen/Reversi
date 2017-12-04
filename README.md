@@ -1,2 +1,0 @@
-# advancedProgramming1
-reversi

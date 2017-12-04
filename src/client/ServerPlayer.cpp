@@ -65,10 +65,10 @@ void ServerPlayer::sendMove(Board &board, int x, int y) {
     }
 }
 
-info ServerPlayer::getMove() {
+Info ServerPlayer::getMove() {
     //Read the result from the server
     int n;
-    info newInfo;
+    Info newInfo;
     n = read(clientSocket, &newInfo.board, sizeof(newInfo.board));
     if (n == -1) {
         throw "Error reading result from socket";

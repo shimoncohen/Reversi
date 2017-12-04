@@ -43,7 +43,7 @@ int main() {
         case 3:
             first = new ServerPlayer("127.0.0.1", 8000, blackPlayer);
             second = new ServerPlayer("127.0.0.1", 8000, whitePlayer);
-            g = new ServerGame(size, gameLogic, first, second);
+            g = new ServerGame(size, gameLogic, first);
     }
 
 	printer->startGameMessage();
