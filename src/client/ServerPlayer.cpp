@@ -46,10 +46,21 @@ void ServerPlayer::connectToServer() {
     if (connect(clientSocket, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) == -1) {
         throw "Error connecting to server";
     }
+    int playerNum;
+    int n = read(clientSocket, &playerNum, sizeof(playerNum));
+    if (n == -1) {
+        throw "Error reading player num";
+    }
+    if(playerNum == 1) {
+        playerType = blackPlayer;
+    } else if(playerNum == 2) {
+        playerType = whitePlayer;
+    }
     cout << "Connected to server" << endl;
+    cout << "You are player number " << playerNum << endl;
 }
 
-void ServerPlayer::sendMove(Board &board, int x, int y) {
+Info ServerPlayer::sendMove(Board &board, int x, int y) {
 // Write the exercise arguments to the socket
     int n = write(clientSocket, &board, sizeof(board));
     if (n == -1) {
@@ -63,6 +74,21 @@ void ServerPlayer::sendMove(Board &board, int x, int y) {
     if (n == -1) {
         throw "Error writing arg2 to socket";
     }
+    //Read the result from the server
+    Info newInfo;
+    n = read(clientSocket, &newInfo.board, sizeof(newInfo.board));
+    if (n == -1) {
+        throw "Error reading result from socket";
+    }
+    n = read(clientSocket, &newInfo.x, sizeof(newInfo.x));
+    if (n == -1) {
+        throw "Error reading result from socket";
+    }
+    n = read(clientSocket, &newInfo.y, sizeof(newInfo.y));
+    if (n == -1) {
+        throw "Error reading result from socket";
+    }
+    return newInfo;
 }
 
 Info ServerPlayer::getMove() {
@@ -82,6 +108,10 @@ Info ServerPlayer::getMove() {
         throw "Error reading result from socket";
     }
     return newInfo;
+}
+
+type ServerPlayer::getType() {
+    return playerType;
 }
 
 int* ServerPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves) {

@@ -53,27 +53,20 @@ void ServerGame::runGame() {
 
 void ServerGame::doOneTurn(vector<Point> options) {
     bool noMoreTurns = false;
-    Player *current;
     Printer *printer = new ConsolePrinter();
-    char playerType = ' ';
+    type playerType = blackPlayer;
     Info recivedInfo;
     //runs the players turns untill there is a winner.
     while(true) {
         string xTest, yTest;
         int x = 0, y = 0;
         int *temp;
-        if (turn == 0) {
+        if (playerType == player->getType()) {
             options = gameLogic->availableMoves(*board, blackPlayer);
-            current = player;
-            playerType = 'x';
         } else {
-            options = gameLogic->availableMoves(*board, whitePlayer);
-            current = player;
-            playerType = 'o';
+            recivedInfo = ((ServerPlayer*)player)->getMove();
+            board->extractBoardFromString(recivedInfo.board);
         }
-        recivedInfo = ((ServerPlayer*)current)->getMove();
-        board->extractBoardFromString(recivedInfo.board);
-        cout << *board;
         /*
          *
          * TODO
@@ -109,7 +102,7 @@ void ServerGame::doOneTurn(vector<Point> options) {
             bool valid = true;
             printer->requestMove();
             Board *copyBoard = new Board(*board);
-            temp = current->makeMove(*gameLogic, *copyBoard, options);
+            temp = player->makeMove(*gameLogic, *copyBoard, options);
             delete copyBoard;
             x = temp[0];
             y = temp[1];
@@ -152,9 +145,15 @@ void ServerGame::doOneTurn(vector<Point> options) {
         delete temp;
         cout << "Sending move: " << x << " " << y << endl;
         try {
-            ((ServerPlayer *) player)->sendMove(*board, x, y);
+            recivedInfo = ((ServerPlayer *) player)->sendMove(*board, x, y);
+            board->extractBoardFromString(recivedInfo.board);
         } catch (const char *msg) {
             cout << "Failed to send exercise to server.Reason: " << msg << endl;
+        }
+        if(playerType == blackPlayer) {
+            playerType = whitePlayer;
+        } else {
+            playerType = blackPlayer;
         }
     }
     printer->printBoard(board);

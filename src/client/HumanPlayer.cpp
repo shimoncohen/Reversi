@@ -12,6 +12,10 @@ HumanPlayer::~HumanPlayer() {
 
 }
 
+type HumanPlayer::getType() {
+    return playerType;
+}
+
 int* HumanPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves) {
     string temp1, temp2;
     int *choice = new int[2];

@@ -9,6 +9,8 @@
 #include <string.h>
 #include <iostream>
 #include <stdio.h>
+#define FIRST 1
+#define SECOND 2
 
 using namespace std;
 #define MAX_CONNECTED_CLIENTS 10
@@ -36,14 +38,26 @@ void Server::start() {
 // Define the client socket's structures
     struct sockaddr_in clientAddress;
     socklen_t clientAddressLen;
+    int playerNum = FIRST;
     while (true) {
         cout << "Waiting for client connections..." << endl;
 // Accept a new client connection
         int firstClientSocket = accept(serverSocket, (struct sockaddr *) &clientAddress, &clientAddressLen);
+        int n = write(firstClientSocket, &playerNum, sizeof(playerNum));
+        if (n == -1) {
+            cout << "Error writing to socket" << endl;
+            return;
+        }
         cout << "First player connected" << endl;
         if (firstClientSocket == -1)
             throw "Error on accept";
+        playerNum = SECOND;
         int secondClientSocket = accept(serverSocket, (struct sockaddr *) &clientAddress, &clientAddressLen);
+        n = write(secondClientSocket, &playerNum, sizeof(playerNum));
+        if (n == -1) {
+            cout << "Error writing to socket" << endl;
+            return;
+        }
         cout << "Second player connected" << endl;
         if (secondClientSocket == -1)
             throw "Error on accept";
@@ -51,6 +65,7 @@ void Server::start() {
 // Close communication with the client
         close(firstClientSocket);
         close(secondClientSocket);
+        playerNum = 1;
     }
 }
 

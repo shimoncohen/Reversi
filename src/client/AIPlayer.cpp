@@ -11,6 +11,10 @@ AIPlayer::~AIPlayer() {
 
 }
 
+type AIPlayer::getType() {
+    return playerType;
+}
+
 int* AIPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves) {
     // copy board to simulate AI player's moves
     Board *simulator = new Board(board);

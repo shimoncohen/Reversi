@@ -30,6 +30,7 @@ public:
      * operation: destructor.
     */
     ~HumanPlayer();
+    type getType();
     virtual int* makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves);
 };
 

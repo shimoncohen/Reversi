@@ -27,6 +27,7 @@ public:
      * operation: destructor.
     */
     ~AIPlayer();
+    type getType();
     /*
 	 * function name: makeMove.
 	 * input: the game logic, the current board and the AI's available moves.
