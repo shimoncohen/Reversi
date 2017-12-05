@@ -75,9 +75,9 @@ void LocalGame::doOneTurn(vector<Point> options) {
         }
         printer->printBoard(board);
         if (turn == 0) {
-            printer->printTurn('X');
+            printer->printTurn(blackPlayer);
         } else {
-            printer->printTurn('O');
+            printer->printTurn(whitePlayer);
         }
         //print all move options.
         printer->printPossibleMoves(options);

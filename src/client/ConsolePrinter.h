@@ -12,7 +12,7 @@ public:
     void printInvalidGameMode();
     void boardSizeMessage();
     void startGameMessage();
-    void printTurn(char type);
+    void printTurn(type playerType);
     void requestMove();
     void printMove(char playerType, int x, int y);
     void printPoint(int* point);

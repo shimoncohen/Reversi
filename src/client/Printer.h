@@ -50,7 +50,7 @@ public:
      * output: none.
      * operation: prints a message that its a certain player turn.
     */
-    virtual void printTurn(char type) = 0;
+    virtual void printTurn(type playerType) = 0;
     /*
      * function name: requestMove.
      * input: none.

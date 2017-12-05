@@ -60,23 +60,21 @@ void ServerGame::doOneTurn(vector<Point> options) {
     while(true) {
         string xTest, yTest;
         int x = 0, y = 0;
+        recivedInfo.x = 0;
+        recivedInfo.y = 0;
         int *temp;
-        if (playerType == player->getType()) {
-            options = gameLogic->availableMoves(*board, player->getType());
-        } else {
+        if(playerType != player->getType()) {
             recivedInfo = ((ServerPlayer*)player)->getMove();
             //board->extractBoardFromString(recivedInfo.board);
+            if(player->getType() == whitePlayer) {
+                board->putTile(recivedInfo.x, recivedInfo.y, 'x');
+                gameLogic->changeTiles(blackPlayer, recivedInfo.x, recivedInfo.y, *board);
+            } else {
+                board->putTile(recivedInfo.x, recivedInfo.y, 'o');
+                gameLogic->changeTiles(whitePlayer, recivedInfo.x, recivedInfo.y, *board);
+            }
         }
-        options = gameLogic->availableMoves(*board, playerType);
-        /*
-         *
-         * TODO
-         * assign board.
-         * play move on board.
-         * print board.
-         *
-         *
-         */
+        options = gameLogic->availableMoves(*board, player->getType());
         //if the current player has no available moves.
         if (options.size() == 0) {
             if(noMoreTurns) {
@@ -91,11 +89,7 @@ void ServerGame::doOneTurn(vector<Point> options) {
             continue;
         }
         printer->printBoard(board);
-        if (turn == 0) {
-            printer->printTurn('X');
-        } else {
-            printer->printTurn('O');
-        }
+        printer->printTurn(player->getType());
         //print all move options.
         printer->printPossibleMoves(options);
         //let the player make a move.
@@ -132,15 +126,14 @@ void ServerGame::doOneTurn(vector<Point> options) {
         printer->printMove(playerType, x, y);
         x -= 1;
         y -= 1;
-        if (turn == 0) {
-            board->putTile(x, y, 'x');
+        if (playerType == player->getType()) {
+            if(playerType == blackPlayer) {
+                board->putTile(x, y, 'x');
+            } else {
+                board->putTile(x, y, 'o');
+            }
             //flips the correct tiles according to the player and the players move.
-            gameLogic->changeTiles(blackPlayer, x, y, *board);
-            turn = 1;
-        } else {
-            board->putTile(x, y, 'o');
-            gameLogic->changeTiles(whitePlayer, x, y, *board);
-            turn = 0;
+            gameLogic->changeTiles(player->getType(), x, y, *board);
         }
         noMoreTurns = false;
         delete temp;

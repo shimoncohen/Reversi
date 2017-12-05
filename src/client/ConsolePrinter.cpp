@@ -22,8 +22,12 @@ void ConsolePrinter::startGameMessage() {
     cout << "Start game!" << endl << endl;
 }
 
-void ConsolePrinter::printTurn(char type) {
-    cout << type << " it's your move." << endl;
+void ConsolePrinter::printTurn(type playerType) {
+    if(playerType == blackPlayer) {
+        cout << "X it's your move." << endl;
+    } else {
+        cout << "O it's your move." << endl;
+    }
 }
 
 void ConsolePrinter::requestMove() {

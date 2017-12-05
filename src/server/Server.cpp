@@ -43,7 +43,7 @@ void Server::start() {
     int playerNum = FIRST;
     string board;
     int temp;
-    int *x, *y;
+    int x, y;
     while (true) {
         cout << "Waiting for client connections..." << endl;
 // Accept a new client connection
@@ -70,16 +70,16 @@ void Server::start() {
         int currentClient = firstClientSocket;
         int waitingClient = secondClientSocket;
         while(true) {
-            handleClient(currentClient, x, y);
-            writeToClient(waitingClient, x, y);
+            handleClient(currentClient, &x, &y);
+            writeToClient(waitingClient, &x, &y);
 // Close communication with the client
             temp = currentClient;
             currentClient = waitingClient;
             waitingClient = temp;
-            if(*x == -2 || *y == -2) {
+            if(x == -2 || y == -2) {
                 break;
             }
-            *x = 0, *y = 0;
+            x = 0, y = 0;
         }
         close(firstClientSocket);
         close(secondClientSocket);
@@ -91,7 +91,7 @@ void Server::handleClient(int clientSocket, int *x, int *y) {
     //int waitingClient = secondClientSocket;
     //while (true) {
 // Read new exercise arguments
-    int n = read(clientSocket, &x, sizeof(x));
+    int n = read(clientSocket, x, sizeof(int));
     if (n == -1) {
         cout << "Error reading x" << endl;
         return;
@@ -100,7 +100,7 @@ void Server::handleClient(int clientSocket, int *x, int *y) {
         cout << "Client disconnected" << endl;
         return;
     }
-    n = read(clientSocket, &y, sizeof(y));
+    n = read(clientSocket, y, sizeof(int));
     if (n == -1) {
         cout << "Error reading y" << endl;
         return;
@@ -113,7 +113,7 @@ void Server::handleClient(int clientSocket, int *x, int *y) {
 }
 
 void Server::writeToClient(int clientSocket, int *x, int *y) {
-    int n = write(clientSocket, &x, sizeof(x));
+    int n = write(clientSocket, x, sizeof(x));
     if (n == -1) {
         cout << "Error reading x" << endl;
         return;
@@ -122,7 +122,7 @@ void Server::writeToClient(int clientSocket, int *x, int *y) {
         cout << "Client disconnected" << endl;
         return;
     }
-    n = write(clientSocket, &y, sizeof(y));
+    n = write(clientSocket, y, sizeof(y));
     if (n == -1) {
         cout << "Error reading y" << endl;
         return;
