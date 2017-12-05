@@ -16,8 +16,8 @@ public:
 private:
     int port;
     int serverSocket;
-    void handleClient(int clientSocket, string board, int x, int y);
-    void writeToClient(int clientSocket, string board, int x, int y);
+    void handleClient(int clientSocket, int *x, int *y);
+    void writeToClient(int clientSocket, int *x, int *y);
 };
 
 #endif //ADVANCEDPROGRAMMING1_SERVER_H

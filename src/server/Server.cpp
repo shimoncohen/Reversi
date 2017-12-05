@@ -41,9 +41,9 @@ void Server::start() {
     socklen_t firstClientAddressLen;
     socklen_t secondClientAddressLen;
     int playerNum = FIRST;
-    int temp;
     string board;
-    int x, y;
+    int temp;
+    int *x, *y;
     while (true) {
         cout << "Waiting for client connections..." << endl;
 // Accept a new client connection
@@ -70,12 +70,16 @@ void Server::start() {
         int currentClient = firstClientSocket;
         int waitingClient = secondClientSocket;
         while(true) {
-            handleClient(currentClient, board, x, y);
-            writeToClient(waitingClient, board, x, y);
+            handleClient(currentClient, x, y);
+            writeToClient(waitingClient, x, y);
 // Close communication with the client
             temp = currentClient;
             currentClient = waitingClient;
             waitingClient = temp;
+            if(*x == -2 || *y == -2) {
+                break;
+            }
+            *x = 0, *y = 0;
         }
         close(firstClientSocket);
         close(secondClientSocket);
@@ -83,22 +87,17 @@ void Server::start() {
 }
 
 // Handle requests from a specific client
-void Server::handleClient(int clientSocket, string board, int x, int y) {
+void Server::handleClient(int clientSocket, int *x, int *y) {
     //int waitingClient = secondClientSocket;
     //while (true) {
 // Read new exercise arguments
-    int n = read(clientSocket, &board, sizeof(board));
+    int n = read(clientSocket, &x, sizeof(x));
     if (n == -1) {
-        cout << "Error reading arg1" << endl;
+        cout << "Error reading x" << endl;
         return;
     }
     if (n == 0) {
         cout << "Client disconnected" << endl;
-        return;
-    }
-    n = read(clientSocket, &x, sizeof(x));
-    if (n == -1) {
-        cout << "Error reading x" << endl;
         return;
     }
     n = read(clientSocket, &y, sizeof(y));
@@ -106,27 +105,21 @@ void Server::handleClient(int clientSocket, string board, int x, int y) {
         cout << "Error reading y" << endl;
         return;
     }
-    cout << "Got info: " << "board and move " << x << " " << y << endl;
-    cout << board << endl;
+    cout << "Got info: " << "board and move " << *x << " " << *y << endl;
 //        temp = currentClient;
 //        currentClient = waitingClient;
 //        waitingClient = temp;
     //}
 }
 
-void Server::writeToClient(int clientSocket, string board, int x, int y) {
-    int n = write(clientSocket, &board, sizeof(board));
+void Server::writeToClient(int clientSocket, int *x, int *y) {
+    int n = write(clientSocket, &x, sizeof(x));
     if (n == -1) {
-        cout << "Error reading arg1" << endl;
+        cout << "Error reading x" << endl;
         return;
     }
     if (n == 0) {
         cout << "Client disconnected" << endl;
-        return;
-    }
-    n = write(clientSocket, &x, sizeof(x));
-    if (n == -1) {
-        cout << "Error reading x" << endl;
         return;
     }
     n = write(clientSocket, &y, sizeof(y));
@@ -134,8 +127,7 @@ void Server::writeToClient(int clientSocket, string board, int x, int y) {
         cout << "Error reading y" << endl;
         return;
     }
-    cout << "Wrote info: " << "board and move " << x << " " << y << endl;
-    cout << board << endl;
+    cout << "Wrote info: " << "board and move " << *x << " " << *y << endl;
 }
 
 void Server::stop() {

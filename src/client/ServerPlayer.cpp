@@ -62,12 +62,7 @@ void ServerPlayer::connectToServer() {
 
 void ServerPlayer::sendMove(Board &board, int x, int y) {
 // Write the exercise arguments to the socket
-    string boardString = board.toString();
-    int n = write(clientSocket, &boardString, sizeof(boardString));
-    if (n == -1) {
-        throw "Error writing arg1 to socket";
-    }
-    n = write(clientSocket, &x, sizeof(x));
+    int n = write(clientSocket, &x, sizeof(x));
     if (n == -1) {
         throw "Error writing op to socket";
     }
@@ -80,12 +75,7 @@ void ServerPlayer::sendMove(Board &board, int x, int y) {
 Info ServerPlayer::getMove() {
     //Read the result from the server
     int n;
-    string boardString;
     Info newInfo;
-    n = read(clientSocket, &boardString, sizeof(newInfo.board));
-    if (n == -1) {
-        throw "Error reading result from socket";
-    }
     n = read(clientSocket, &newInfo.x, sizeof(newInfo.x));
     if (n == -1) {
         throw "Error reading result from socket";
@@ -94,7 +84,6 @@ Info ServerPlayer::getMove() {
     if (n == -1) {
         throw "Error reading result from socket";
     }
-    newInfo.board = boardString;
     return newInfo;
 }
 

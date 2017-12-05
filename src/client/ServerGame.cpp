@@ -65,7 +65,7 @@ void ServerGame::doOneTurn(vector<Point> options) {
             options = gameLogic->availableMoves(*board, player->getType());
         } else {
             recivedInfo = ((ServerPlayer*)player)->getMove();
-            board->extractBoardFromString(recivedInfo.board);
+            //board->extractBoardFromString(recivedInfo.board);
         }
         options = gameLogic->availableMoves(*board, playerType);
         /*

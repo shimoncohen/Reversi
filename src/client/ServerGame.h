@@ -9,7 +9,6 @@
 #include "ServerPlayer.h"
 
 typedef struct Info {
-    string board;
     int x;
     int y;
 }Info;
