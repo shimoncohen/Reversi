@@ -63,92 +63,107 @@ void ServerGame::doOneTurn(vector<Point> options) {
         recivedInfo.x = 0;
         recivedInfo.y = 0;
         int *temp;
-        if(playerType != player->getType()) {
-            recivedInfo = ((ServerPlayer*)player)->getMove();
-            //board->extractBoardFromString(recivedInfo.board);
-            if(player->getType() == whitePlayer) {
+        // if it's the other player's turn, we will make his move on the current player board.
+        if (playerType != player->getType()) {
+            // reciving the other player move
+            recivedInfo = ((ServerPlayer *) player)->getMove();
+            //assigning values on the board according to the player's type.
+            //if we are white, other is black, and the opposite.
+            if (player->getType() == whitePlayer) {
                 board->putTile(recivedInfo.x, recivedInfo.y, 'x');
                 gameLogic->changeTiles(blackPlayer, recivedInfo.x, recivedInfo.y, *board);
             } else {
                 board->putTile(recivedInfo.x, recivedInfo.y, 'o');
                 gameLogic->changeTiles(whitePlayer, recivedInfo.x, recivedInfo.y, *board);
             }
-        }
-        options = gameLogic->availableMoves(*board, player->getType());
-        //if the current player has no available moves.
-        if (options.size() == 0) {
-            if(noMoreTurns) {
-                break;
-            }
-            noMoreTurns = true;
-            turn += 1;
-            turn %= 2;
-            /* TODO
-             * no moves
-             */
-            continue;
-        }
-        printer->printBoard(board);
-        printer->printTurn(player->getType());
-        //print all move options.
-        printer->printPossibleMoves(options);
-        //let the player make a move.
-        while (true) {
-            bool valid = true;
-            printer->requestMove();
-            Board *copyBoard = new Board(*board);
-            temp = player->makeMove(*gameLogic, *copyBoard, options);
-            delete copyBoard;
-            x = temp[0];
-            y = temp[1];
-            if (x > 0 && y > 0 && x <= board->getSize() && y <= board->getSize()) {
-                for (int i = 0; i < options.size(); i++) {
-                    if (x == options[i].getX() && y == options[i].getY()) {
-                        valid = false;
-                        break;
-                    }
+        } else {
+            options = gameLogic->availableMoves(*board, player->getType());
+            //if the current player has no available moves.
+            if (options.size() == 0) {
+                if (noMoreTurns) {
+                    break;
                 }
-            } else {
-                printer->printInvalidMove('o');
-                x = 0;
-                y = 0;
+                noMoreTurns = true;
+                turn += 1;
+                turn %= 2;
+                /* TODO
+                 * no moves
+                 */
                 continue;
             }
-            //checks if the move was declared valid.
-            if (valid) {
-                printer->printInvalidMove('i');
-                x = 0;
-                y = 0;
+            printer->printBoard(board);
+            printer->printTurn(player->getType());
+            //print all move options.
+            printer->printPossibleMoves(options);
+            //let the player make a move.
+            while (true) {
+                bool valid = true;
+                printer->requestMove();
+                Board *copyBoard = new Board(*board);
+                temp = player->makeMove(*gameLogic, *copyBoard, options);
+                delete copyBoard;
+                x = temp[0];
+                y = temp[1];
+                if (x > 0 && y > 0 && x <= board->getSize() && y <= board->getSize()) {
+                    for (int i = 0; i < options.size(); i++) {
+                        if (x == options[i].getX() && y == options[i].getY()) {
+                            valid = false;
+                            break;
+                        }
+                    }
+                } else {
+                    printer->printInvalidMove('o');
+                    x = 0;
+                    y = 0;
+                    continue;
+                }
+                //checks if the move was declared valid.
+                if (valid) {
+                    printer->printInvalidMove('i');
+                    x = 0;
+                    y = 0;
+                } else {
+                    break;
+                }
+            }
+            if (player->getType() == blackPlayer) {
+                printer->printMove('X', x, y);
             } else {
-                break;
+                printer->printMove('O', x, y);
+            }
+            x -= 1;
+            y -= 1;
+            if (playerType == player->getType()) {
+                if (playerType == blackPlayer) {
+                    board->putTile(x, y, 'x');
+                } else {
+                    board->putTile(x, y, 'o');
+                }
+                //flips the correct tiles according to the player and the players move.
+                gameLogic->changeTiles(player->getType(), x, y, *board);
+            } else {
+                if (playerType == whitePlayer) {
+                    board->putTile(x, y, 'x');
+                } else {
+                    board->putTile(x, y, 'o');
+                }
+                //flips the correct tiles according to the player and the players move.
+                gameLogic->changeTiles(player->getType(), x, y, *board);
+            }
+            noMoreTurns = false;
+            delete temp;
+            cout << "Sending move: " << x << " " << y << endl;
+            try {
+                ((ServerPlayer *) player)->sendMove(*board, x, y);
+            } catch (const char *msg) {
+                cout << "Failed to send exercise to server.Reason: " << msg << endl;
             }
         }
-        printer->printMove(playerType, x, y);
-        x -= 1;
-        y -= 1;
-        if (playerType == player->getType()) {
-            if(playerType == blackPlayer) {
-                board->putTile(x, y, 'x');
-            } else {
-                board->putTile(x, y, 'o');
-            }
-            //flips the correct tiles according to the player and the players move.
-            gameLogic->changeTiles(player->getType(), x, y, *board);
-        }
-        noMoreTurns = false;
-        delete temp;
-        cout << "Sending move: " << x << " " << y << endl;
-        try {
-            ((ServerPlayer *) player)->sendMove(*board, x, y);
-        } catch (const char *msg) {
-            cout << "Failed to send exercise to server.Reason: " << msg << endl;
-        }
-        if(playerType == blackPlayer) {
+        if (playerType == blackPlayer) {
             playerType = whitePlayer;
         } else {
             playerType = blackPlayer;
         }
     }
     printer->printBoard(board);
-
 }

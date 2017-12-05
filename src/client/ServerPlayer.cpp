@@ -62,11 +62,11 @@ void ServerPlayer::connectToServer() {
 
 void ServerPlayer::sendMove(Board &board, int x, int y) {
 // Write the exercise arguments to the socket
-    int n = write(clientSocket, &x, sizeof(x));
+    int n = write(clientSocket, &x, sizeof(int));
     if (n == -1) {
         throw "Error writing op to socket";
     }
-    n = write(clientSocket, &y, sizeof(y));
+    n = write(clientSocket, &y, sizeof(int));
     if (n == -1) {
         throw "Error writing arg2 to socket";
     }
@@ -76,11 +76,11 @@ Info ServerPlayer::getMove() {
     //Read the result from the server
     int n;
     Info newInfo;
-    n = read(clientSocket, &newInfo.x, sizeof(newInfo.x));
+    n = read(clientSocket, &newInfo.x, sizeof(int));
     if (n == -1) {
         throw "Error reading result from socket";
     }
-    n = read(clientSocket, &newInfo.y, sizeof(newInfo.y));
+    n = read(clientSocket, &newInfo.y, sizeof(int));
     if (n == -1) {
         throw "Error reading result from socket";
     }
