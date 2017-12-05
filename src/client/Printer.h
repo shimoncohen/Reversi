@@ -45,6 +45,13 @@ public:
     */
     virtual void startGameMessage() = 0;
     /*
+     * function name: waitingMessage.
+     * input: none.
+     * output: none.
+     * operation: prints a message when waiting for opponent.
+    */
+    virtual void waitingMessage() = 0;
+    /*
      * function name: printTurn.
      * input: a char indicating the current player.
      * output: none.
@@ -93,6 +100,20 @@ public:
      * operation: prints all of the points in the vector.
     */
     virtual void printPossibleMoves(vector<Point> possibleMoves) = 0;
+    /*
+     * function name: printNoMoves.
+     * input: none.
+     * output: none.
+     * operation: prints a message if player has no moves.
+    */
+    virtual void printNoMoves() = 0;
+    /*
+     * function name: printOpponentHasNoMoves.
+     * input: none.
+     * output: none.
+     * operation: prints a message if opponent has no moves.
+    */
+    virtual void printOpponentHasNoMoves() = 0;
     /*
      * function name: printWinMessage.
      * input: the player that won.

@@ -43,8 +43,9 @@ void Server::start() {
     int playerNum = FIRST;
     string board;
     int temp;
-    int x = 0, y = 0;
+    int x, y;
     while (true) {
+        x = 0, y = 0;
         cout << "Waiting for client connections..." << endl;
         // Accept a new client connection
         int firstClientSocket = accept(serverSocket, (struct sockaddr *) &firstClientAddress,
@@ -77,10 +78,11 @@ void Server::start() {
             temp = currentClient;
             currentClient = waitingClient;
             waitingClient = temp;
-            x = 0, y = 0;
         }
+        handleClient(currentClient, &x, &y);
         close(firstClientSocket);
         close(secondClientSocket);
+        playerNum = FIRST;
     }
 }
 

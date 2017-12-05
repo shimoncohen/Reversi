@@ -26,9 +26,6 @@ void ServerGame::runGame() {
         return;
     }
     doOneTurn(options);
-    /*
-     * end of game: TODO
-     */
     int blackPieces = 0, whitePieces = 0;
     //counts the black and white pieces on the board.
     for(int i = 0; i < board->getSize(); i++) {
@@ -66,29 +63,55 @@ void ServerGame::doOneTurn(vector<Point> options) {
         // if it's the other player's turn, we will make his move on the current player board.
         if (playerType != player->getType()) {
             // reciving the other player move
+            printer->waitingMessage();
             recivedInfo = ((ServerPlayer *) player)->getMove();
             //assigning values on the board according to the player's type.
             //if we are white, other is black, and the opposite.
-            if (player->getType() == whitePlayer) {
-                board->putTile(recivedInfo.x, recivedInfo.y, 'x');
-                gameLogic->changeTiles(blackPlayer, recivedInfo.x, recivedInfo.y, *board);
+            if(recivedInfo.x == -2 && recivedInfo.y == -2) {
+                printer->printBoard(board);
+                break;
+            } if(recivedInfo.x != -1 && recivedInfo.y != -1) {
+                if (player->getType() == whitePlayer) {
+                    board->putTile(recivedInfo.x, recivedInfo.y, 'x');
+                    gameLogic->changeTiles(blackPlayer, recivedInfo.x, recivedInfo.y, *board);
+                    printer->printMove('X', recivedInfo.x + 1, recivedInfo.y + 1);
+                } else {
+                    board->putTile(recivedInfo.x, recivedInfo.y, 'o');
+                    gameLogic->changeTiles(whitePlayer, recivedInfo.x, recivedInfo.y, *board);
+                    printer->printMove('O', recivedInfo.x + 1, recivedInfo.y + 1);
+                }
             } else {
-                board->putTile(recivedInfo.x, recivedInfo.y, 'o');
-                gameLogic->changeTiles(whitePlayer, recivedInfo.x, recivedInfo.y, *board);
+                printer->printOpponentHasNoMoves();
             }
         } else {
             options = gameLogic->availableMoves(*board, player->getType());
             //if the current player has no available moves.
             if (options.size() == 0) {
                 if (noMoreTurns) {
+                    try {
+                        ((ServerPlayer *) player)->sendMove(*board, -2, -2);
+                    } catch (const char *msg) {
+                        cout << "Failed to send exercise to server.Reason: " << msg << endl;
+                    }
+                    printer->printBoard(board);
                     break;
                 }
                 noMoreTurns = true;
-                turn += 1;
-                turn %= 2;
                 /* TODO
                  * no moves
                  */
+                printer->printBoard(board);
+                printer->printNoMoves();
+                try {
+                    ((ServerPlayer *) player)->sendMove(*board, -1, -1);
+                } catch (const char *msg) {
+                    cout << "Failed to send move to server.Reason: " << msg << endl;
+                }
+                if (playerType == blackPlayer) {
+                    playerType = whitePlayer;
+                } else {
+                    playerType = blackPlayer;
+                }
                 continue;
             }
             printer->printBoard(board);
@@ -152,12 +175,12 @@ void ServerGame::doOneTurn(vector<Point> options) {
             }
             noMoreTurns = false;
             delete temp;
-            cout << "Sending move: " << x << " " << y << endl;
             try {
                 ((ServerPlayer *) player)->sendMove(*board, x, y);
             } catch (const char *msg) {
-                cout << "Failed to send exercise to server.Reason: " << msg << endl;
+                cout << "Failed to send move to server.Reason: " << msg << endl;
             }
+            printer->printBoard(board);
         }
         if (playerType == blackPlayer) {
             playerType = whitePlayer;
@@ -165,5 +188,4 @@ void ServerGame::doOneTurn(vector<Point> options) {
             playerType = blackPlayer;
         }
     }
-    printer->printBoard(board);
 }

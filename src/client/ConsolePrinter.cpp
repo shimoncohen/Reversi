@@ -22,6 +22,10 @@ void ConsolePrinter::startGameMessage() {
     cout << "Start game!" << endl << endl;
 }
 
+void ConsolePrinter::waitingMessage() {
+    cout << "Waiting for opponent..." << endl;
+}
+
 void ConsolePrinter::printTurn(type playerType) {
     if(playerType == blackPlayer) {
         cout << "X it's your move." << endl;
@@ -66,6 +70,14 @@ void ConsolePrinter::printPossibleMoves(vector<Point> possibleMoves) {
         cout << "(" << possibleMoves[k].getX() << "," << possibleMoves[k].getY() << ")";
     }
     cout << endl << endl;
+}
+
+void ConsolePrinter::printNoMoves() {
+    cout << "You have no available moves!" << endl << "Turn goes to opponent." << endl;
+}
+
+void ConsolePrinter::printOpponentHasNoMoves() {
+    cout << "Opponent has no available moves!" << endl;
 }
 
 void ConsolePrinter::printWinMessage(char winner) {
