@@ -60,9 +60,10 @@ void ServerPlayer::connectToServer() {
     cout << "You are player number " << playerNum << endl;
 }
 
-Info ServerPlayer::sendMove(Board &board, int x, int y) {
+void ServerPlayer::sendMove(Board &board, int x, int y) {
 // Write the exercise arguments to the socket
-    int n = write(clientSocket, &board, sizeof(board));
+    string boardString = board.toString();
+    int n = write(clientSocket, &boardString, sizeof(boardString));
     if (n == -1) {
         throw "Error writing arg1 to socket";
     }
@@ -74,28 +75,14 @@ Info ServerPlayer::sendMove(Board &board, int x, int y) {
     if (n == -1) {
         throw "Error writing arg2 to socket";
     }
-    //Read the result from the server
-    Info newInfo;
-    n = read(clientSocket, &newInfo.board, sizeof(newInfo.board));
-    if (n == -1) {
-        throw "Error reading result from socket";
-    }
-    n = read(clientSocket, &newInfo.x, sizeof(newInfo.x));
-    if (n == -1) {
-        throw "Error reading result from socket";
-    }
-    n = read(clientSocket, &newInfo.y, sizeof(newInfo.y));
-    if (n == -1) {
-        throw "Error reading result from socket";
-    }
-    return newInfo;
 }
 
 Info ServerPlayer::getMove() {
     //Read the result from the server
     int n;
+    string boardString;
     Info newInfo;
-    n = read(clientSocket, &newInfo.board, sizeof(newInfo.board));
+    n = read(clientSocket, &boardString, sizeof(newInfo.board));
     if (n == -1) {
         throw "Error reading result from socket";
     }
@@ -107,6 +94,7 @@ Info ServerPlayer::getMove() {
     if (n == -1) {
         throw "Error reading result from socket";
     }
+    newInfo.board = boardString;
     return newInfo;
 }
 

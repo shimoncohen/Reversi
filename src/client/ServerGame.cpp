@@ -62,11 +62,12 @@ void ServerGame::doOneTurn(vector<Point> options) {
         int x = 0, y = 0;
         int *temp;
         if (playerType == player->getType()) {
-            options = gameLogic->availableMoves(*board, blackPlayer);
+            options = gameLogic->availableMoves(*board, player->getType());
         } else {
             recivedInfo = ((ServerPlayer*)player)->getMove();
             board->extractBoardFromString(recivedInfo.board);
         }
+        options = gameLogic->availableMoves(*board, playerType);
         /*
          *
          * TODO
@@ -145,8 +146,7 @@ void ServerGame::doOneTurn(vector<Point> options) {
         delete temp;
         cout << "Sending move: " << x << " " << y << endl;
         try {
-            recivedInfo = ((ServerPlayer *) player)->sendMove(*board, x, y);
-            board->extractBoardFromString(recivedInfo.board);
+            ((ServerPlayer *) player)->sendMove(*board, x, y);
         } catch (const char *msg) {
             cout << "Failed to send exercise to server.Reason: " << msg << endl;
         }

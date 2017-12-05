@@ -198,7 +198,11 @@ string Board::toString() {
     for(int i = 0; i < boardSize; i ++ ) {
         for(int j = 0; j < boardSize; j++) {
             // appeand the cell char to the string
-            str += checkCell(i,j);
+            if(checkCell(i, j) == ' ') {
+                str += "-";
+            } else {
+                str += checkCell(i, j);
+            }
         }
     }
     return str;
@@ -210,13 +214,13 @@ void Board::extractBoardFromString(string str) {
     // filling the board
     for(int i = 0; i < boardSize; i++) {
         for(int j = 0; j < boardSize; j++) {
-            c = str.at(k);
+            c = str[k];
             // comparing the char to the enums, and assign to the board accordingly
             if(c == 'x') {
                 board[i][j] = black;
             } else if(c == 'o') {
                 board[i][j] = white;
-            } else if(c == ' ') {
+            } else if(c == '-') {
                 board[i][j] = space;
             }
             // next char in the string

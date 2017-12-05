@@ -12,7 +12,7 @@ public:
     ServerPlayer(const char *serverIP, int serverPort, type type1);
     void connectToServer();
     struct Info getMove();
-    Info sendMove(Board &board, int x, int y);
+    void sendMove(Board &board, int x, int y);
     type getType();
     int* makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves);
 private:

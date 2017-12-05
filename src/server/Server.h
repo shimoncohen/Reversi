@@ -5,6 +5,9 @@
 #ifndef ADVANCEDPROGRAMMING1_SERVER_H
 #define ADVANCEDPROGRAMMING1_SERVER_H
 
+#include <string>
+using namespace std;
+
 class Server {
 public:
     Server(int port);
@@ -13,8 +16,8 @@ public:
 private:
     int port;
     int serverSocket;
-    void handleClient(int firstClientSocket, int secondClientSocket);
-    int calc(int arg1, const char op, int arg2) const;
+    void handleClient(int clientSocket, string board, int x, int y);
+    void writeToClient(int clientSocket, string board, int x, int y);
 };
 
 #endif //ADVANCEDPROGRAMMING1_SERVER_H

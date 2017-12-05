@@ -41,7 +41,7 @@ int main() {
             g = new LocalGame(size, gameLogic, first, second);
             break;
         case 3:
-            first = new ServerPlayer("127.0.0.1", 8000, blackPlayer);
+            first = new ServerPlayer("127.0.0.1", 8001, blackPlayer);
             g = new ServerGame(size, gameLogic, first);
     }
 
