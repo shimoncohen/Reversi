@@ -51,12 +51,17 @@ void ServerPlayer::connectToServer() {
     if (n == -1) {
         throw "Error reading player num";
     }
+    printer.connectedToServerMessage();
     if(playerNum == 1) {
+        printer.waitingForConnectionMessage();
         playerType = blackPlayer;
     } else if(playerNum == 2) {
         playerType = whitePlayer;
     }
-    printer.connectedToServerMessage();
+    n = read(clientSocket, &playerNum, sizeof(playerNum));
+    if (n == -1) {
+        throw "Error reading start game";
+    }
 }
 
 void ServerPlayer::sendMove(int x, int y) {

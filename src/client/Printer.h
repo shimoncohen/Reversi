@@ -31,6 +31,13 @@ public:
     */
     virtual void connectedToServerMessage() = 0;
     /*
+     * function name: waitingForConnectionMessage.
+     * input: none.
+     * output: none.
+     * operation: prints a message when waiting for opponent to connect to server.
+    */
+    virtual void waitingForConnectionMessage() = 0;
+    /*
      * function name: failedConnectingToServer.
      * input: none.
      * output: none.

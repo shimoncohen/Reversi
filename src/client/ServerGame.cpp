@@ -53,6 +53,9 @@ void ServerGame::doOneTurn(vector<Point> options) {
     Printer *printer = new ConsolePrinter();
     type playerType = blackPlayer;
     Info recivedInfo;
+    if(playerType != player->getType()) {
+        printer->printBoard(board);
+    }
     //runs the players turns untill there is a winner.
     while(true) {
         string xTest, yTest;

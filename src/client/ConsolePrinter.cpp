@@ -12,6 +12,10 @@ void ConsolePrinter::connectedToServerMessage() {
     cout << "Connected to server" << endl;
 }
 
+void ConsolePrinter::waitingForConnectionMessage() {
+    cout << "Waiting for opponent to join..." << endl;
+}
+
 void ConsolePrinter::failedConnectingToServer(const char *msg) {
     cout << "Failed to connect to server. Reason:" << msg << endl;
 }
@@ -35,7 +39,7 @@ void ConsolePrinter::startGameMessage() {
 }
 
 void ConsolePrinter::waitingMessage() {
-    cout << "Waiting for opponent..." << endl << endl;
+    cout << "Waiting for opponents move..." << endl << endl;
 }
 
 void ConsolePrinter::printTurn(type playerType) {

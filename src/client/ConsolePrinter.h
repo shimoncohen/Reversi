@@ -10,6 +10,7 @@ class ConsolePrinter : public Printer {
 public:
     void printGameOpenning();
     void connectedToServerMessage();
+    void waitingForConnectionMessage();
     void failedConnectingToServer(const char *msg);
     void failedSendingToServer(const char *msg);
     void printInvalidGameMode();

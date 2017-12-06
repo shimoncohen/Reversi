@@ -45,7 +45,6 @@ int main() {
             second = new ServerPlayer("127.0.0.1", 8000, blackPlayer);
             g = new ServerGame(size, gameLogic, second);
     }
-	printer->startGameMessage();
 	g->runGame();
     delete printer;
     delete g;

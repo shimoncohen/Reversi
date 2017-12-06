@@ -66,6 +66,16 @@ void Server::start() {
             cout << "Error writing to socket" << endl;
             return;
         }
+        n = write(firstClientSocket, &playerNum, sizeof(playerNum));
+        if (n == -1) {
+            cout << "Error writing to socket" << endl;
+            return;
+        }
+        n = write(secondClientSocket, &playerNum, sizeof(playerNum));
+        if (n == -1) {
+            cout << "Error writing to socket" << endl;
+            return;
+        }
         cout << "Second player connected" << endl;
         if (secondClientSocket == -1)
             throw "Error on accept";
