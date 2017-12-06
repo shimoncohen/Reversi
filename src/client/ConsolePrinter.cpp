@@ -8,6 +8,18 @@ void ConsolePrinter::printGameOpenning() {
     cout << "1. a human local player" << endl << "2. an AI player" << endl << "3. a remote player" << endl;
 }
 
+void ConsolePrinter::connectedToServerMessage() {
+    cout << "Connected to server" << endl;
+}
+
+void ConsolePrinter::failedConnectingToServer(const char *msg) {
+    cout << "Failed to connect to server. Reason:" << msg << endl;
+}
+
+void ConsolePrinter::failedSendingToServer(const char *msg) {
+    cout << "Failed to send move to server.Reason: " << msg << endl;
+}
+
 void ConsolePrinter::printInvalidGameMode() {
     cout << "Invalid option." << endl << endl;
     cout << "which mode would you like to play?" << endl;
@@ -23,14 +35,14 @@ void ConsolePrinter::startGameMessage() {
 }
 
 void ConsolePrinter::waitingMessage() {
-    cout << "Waiting for opponent..." << endl;
+    cout << "Waiting for opponent..." << endl << endl;
 }
 
 void ConsolePrinter::printTurn(type playerType) {
     if(playerType == blackPlayer) {
-        cout << "X it's your move." << endl;
+        cout << "X: it's your move." << endl;
     } else {
-        cout << "O it's your move." << endl;
+        cout << "O: it's your move." << endl;
     }
 }
 
@@ -38,8 +50,12 @@ void ConsolePrinter::requestMove() {
     cout << "Please enter your move row col: ";
 }
 
-void ConsolePrinter::printMove(char playerType, int x, int y) {
-    cout << endl << playerType << " played " << x << " " << y << endl;
+void ConsolePrinter::printMove(type playerType, int x, int y) {
+    if(playerType == blackPlayer) {
+        cout << "X played " << x << " " << y << endl;
+    } else {
+        cout << "O played " << x << " " << y << endl;
+    }
 }
 
 void ConsolePrinter::printPoint(int* point) {

@@ -44,9 +44,9 @@ int AIPlayer::checkMove(GameLogic &gameLogic, Board &board, Point point) {
     // vector of opponents moves
     vector<Point> opponentsMoves;
     if(playerType == blackPlayer) {
-        opponentSimulator->putTile(point.getX() - 1, point.getY() - 1, 'x');
+        opponentSimulator->putTile(point.getX() - 1, point.getY() - 1, blackPlayer);
     } else {
-        opponentSimulator->putTile(point.getX() - 1, point.getY() - 1, 'o');
+        opponentSimulator->putTile(point.getX() - 1, point.getY() - 1, whitePlayer);
     }
     gameLogic.changeTiles(playerType, point.getX() - 1, point.getY() - 1, *opponentSimulator);
     // check opponents possible moves according to his type
@@ -80,10 +80,10 @@ int AIPlayer::gradeMove(GameLogic &gameLogic, Board &board, Point move) {
     ///making the move on the new board
     if(playerType == blackPlayer) {
         otherPlayerType = whitePlayer;
-        tempBoard->putTile(move.getX() - 1, move.getY() - 1, 'o');
+        tempBoard->putTile(move.getX() - 1, move.getY() - 1, whitePlayer);
     } else {
         otherPlayerType = blackPlayer;
-        tempBoard->putTile(move.getX() - 1, move.getY() - 1, 'x');
+        tempBoard->putTile(move.getX() - 1, move.getY() - 1, blackPlayer);
     }
     gameLogic.changeTiles(otherPlayerType, move.getX() - 1, move.getY() - 1, *tempBoard);
     //counting the x's and the o's on the board

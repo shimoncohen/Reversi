@@ -9,13 +9,16 @@
 class ConsolePrinter : public Printer {
 public:
     void printGameOpenning();
+    void connectedToServerMessage();
+    void failedConnectingToServer(const char *msg);
+    void failedSendingToServer(const char *msg);
     void printInvalidGameMode();
     void boardSizeMessage();
     void startGameMessage();
     void waitingMessage();
     void printTurn(type playerType);
     void requestMove();
-    void printMove(char playerType, int x, int y);
+    void printMove(type playerType, int x, int y);
     void printPoint(int* point);
     void printBoard(Board *board) const;
     void printInvalidMove(char outIn);

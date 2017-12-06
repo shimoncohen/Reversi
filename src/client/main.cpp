@@ -41,8 +41,9 @@ int main() {
             g = new LocalGame(size, gameLogic, first, second);
             break;
         case 3:
-            first = new ServerPlayer("127.0.0.1", 8001, blackPlayer);
-            g = new ServerGame(size, gameLogic, first);
+            first = new HumanPlayer(blackPlayer);
+            second = new ServerPlayer("127.0.0.1", 8000, blackPlayer);
+            g = new ServerGame(size, gameLogic, second);
     }
 	printer->startGameMessage();
 	g->runGame();

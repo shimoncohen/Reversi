@@ -76,7 +76,11 @@ void StandartGameLogic::flipTiles(char type, int x, int y, int right, int down, 
        || (x > board.getSize() || y > board.getSize() || x < 0 || y < 0)) {
         return;
     }
-    board.putTile(x, y, type);
+    if(type == 'x') {
+        board.putTile(x, y, blackPlayer);
+    } else if(type == 'o') {
+        board.putTile(x, y, whitePlayer);
+    }
     //flip all of the valid move tiles.
     flipTiles(type, x + right, y + down, right, down, board);
 }

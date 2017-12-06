@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include "Board.h"
+#include "Enum.h"
 using namespace std;
 
 enum boardChar {black, white, space};
@@ -68,7 +69,7 @@ public:
      * output: none.
      * operation: puts a players piece in a given cell of the board.
     */
-    void putTile(const int x, const int y, const char type);
+    void putTile(const int x, const int y, const type type);
     /*
 	 * function name: operator <<.
 	 * input: a stream and a board object.

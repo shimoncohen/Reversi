@@ -14,11 +14,11 @@ using namespace std;
 ServerPlayer::ServerPlayer(const char *serverIP, int serverPort, type type1):
         serverIP(serverIP), serverPort(serverPort),
         clientSocket(0), playerType(type1) {
-    cout << "Client" << endl;
 }
 
 void ServerPlayer::connectToServer() {
 // Create a socket point
+    ConsolePrinter printer;
     clientSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (clientSocket == -1) {
         throw "Error opening socket";
@@ -56,19 +56,18 @@ void ServerPlayer::connectToServer() {
     } else if(playerNum == 2) {
         playerType = whitePlayer;
     }
-    cout << "Connected to server" << endl;
-    cout << "You are player number " << playerNum << endl;
+    printer.connectedToServerMessage();
 }
 
-void ServerPlayer::sendMove(Board &board, int x, int y) {
+void ServerPlayer::sendMove(int x, int y) {
 // Write the exercise arguments to the socket
     int n = write(clientSocket, &x, sizeof(int));
     if (n == -1) {
-        throw "Error writing op to socket";
+        throw "Error writing x to socket";
     }
     n = write(clientSocket, &y, sizeof(int));
     if (n == -1) {
-        throw "Error writing arg2 to socket";
+        throw "Error writing y to socket";
     }
 }
 
@@ -78,11 +77,11 @@ Info ServerPlayer::getMove() {
     Info newInfo;
     n = read(clientSocket, &newInfo.x, sizeof(int));
     if (n == -1) {
-        throw "Error reading result from socket";
+        throw "Error reading x from socket";
     }
     n = read(clientSocket, &newInfo.y, sizeof(int));
     if (n == -1) {
-        throw "Error reading result from socket";
+        throw "Error reading y from socket";
     }
     return newInfo;
 }
@@ -92,34 +91,6 @@ type ServerPlayer::getType() {
 }
 
 int* ServerPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves) {
-    string temp1, temp2;
-    int *choice = new int[2];
-    choice[0] = 0;
-    choice[1] = 0;
-    cin >> temp1 >> temp2;
-    //check if what the user entered are numbers.
-    for (int i = 0; i < temp1.size(); i++) {
-        if (!isdigit(temp1[i])) {
-            choice[0] = 0;
-            choice[1] = 0;
-            return choice;
-        }
-    }
-    for (int i = 0; i < temp2.size(); i++) {
-        if (!isdigit(temp2[i])) {
-            choice[0] = 0;
-            choice[1] = 0;
-            return choice;
-        }
-    }
-    //if the user entered numbers the convert them to int.
-    for(int i = 0; i < temp1.size(); i++) {
-        choice[0] *= 10;
-        choice[0] += temp1[i] - 48;
-    }
-    for(int i = 0; i < temp2.size(); i++) {
-        choice[1] *= 10;
-        choice[1] += temp2[i] - 48;
-    }
-    return choice;
+    HumanPlayer humanPlayer(playerType);
+    return humanPlayer.makeMove(gameLogic, board, moves);
 }

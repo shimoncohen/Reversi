@@ -31,7 +31,7 @@ public:
     */
     ~HumanPlayer();
     type getType();
-    virtual int* makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves);
+    int* makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves);
 };
 
 

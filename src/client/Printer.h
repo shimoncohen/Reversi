@@ -24,6 +24,27 @@ public:
     */
     virtual void printGameOpenning() = 0;
     /*
+     * function name: connectedToServerMessage.
+     * input: none.
+     * output: none.
+     * operation: prints a message that client connected to the server.
+    */
+    virtual void connectedToServerMessage() = 0;
+    /*
+     * function name: failedConnectingToServer.
+     * input: none.
+     * output: none.
+     * operation: prints a message that client failed to connected to the server.
+    */
+    virtual void failedConnectingToServer(const char *msg) = 0;
+    /*
+     * function name: failedSendingToServer.
+     * input: none.
+     * output: none.
+     * operation: prints a message that client failed to send to the server.
+    */
+    virtual void failedSendingToServer(const char *msg) = 0;
+    /*
      * function name: printInvalidGameMode.
      * input: none.
      * output: none.
@@ -85,7 +106,7 @@ public:
      * output: none.
      * operation: print the move the player entered.
     */
-    virtual void printMove(char playerType, int x, int y) = 0;
+    virtual void printMove(type playerType, int x, int y) = 0;
     /*
      * function name: printInvalidMove.
      * input: none.

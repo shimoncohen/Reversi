@@ -46,39 +46,29 @@ void LocalGame::runGame() {
 
 void LocalGame::doOneTurn(vector<Point> options) {
     bool noMoreTurns = false;
-    Player *current;
+    Player *current = firstPlayer, *waitingPlayer = secondPlayer, *tempPlayer;
     Printer *printer = new ConsolePrinter();
-    char playerType = ' ';
+    type playerType;
     //runs the players turns untill there is a winner.
     while(true) {
         string xTest, yTest;
         int x = 0, y = 0;
         int *temp;
-        if (turn == 0) {
-            options = gameLogic->availableMoves(*board, blackPlayer);
-            current = firstPlayer;
-            playerType = 'x';
-        } else {
-            options = gameLogic->availableMoves(*board, whitePlayer);
-            current = secondPlayer;
-            playerType = 'o';
-        }
+        playerType = current->getType();
+        options = gameLogic->availableMoves(*board, playerType);
         //if the current player has no available moves.
         if (options.size() == 0) {
             if(noMoreTurns) {
                 break;
             }
             noMoreTurns = true;
-            turn += 1;
-            turn %= 2;
+            tempPlayer = current;
+            current = waitingPlayer;
+            waitingPlayer = tempPlayer;
             continue;
         }
         printer->printBoard(board);
-        if (turn == 0) {
-            printer->printTurn(blackPlayer);
-        } else {
-            printer->printTurn(whitePlayer);
-        }
+        printer->printTurn(playerType);
         //print all move options.
         printer->printPossibleMoves(options);
         //let the player make a move.
@@ -90,8 +80,11 @@ void LocalGame::doOneTurn(vector<Point> options) {
             delete copyBoard;
             x = temp[0];
             y = temp[1];
+            //check if move is in board boundaries.
             if (x > 0 && y > 0 && x <= board->getSize() && y <= board->getSize()) {
+                //go over all of the possible moves.
                 for (int i = 0; i < options.size(); i++) {
+                    //if the move is a possible move.
                     if (x == options[i].getX() && y == options[i].getY()) {
                         valid = false;
                         break;
@@ -99,32 +92,23 @@ void LocalGame::doOneTurn(vector<Point> options) {
                 }
             } else {
                 printer->printInvalidMove('o');
-                x = 0;
-                y = 0;
                 continue;
             }
             //checks if the move was declared valid.
             if (valid) {
                 printer->printInvalidMove('i');
-                x = 0;
-                y = 0;
             } else {
                 break;
             }
         }
         printer->printMove(playerType, x, y);
-        x -= 1;
-        y -= 1;
-        if (turn == 0) {
-            board->putTile(x, y, 'x');
-            //flips the correct tiles according to the player and the players move.
-            gameLogic->changeTiles(blackPlayer, x, y, *board);
-            turn = 1;
-        } else {
-            board->putTile(x, y, 'o');
-            gameLogic->changeTiles(whitePlayer, x, y, *board);
-            turn = 0;
-        }
+        x -= 1, y -= 1;
+        board->putTile(x, y, playerType);
+        //flips the correct tiles according to the player and the players move.
+        gameLogic->changeTiles(playerType, x, y, *board);
+        tempPlayer = current;
+        current = waitingPlayer;
+        waitingPlayer = tempPlayer;
         noMoreTurns = false;
         delete temp;
     }

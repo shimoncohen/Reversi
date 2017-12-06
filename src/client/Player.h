@@ -15,6 +15,12 @@ class Player {
 private:
     type playerType;
 public:
+    /*
+	 * function name:getType.
+	 * input: none.
+	 * output: the players type.
+     * operation: returns the players type.
+    */
     virtual type getType() = 0;
     /*
 	 * function name:makeMove.

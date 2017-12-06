@@ -116,11 +116,11 @@ char Board::checkCell(const int x, const int y) {
     return ' ';
 }
 
-void Board::putTile(const int x, const int y, const char type) {
+void Board::putTile(const int x, const int y, const type type) {
     // put a value in the cell according to type.
-    if(type == 'x') {
+    if(type == blackPlayer) {
         board[x][y] = black;
-    } else if(type == 'o') {
+    } else if(type == whitePlayer) {
         board[x][y] = white;
     } else {
         board[x][y] == space;
@@ -128,6 +128,7 @@ void Board::putTile(const int x, const int y, const char type) {
 }
 
 ostream &operator <<(ostream &out, Board &board1) {
+    cout << "Current board:" << endl << endl;
     // print the board to the stream with all
     // of the line and column numbers and dividers between cells.
     if(board1.getSize() > 9) {
