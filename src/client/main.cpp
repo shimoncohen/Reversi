@@ -2,9 +2,20 @@
 // 302228275 Nadav Spitzer
 
 #include "LocalGame.h"
+#include <fstream>
+#include <stdlib.h>
+#include <string.h>
+#define ENDPORTWORD 5
+#define ENDIPWORD 3
+
+using namespace std;
+
+void settingsReading(int* port, char *IPAddress);
 
 int main() {
-	int size, choice = 0;
+    char *IPAddress = (char*)malloc(255 * sizeof(char));
+	int size, choice = 0, port;
+    settingsReading(&port, IPAddress);
     Printer *printer = new ConsolePrinter();
     printer->printGameOpenning();
     // choosing game style. 1) PvP . 2) PvAI.
@@ -42,11 +53,46 @@ int main() {
             break;
         case 3:
             first = new HumanPlayer(blackPlayer);
-            second = new ServerPlayer("127.0.0.1", 8000, blackPlayer);
+            second = new ServerPlayer(IPAddress, port, blackPlayer);
             g = new ServerGame(size, gameLogic, second);
     }
 	g->runGame();
     delete printer;
     delete g;
 	return 0;
+}
+
+/*
+    * function name: settingsReading.
+    * input: int* port, const char** IPAddress.
+    * output: none.
+    * operation: reads the port number, and IP address of the server from a file.
+*/
+void settingsReading(int* port, char *IPAddress) {
+    //reader for the file
+    string reader;
+    //input streamer
+    ifstream serverInfo;
+    serverInfo.open("serverInfo.txt", ios::in);
+    //error opening file will give a proper message
+    if(!serverInfo.is_open()) {
+        cout << "Error reading from file" << endl;
+        //file opening was succssesful
+    } else {
+        //reading from the file
+        while(!serverInfo.eof()) {
+            serverInfo >> reader;
+            if(reader.find("IP:", 0) == 0) {
+                //removing "IP:" from the string
+                reader = reader.erase(0, ENDIPWORD);
+                strcpy(IPAddress, reader.c_str());
+            } else if(reader.find("Port:", 0) == 0) {
+                //removing "Port:" from the string
+                reader = reader.erase(0, ENDPORTWORD);
+                //converting to int
+                *port = atoi(reader.c_str());
+            }
+        }
+    }
+    serverInfo.close();
 }
