@@ -71,13 +71,14 @@ void ConsolePrinter::printBoard(Board *board) const {
 }
 
 void ConsolePrinter::printInvalidMove(char outIn) {
-    // if char is i then the invalid move is in the board.
-    if(outIn == 'i') {
-        cout << "invalid move!" << endl << endl;
-        // else the invalid move was out of the board boundaries
-    } else if(outIn == 'o') {
-        cout << "ERROR: move out of board boundries" << endl << endl;
-    }
+//    // if char is i then the invalid move is in the board.
+//    if(outIn == 'i') {
+//        cout << "invalid move!" << endl << endl;
+//        // else the invalid move was out of the board boundaries
+//    } else if(outIn == 'o') {
+//        cout << "ERROR: move out of board boundries" << endl << endl;
+//    }
+    cout << "invalid move!" << endl << endl;
 }
 
 void ConsolePrinter::printPossibleMoves(vector<Point> possibleMoves) {

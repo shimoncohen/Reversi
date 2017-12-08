@@ -44,11 +44,13 @@ int AIPlayer::checkMove(GameLogic &gameLogic, Board &board, Point point) {
     // vector of opponents moves
     vector<Point> opponentsMoves;
     if(playerType == blackPlayer) {
-        opponentSimulator->putTile(point.getX() - 1, point.getY() - 1, blackPlayer);
+        gameLogic.changeTiles(blackPlayer, point.getX() - 1, point.getY() - 1, *opponentSimulator);
+        //opponentSimulator->putTile(point.getX() - 1, point.getY() - 1, blackPlayer);
     } else {
-        opponentSimulator->putTile(point.getX() - 1, point.getY() - 1, whitePlayer);
+        gameLogic.changeTiles(whitePlayer, point.getX() - 1, point.getY() - 1, *opponentSimulator);
+        //opponentSimulator->putTile(point.getX() - 1, point.getY() - 1, whitePlayer);
     }
-    gameLogic.changeTiles(playerType, point.getX() - 1, point.getY() - 1, *opponentSimulator);
+    //gameLogic.changeTiles(playerType, point.getX() - 1, point.getY() - 1, *opponentSimulator);
     // check opponents possible moves according to his type
     if(playerType == blackPlayer) {
         opponentsMoves = gameLogic.availableMoves(*opponentSimulator, whitePlayer);

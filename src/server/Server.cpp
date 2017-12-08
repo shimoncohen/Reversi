@@ -84,12 +84,14 @@ void Server::start() {
         while(x != -2 || y != -2) {
             handleClient(currentClient, &x, &y);
             writeToClient(waitingClient, &x, &y);
-// Close communication with the client
             temp = currentClient;
             currentClient = waitingClient;
             waitingClient = temp;
         }
+        // end of game
+        // send the other player the end message.
         handleClient(currentClient, &x, &y);
+        // Close communication with the client.
         close(firstClientSocket);
         close(secondClientSocket);
         playerNum = FIRST;
@@ -98,9 +100,7 @@ void Server::start() {
 
 // Handle requests from a specific client
 void Server::handleClient(int clientSocket, int *x, int *y) {
-    //int waitingClient = secondClientSocket;
-    //while (true) {
-// Read new exercise arguments
+    //read the info sent from the client.
     int n = read(clientSocket, x, sizeof(int));
     if (n == -1) {
         cout << "Error reading x" << endl;
@@ -115,14 +115,17 @@ void Server::handleClient(int clientSocket, int *x, int *y) {
         cout << "Error reading y" << endl;
         return;
     }
-    cout << "Got info: " << "board and move " << *x << " " << *y << endl;
-//        temp = currentClient;
-//        currentClient = waitingClient;
-//        waitingClient = temp;
-    //}
+    if(*x == -1 && *y == -1) {
+        cout << "Player has no move" << endl;
+    } else if(*x == -2 && *y == -2) {
+        cout << "Got end of game info" << endl;
+    } else {
+        cout << "Got info: " << "move " << *x + 1 << " " << *y + 1 << endl;
+    }
 }
 
 void Server::writeToClient(int clientSocket, int *x, int *y) {
+    //write the info from one client to the other.
     int n = write(clientSocket, x, sizeof(int));
     if (n == -1) {
         cout << "Error reading x" << endl;
@@ -137,7 +140,13 @@ void Server::writeToClient(int clientSocket, int *x, int *y) {
         cout << "Error reading y" << endl;
         return;
     }
-    cout << "Wrote info: " << "board and move " << *x << " " << *y << endl;
+    if(*x == -1 && *y == -1) {
+        cout << "Opponent had no move" << endl;
+    } else if(*x == -2 && *y == -2) {
+        cout << "Wrote end of game info" << endl;
+    } else {
+        cout << "Wrote info: " << "move " << *x + 1 << " " << *y + 1 << endl;
+    }
 }
 
 void Server::stop() {

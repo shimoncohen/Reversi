@@ -18,6 +18,20 @@ using namespace std;
 class GameLogic {
 public:
     /*
+	 * function name: availableMoves.
+	 * input: type- the player type(black/white). board- the game board.
+	 * output: a vector of points indicating the available moves.
+     * operation: searches the board for available moves for the current player.
+    */
+    virtual vector<Point> availableMoves(Board &board, type type1) = 0;
+    /*
+	 * function name: validOption.
+	 * input: the players move.
+	 * output: true if optional move, false otherwise.
+     * operation: checks if the move is an optional move and returns true if it is, false otherwise.
+    */
+    virtual bool validOption(Board &board, int x, int y, vector<Point> options) = 0;
+    /*
 	 * function name: changeTiles.
 	 * input: type- the player type(black/white). x- the row. y- the column. board- the game board.
 	 * output: none.
@@ -25,12 +39,19 @@ public:
 	*/
     virtual void changeTiles(type type, int x, int y, Board &board) = 0;
     /*
-	 * function name: availableMoves.
-	 * input: type- the player type(black/white). board- the game board.
-	 * output: a vector of points indicating the available moves.
-     * operation: searches the board for available moves for the current player.
+	 * function name: gameWon.
+	 * input: none.
+	 * output: the playerType of the player who won, otherwise t for tie.
+     * operation: returns the winning player's type, otherwise returns t for tie.
     */
-    virtual vector<Point> availableMoves(Board &board, type type1) = 0;
+    virtual char gameWon(Board &board) = 0;
+    /*
+	 * function name: gameFinalMove.
+	 * input: the game board and the last move.
+	 * output: true if the game ends after given move, false otherwise.
+     * operation: plays give move on board and returns true if the given move was the final move, false otherwise.
+    */
+    virtual bool gameFinalMove(Board &board, type pType, int x, int y) = 0;
 private:
     /*
 	 * function name: validMove.
