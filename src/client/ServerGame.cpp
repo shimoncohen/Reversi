@@ -80,29 +80,29 @@ void ServerGame::doOneTurn(vector<Point> options) {
             options = gameLogic->availableMoves(*board, player->getType());
             //if the current player has no available moves.
             if (options.size() == 0) {
-                if (noMoreTurns) {
-                    try {
-                        ((ServerPlayer *) player)->sendMove(-2, -2);
-                    } catch (const char *msg) {
-                        printer->failedSendingToServer(msg);
-                    }
-                    printer->printBoard(board);
-                    break;
-                }
-                noMoreTurns = true;
-                printer->printBoard(board);
-                printer->printNoMoves();
-                try {
-                    ((ServerPlayer *) player)->sendMove(-1, -1);
-                } catch (const char *msg) {
-                    printer->failedSendingToServer(msg);
-                }
-                if (playerType == blackPlayer) {
-                    playerType = whitePlayer;
-                } else {
-                    playerType = blackPlayer;
-                }
-                continue;
+//                if (noMoreTurns) {
+//                    try {
+//                        ((ServerPlayer *) player)->sendMove(-2, -2);
+//                    } catch (const char *msg) {
+//                        printer->failedSendingToServer(msg);
+//                    }
+//                    printer->printBoard(board);
+//                    break;
+//                }
+//                noMoreTurns = true;
+//                printer->printBoard(board);
+//                printer->printNoMoves();
+//                try {
+//                    ((ServerPlayer *) player)->sendMove(-1, -1);
+//                } catch (const char *msg) {
+//                    printer->failedSendingToServer(msg);
+//                }
+//                if (playerType == blackPlayer) {
+//                    playerType = whitePlayer;
+//                } else {
+//                    playerType = blackPlayer;
+//                }
+//                continue;
             }
             printer->printBoard(board);
             printer->printTurn(player->getType());
@@ -142,7 +142,7 @@ void ServerGame::doOneTurn(vector<Point> options) {
             noMoreTurns = false;
             delete temp;
             try {
-                ((ServerPlayer *) player)->sendMove(x, y);
+                //((ServerPlayer *) player)->sendMove(x, y);
             } catch (const char *msg) {
                 printer->failedSendingToServer(msg);
             }

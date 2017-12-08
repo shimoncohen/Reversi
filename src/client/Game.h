@@ -23,8 +23,14 @@ private:
     Board* board;//the game board.
     Player* firstPlayer;//the first player in the game.
     Player* secondPlayer;// the second player in the game.
-    int turn;
 public:
+    /*
+	 * function name: assignTypes.
+	 * input: none.
+	 * output: none.
+     * operation: assigns playerTypes to the players.
+    */
+    virtual void assignTypes() = 0;
     /*
 	 * function name: runGame.
 	 * input: none.

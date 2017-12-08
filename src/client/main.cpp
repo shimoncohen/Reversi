@@ -42,19 +42,19 @@ int main() {
     // create a game object and give it a board, players and a logic to play by.
     switch(choice) {
         case 1:
-            first = new HumanPlayer(blackPlayer);
-            second = new HumanPlayer(whitePlayer);
+            first = new HumanPlayer();
+            second = new HumanPlayer();
             g = new LocalGame(size, gameLogic, first, second);
             break;
         case 2:
-            first = new HumanPlayer(blackPlayer);
-            second = new AIPlayer(whitePlayer);
+            first = new HumanPlayer();
+            second = new AIPlayer();
             g = new LocalGame(size, gameLogic, first, second);
             break;
         case 3:
-            first = new HumanPlayer(blackPlayer);
-            second = new ServerPlayer(IPAddress, port, blackPlayer);
-            g = new ServerGame(size, gameLogic, second);
+            first = new HumanPlayer();
+            second = new ServerPlayer(IPAddress, port);
+            g = new LocalGame(size, gameLogic, first, second);
     }
 	g->runGame();
     delete printer;

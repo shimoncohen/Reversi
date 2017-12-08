@@ -18,11 +18,11 @@ private:
 public:
     /*
 	 * function name: HumanPlayer.
-	 * input: type1 - represents the players type.
+	 * input: none.
 	 * output: none.
      * operation: constructor.
     */
-    HumanPlayer(type type1);
+    HumanPlayer();
     /*
 	 * function name: ~HumanPlayer.
 	 * input: none.
@@ -30,8 +30,10 @@ public:
      * operation: destructor.
     */
     ~HumanPlayer();
+    void assignType(type playerType1);
     type getType();
     int* makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves);
+    void recieveOpponentsMove(int x, int y);
 };
 
 

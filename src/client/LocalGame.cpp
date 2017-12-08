@@ -8,7 +8,6 @@ LocalGame::LocalGame(int boardSize, GameLogic* newGameLogic, Player* first, Play
     board = new Board(boardSize);
     firstPlayer = first;
     secondPlayer = second;
-    turn = 0;
 }
 
 LocalGame::~LocalGame() {
@@ -16,6 +15,21 @@ LocalGame::~LocalGame() {
     delete firstPlayer;
     delete secondPlayer;
     delete gameLogic;
+}
+
+void LocalGame::assignTypes() {
+    Player *tempPlayer;
+    if(secondPlayer->getType() == notDefined) {
+        firstPlayer->assignType(blackPlayer);
+        secondPlayer->assignType(whitePlayer);
+    } else if(secondPlayer->getType() == blackPlayer) {
+        firstPlayer->assignType(whitePlayer);
+        tempPlayer = firstPlayer;
+        firstPlayer = secondPlayer;
+        secondPlayer = tempPlayer;
+    } else if(secondPlayer->getType() == whitePlayer) {
+        firstPlayer->assignType(blackPlayer);
+    }
 }
 
 void LocalGame::runGame() {
@@ -38,6 +52,7 @@ void LocalGame::doOneTurn(vector<Point> options) {
         int x = 0, y = 0;
         int *temp;
         playerType = current->getType();
+        waitingPlayer->recieveOpponentsMove(x, y);
         options = gameLogic->availableMoves(*board, playerType);
         //if the current player has no available moves.
         if (options.size() == 0) {

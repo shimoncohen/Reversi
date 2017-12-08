@@ -8,6 +8,6 @@
  * the player types.
  * a player may be the black or white pieces.
  */
-enum type {blackPlayer, whitePlayer};
+enum type {blackPlayer, whitePlayer, notDefined};
 
 #endif //EX1_ENUM_H

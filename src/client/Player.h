@@ -16,6 +16,13 @@ private:
     type playerType;
 public:
     /*
+	 * function name: assignType.
+	 * input: a type to assign as player type.
+	 * output: none.
+     * operation: assigns the player the given type.
+    */
+    virtual void assignType(type playerType1) = 0;
+    /*
 	 * function name:getType.
 	 * input: none.
 	 * output: the players type.
@@ -29,6 +36,13 @@ public:
      * operation: the player chooses a point on the board to put a piece on (from the available moves he has).
     */
     virtual int* makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves) = 0;
+    /*
+	 * function name: recieveOpponentsMove.
+	 * input: the players move.
+	 * output: none.
+	 * operation: gives the opponents move to the player.
+	*/
+    virtual void recieveOpponentsMove(int x, int y) = 0;
 };
 
 

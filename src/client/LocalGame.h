@@ -26,7 +26,6 @@ private:
     Board* board;//the game board.
     Player* firstPlayer;//the first player in the game.
     Player* secondPlayer;// the second player in the game.
-    int turn;
 public:
     /*
 	 * function name: LocalGame.
@@ -42,6 +41,13 @@ public:
      * operation: deconstructor.
     */
     ~LocalGame();
+    /*
+	 * function name: assignTypes.
+	 * input: none.
+	 * output: none.
+     * operation: assigns playerTypes to the players.
+    */
+    void assignTypes();
     /*
 	 * function name: runGame.
 	 * input: none.

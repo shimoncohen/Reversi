@@ -11,9 +11,14 @@
 #include <unistd.h>
 using namespace std;
 
-ServerPlayer::ServerPlayer(const char *serverIP, int serverPort, type type1):
+ServerPlayer::ServerPlayer(const char *serverIP, int serverPort):
         serverIP(serverIP), serverPort(serverPort),
-        clientSocket(0), playerType(type1) {
+        clientSocket(0), playerType(notDefined) {
+     try{
+         connectToServer();
+     } catch (const char *msg) {
+         throw msg;
+     }
 }
 
 void ServerPlayer::connectToServer() {
@@ -64,7 +69,7 @@ void ServerPlayer::connectToServer() {
     }
 }
 
-void ServerPlayer::sendMove(int x, int y) {
+void ServerPlayer::recieveOpponentsMove(int x, int y) {
 // Write the exercise arguments to the socket
     int n = write(clientSocket, &x, sizeof(int));
     if (n == -1) {
@@ -91,11 +96,18 @@ Info ServerPlayer::getMove() {
     return newInfo;
 }
 
+void ServerPlayer::assignType(type playerType1) {
+    playerType = playerType1;
+}
+
 type ServerPlayer::getType() {
     return playerType;
 }
 
 int* ServerPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves) {
-    HumanPlayer humanPlayer(playerType);
-    return humanPlayer.makeMove(gameLogic, board, moves);
+    Info newInfo = getMove();
+    int move[2];
+    move[0] = newInfo.x;
+    move[1] = newInfo.y;
+    return move;
 }

@@ -4,12 +4,16 @@
 #include <cstdio>
 #include "HumanPlayer.h"
 
-HumanPlayer::HumanPlayer(type type1) {
-    playerType = type1;
+HumanPlayer::HumanPlayer() {
+    playerType = notDefined;
 }
 
 HumanPlayer::~HumanPlayer() {
 
+}
+
+void HumanPlayer::assignType(type playerType1) {
+    playerType = playerType1;
 }
 
 type HumanPlayer::getType() {
@@ -47,4 +51,8 @@ int* HumanPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &mo
         choice[1] += temp2[i] - 48;
     }
     return choice;
+}
+
+void HumanPlayer::recieveOpponentsMove(int x, int y) {
+
 }

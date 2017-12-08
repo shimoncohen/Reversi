@@ -3,12 +3,16 @@
 
 #include "AIPlayer.h"
 
-AIPlayer::AIPlayer(type type1) {
-    playerType = type1;
+AIPlayer::AIPlayer() {
+    playerType = notDefined;
 }
 
 AIPlayer::~AIPlayer() {
 
+}
+
+void AIPlayer::assignType(type playerType1) {
+    playerType = playerType1;
 }
 
 type AIPlayer::getType() {
@@ -110,4 +114,8 @@ int AIPlayer::gradeMove(GameLogic &gameLogic, Board &board, Point move) {
     delete tempBoard;
     //giving a grade to the move
     return countOther - countPlayer;
+}
+
+void AIPlayer::recieveOpponentsMove(int x, int y) {
+
 }

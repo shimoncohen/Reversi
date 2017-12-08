@@ -11,11 +11,11 @@ class ServerPlayer : public Player {
 public:
     /*
 	 * function name: ServerPlayer.
-	 * input: the servers IP and port number that the player connects to and the player type.
+	 * input: the servers IP and port number that the player connects to.
 	 * output: none.
 	 * operation: constructor.
 	*/
-    ServerPlayer(const char *serverIP, int serverPort, type type1);
+    ServerPlayer(const char *serverIP, int serverPort);
     /*
 	 * function name: connectToServer.
 	 * input: none.
@@ -30,17 +30,16 @@ public:
 	 * operation: gets the opponents move from the server.
 	*/
     struct Info getMove();
+    void assignType(type playerType1);
+    type getType();
+    int* makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves);
     /*
-	 * function name: sendMove.
+	 * function name: recieveOpponentsMove.
 	 * input: the players move.
 	 * output: none.
 	 * operation: sends the players move to the server.
 	*/
-    void sendMove(int x, int y);
-    type getType();
-    int* makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves);
-    //for use of HumanPlayer function makeMove(to prevent code duplication)
-    friend class HumanPlayer;
+    void recieveOpponentsMove(int x, int y);
 private:
     type playerType;
     //the IP of the server the player connects to.
