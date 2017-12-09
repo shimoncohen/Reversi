@@ -3,6 +3,8 @@
 
 #include "LocalGame.h"
 
+#define END -2
+
 LocalGame::LocalGame(int boardSize, GameLogic* newGameLogic, Player* first, Player* second) {
     gameLogic = newGameLogic;
     board = new Board(boardSize);
@@ -36,6 +38,7 @@ void LocalGame::runGame() {
     vector<Point> options;
     Printer *printer = new ConsolePrinter();
     char winner;
+    assignTypes();
     doOneTurn(options);
     winner = gameLogic->gameWon(*board);
     printer->printWinMessage(winner);
@@ -45,14 +48,34 @@ void LocalGame::runGame() {
 void LocalGame::doOneTurn(vector<Point> options) {
     Player *current = firstPlayer, *waitingPlayer = secondPlayer, *tempPlayer;
     Printer *printer = new ConsolePrinter();
-    type playerType;
+    type playerType = blackPlayer;
+    int x = 0, y = 0;
+    int *temp;
+    int valid;
+    bool end = false;
     //runs the players turns untill there is a winner.
-    while(true) {
+    while (true) {
         string xTest, yTest;
-        int x = 0, y = 0;
-        int *temp;
         playerType = current->getType();
-        waitingPlayer->recieveOpponentsMove(x, y);
+//        if (playerType != current->getType()) {
+//            current->recieveOpponentsMove(x, y);
+//            options = gameLogic->availableMoves(*board, current->getType());
+//            temp = current->makeMove(*gameLogic, *board, options);
+//            x = temp[0];
+//            y = temp[1];
+//            printer->printMove(current->getType(), x, y);
+//            //flips the correct tiles according to the player and the players move.
+//            gameLogic->changeTiles(current->getType(), x, y, *board);
+//            if (gameLogic->gameFinalMove(*board, playerType, x, y)) {
+//                break;
+//            }
+//        } else {
+        //temp = waitingPlayer->makeMove(*gameLogic, *board, options);temp =
+        current->recieveOpponentsMove(x, y);
+        if(end) {
+            waitingPlayer->recieveOpponentsMove(END, END);
+            break;
+        }
         options = gameLogic->availableMoves(*board, playerType);
         //if the current player has no available moves.
         if (options.size() == 0) {
@@ -65,41 +88,40 @@ void LocalGame::doOneTurn(vector<Point> options) {
         printer->printTurn(playerType);
         //print all move options.
         printer->printPossibleMoves(options);
+        printer->requestMove();
         //let the player make a move.
         while (true) {
             //bool valid = true;
-            printer->requestMove();
             Board *copyBoard = new Board(*board);
             temp = current->makeMove(*gameLogic, *copyBoard, options);
+//                waitingPlayer->recieveOpponentsMove(temp[0], temp[1]);
             delete copyBoard;
-            x = temp[0];
-            y = temp[1];
+            x = temp[0] + 1;
+            y = temp[1] + 1;
             //check if move is in board boundaries.
-            if(!gameLogic->validOption(*board, x - 1, y - 1, options)) {
+            valid = gameLogic->validOption(*board, x, y , options);
+            if (valid) {
                 break;
             } else {
                 printer->printInvalidMove('o');
                 continue;
             }
-//            //checks if the move was declared valid.
-//            if (valid) {
-//                printer->printInvalidMove('i');
-//            } else {
-//                break;
-//            }
         }
-        printer->printMove(playerType, x, y);
         x -= 1, y -= 1;
+        printer->printMove(playerType, x, y);
         //flips the correct tiles according to the player and the players move.
         gameLogic->changeTiles(playerType, x, y, *board);
-        if(gameLogic->gameFinalMove(*board, playerType, x, y)) {
-            break;
+        if (gameLogic->gameFinalMove(*board, playerType, x, y)) {
+            waitingPlayer->recieveOpponentsMove(x, y);
+            end = true;
         }
         tempPlayer = current;
         current = waitingPlayer;
         waitingPlayer = tempPlayer;
-        delete temp;
     }
+//    }
+
     printer->printBoard(board);
+    delete temp;
     delete printer;
 }

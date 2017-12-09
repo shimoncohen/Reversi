@@ -50,9 +50,15 @@ int* HumanPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &mo
         choice[1] *= 10;
         choice[1] += temp2[i] - 48;
     }
+    choice[0] -= 1;
+    choice[1] -= 1;
     return choice;
 }
 
 void HumanPlayer::recieveOpponentsMove(int x, int y) {
+    return;
+}
 
+bool HumanPlayer::isWaiting() {
+    return false;
 }

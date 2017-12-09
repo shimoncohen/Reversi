@@ -46,6 +46,13 @@ public:
     */
     virtual char gameWon(Board &board) = 0;
     /*
+	 * function name: isGameWon.
+	 * input: none.
+	 * output: true if board is full, false otherwise.
+     * operation: returns true if board is full, false otherwise.
+    */
+    virtual bool isGameWon(Board &board) = 0;
+    /*
 	 * function name: gameFinalMove.
 	 * input: the game board and the last move.
 	 * output: true if the game ends after given move, false otherwise.

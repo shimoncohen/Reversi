@@ -51,6 +51,7 @@ public:
     */
     int* makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves);//will get gameLogic and moves vector
     void recieveOpponentsMove(int x, int y);
+    bool isWaiting();
 };
 
 

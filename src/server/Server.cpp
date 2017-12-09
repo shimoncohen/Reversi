@@ -90,7 +90,7 @@ void Server::start() {
         }
         // end of game
         // send the other player the end message.
-        handleClient(currentClient, &x, &y);
+        //handleClient(currentClient, &x, &y);
         // Close communication with the client.
         close(firstClientSocket);
         close(secondClientSocket);
@@ -103,11 +103,11 @@ void Server::handleClient(int clientSocket, int *x, int *y) {
     //read the info sent from the client.
     int n = read(clientSocket, x, sizeof(int));
     if (n == -1) {
-        cout << "Error reading x" << endl;
+        //cout << "Error reading x" << endl;
         return;
     }
     if (n == 0) {
-        cout << "Client disconnected" << endl;
+        //cout << "Client disconnected" << endl;
         return;
     }
     n = read(clientSocket, y, sizeof(int));
@@ -128,11 +128,11 @@ void Server::writeToClient(int clientSocket, int *x, int *y) {
     //write the info from one client to the other.
     int n = write(clientSocket, x, sizeof(int));
     if (n == -1) {
-        cout << "Error reading x" << endl;
+        //cout << "Error reading x" << endl;
         return;
     }
     if (n == 0) {
-        cout << "Client disconnected" << endl;
+        //cout << "Client disconnected" << endl;
         return;
     }
     n = write(clientSocket, y, sizeof(int));

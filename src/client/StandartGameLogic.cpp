@@ -40,6 +40,9 @@ vector<Point> StandartGameLogic::availableMoves(Board &board, type type1) {
 }
 
 bool StandartGameLogic::validOption(Board &board, int x, int y, vector<Point> options) {
+    if(isGameWon(board)) {
+        return true;
+    }
     if (x > 0 && y > 0 && x <= board.getSize() && y <= board.getSize()) {
         //go over all of the possible moves.
         for (int i = 0; i < options.size(); i++) {
@@ -95,6 +98,18 @@ char StandartGameLogic::gameWon(Board &board) {
     }
 }
 
+bool StandartGameLogic::isGameWon(Board &board) {
+    //check if board is full.
+    for (int i = 0; i < board.getSize(); i++) {
+        for (int j = 0; j < board.getSize(); j++) {
+            if (board.checkCell(i, j) == ' ') {
+                return false;
+            }
+        }
+    }
+    return false;
+}
+
 bool StandartGameLogic::gameFinalMove(Board &board, type pType, int x, int y) {
     if (x == -2 && y == -2) {
         return true;
@@ -110,14 +125,6 @@ bool StandartGameLogic::gameFinalMove(Board &board, type pType, int x, int y) {
             return true;
         }
     }
-    //check if board is full.
-//    for (int i = 0; i < board.getSize(); i++) {
-//        for (int j = 0; j < board.getSize(); j++) {
-//            if (board.checkCell(i, j) == ' ') {
-//                return false;
-//            }
-//        }
-//    }
     return false;
 }
 

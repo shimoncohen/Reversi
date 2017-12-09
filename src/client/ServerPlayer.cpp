@@ -82,6 +82,9 @@ void ServerPlayer::recieveOpponentsMove(int x, int y) {
 }
 
 Info ServerPlayer::getMove() {
+    Printer *printer = new ConsolePrinter;
+    printer->waitingMessage();
+    delete printer;
     //Read the result from the server
     int n;
     Info newInfo;
@@ -92,6 +95,16 @@ Info ServerPlayer::getMove() {
     n = read(clientSocket, &newInfo.y, sizeof(int));
     if (n == -1) {
         throw "Error reading y from socket";
+    }
+    if(newInfo.x == 0 && newInfo.y == 0) {
+        n = read(clientSocket, &newInfo.x, sizeof(int));
+        if (n == -1) {
+            throw "Error reading x from socket";
+        }
+        n = read(clientSocket, &newInfo.y, sizeof(int));
+        if (n == -1) {
+
+        }
     }
     return newInfo;
 }
@@ -106,8 +119,12 @@ type ServerPlayer::getType() {
 
 int* ServerPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves) {
     Info newInfo = getMove();
-    int move[2];
+    int* move = new int[2];
     move[0] = newInfo.x;
     move[1] = newInfo.y;
     return move;
+}
+
+bool ServerPlayer::isWaiting() {
+
 }

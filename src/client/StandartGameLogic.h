@@ -17,6 +17,7 @@ public:
     bool validOption(Board &board, int x, int y, vector<Point> options);
     void changeTiles(type type, int x, int y, Board &board);
     char gameWon(Board &board);
+    bool isGameWon(Board &board);
     bool gameFinalMove(Board &board, type pType, int x, int y);
 private:
     bool validMove(Board &board, int x, int y, int right, int down, char piece, int iteration);

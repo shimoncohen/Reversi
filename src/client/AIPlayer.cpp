@@ -32,8 +32,8 @@ int* AIPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves
         // save the avaliable option with the lowest grade
         if(currentMinGrade < minGrade) {
             minGrade = currentMinGrade;
-            myMove[0] = moves[i].getX();
-            myMove[1] = moves[i].getY();
+            myMove[0] = moves[i].getX() - 1;
+            myMove[1] = moves[i].getY() - 1;
         }
     }
     delete simulator;
@@ -117,5 +117,9 @@ int AIPlayer::gradeMove(GameLogic &gameLogic, Board &board, Point move) {
 }
 
 void AIPlayer::recieveOpponentsMove(int x, int y) {
+    return;
+}
 
+bool AIPlayer::isWaiting() {
+    return false;
 }

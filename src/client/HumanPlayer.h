@@ -34,6 +34,7 @@ public:
     type getType();
     int* makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves);
     void recieveOpponentsMove(int x, int y);
+    bool isWaiting();
 };
 
 
