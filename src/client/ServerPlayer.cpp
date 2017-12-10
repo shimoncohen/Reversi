@@ -59,9 +59,9 @@ void ServerPlayer::connectToServer() {
     printer.connectedToServerMessage();
     if(playerNum == 1) {
         printer.waitingForConnectionMessage();
-        playerType = blackPlayer;
-    } else if(playerNum == 2) {
         playerType = whitePlayer;
+    } else if(playerNum == 2) {
+        playerType = blackPlayer;
     }
     n = read(clientSocket, &playerNum, sizeof(playerNum));
     if (n == -1) {
@@ -103,7 +103,7 @@ Info ServerPlayer::getMove() {
         }
         n = read(clientSocket, &newInfo.y, sizeof(int));
         if (n == -1) {
-
+            throw "Error reading y from socket";
         }
     }
     return newInfo;

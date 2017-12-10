@@ -25,12 +25,14 @@ void LocalGame::assignTypes() {
         firstPlayer->assignType(blackPlayer);
         secondPlayer->assignType(whitePlayer);
     } else if(secondPlayer->getType() == blackPlayer) {
+        firstPlayer->assignType(blackPlayer);
+        secondPlayer->assignType(whitePlayer);
+    } else if(secondPlayer->getType() == whitePlayer) {
         firstPlayer->assignType(whitePlayer);
+        secondPlayer->assignType(blackPlayer);
         tempPlayer = firstPlayer;
         firstPlayer = secondPlayer;
         secondPlayer = tempPlayer;
-    } else if(secondPlayer->getType() == whitePlayer) {
-        firstPlayer->assignType(blackPlayer);
     }
 }
 
@@ -57,20 +59,6 @@ void LocalGame::doOneTurn(vector<Point> options) {
     while (true) {
         string xTest, yTest;
         playerType = current->getType();
-//        if (playerType != current->getType()) {
-//            current->recieveOpponentsMove(x, y);
-//            options = gameLogic->availableMoves(*board, current->getType());
-//            temp = current->makeMove(*gameLogic, *board, options);
-//            x = temp[0];
-//            y = temp[1];
-//            printer->printMove(current->getType(), x, y);
-//            //flips the correct tiles according to the player and the players move.
-//            gameLogic->changeTiles(current->getType(), x, y, *board);
-//            if (gameLogic->gameFinalMove(*board, playerType, x, y)) {
-//                break;
-//            }
-//        } else {
-        //temp = waitingPlayer->makeMove(*gameLogic, *board, options);temp =
         current->recieveOpponentsMove(x, y);
         if(end) {
             waitingPlayer->recieveOpponentsMove(END, END);
@@ -108,7 +96,7 @@ void LocalGame::doOneTurn(vector<Point> options) {
             }
         }
         x -= 1, y -= 1;
-        printer->printMove(playerType, x, y);
+        printer->printMove(playerType, x + 1, y + 1);
         //flips the correct tiles according to the player and the players move.
         gameLogic->changeTiles(playerType, x, y, *board);
         if (gameLogic->gameFinalMove(*board, playerType, x, y)) {

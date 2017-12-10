@@ -43,7 +43,7 @@ void Server::start() {
     int playerNum = FIRST;
     string board;
     int temp;
-    int x, y;
+    int x = -10, y = -10;
     while (true) {
         x = 0, y = 0;
         cout << "Waiting for client connections..." << endl;
@@ -103,11 +103,11 @@ void Server::handleClient(int clientSocket, int *x, int *y) {
     //read the info sent from the client.
     int n = read(clientSocket, x, sizeof(int));
     if (n == -1) {
-        //cout << "Error reading x" << endl;
+        cout << "Error reading x" << endl;
         return;
     }
     if (n == 0) {
-        //cout << "Client disconnected" << endl;
+        cout << "Client disconnected" << endl;
         return;
     }
     n = read(clientSocket, y, sizeof(int));
