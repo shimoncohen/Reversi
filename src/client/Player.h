@@ -43,13 +43,6 @@ public:
 	 * operation: gives the opponents move to the player.
 	*/
     virtual void recieveOpponentsMove(int x, int y) = 0;
-    /*
-	 * function name: isWaiting.
-	 * input: none.
-	 * output: true if player is waiting, false otherwise.
-	 * operation: returns true if player is waiting, false otherwise.
-	*/
-    virtual bool isWaiting() = 0;
 };
 
 

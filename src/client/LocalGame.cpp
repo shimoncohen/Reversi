@@ -25,14 +25,12 @@ void LocalGame::assignTypes() {
         firstPlayer->assignType(blackPlayer);
         secondPlayer->assignType(whitePlayer);
     } else if(secondPlayer->getType() == blackPlayer) {
-        firstPlayer->assignType(blackPlayer);
-        secondPlayer->assignType(whitePlayer);
-    } else if(secondPlayer->getType() == whitePlayer) {
         firstPlayer->assignType(whitePlayer);
-        secondPlayer->assignType(blackPlayer);
         tempPlayer = firstPlayer;
         firstPlayer = secondPlayer;
         secondPlayer = tempPlayer;
+    } else if(secondPlayer->getType() == whitePlayer) {
+        firstPlayer->assignType(blackPlayer);
     }
 }
 
@@ -50,8 +48,8 @@ void LocalGame::runGame() {
 void LocalGame::doOneTurn(vector<Point> options) {
     Player *current = firstPlayer, *waitingPlayer = secondPlayer, *tempPlayer;
     Printer *printer = new ConsolePrinter();
-    type playerType = blackPlayer;
-    int x = 0, y = 0;
+    type playerType;
+    int x = -10, y = -10;
     int *temp;
     int valid;
     bool end = false;

@@ -119,7 +119,3 @@ int AIPlayer::gradeMove(GameLogic &gameLogic, Board &board, Point move) {
 void AIPlayer::recieveOpponentsMove(int x, int y) {
     return;
 }
-
-bool AIPlayer::isWaiting() {
-    return false;
-}

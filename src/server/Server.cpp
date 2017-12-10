@@ -89,8 +89,6 @@ void Server::start() {
             waitingClient = temp;
         }
         // end of game
-        // send the other player the end message.
-        //handleClient(currentClient, &x, &y);
         // Close communication with the client.
         close(firstClientSocket);
         close(secondClientSocket);

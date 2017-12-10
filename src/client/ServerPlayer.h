@@ -40,7 +40,6 @@ public:
 	 * operation: sends the players move to the server.
 	*/
     void recieveOpponentsMove(int x, int y);
-    bool isWaiting();
 private:
     type playerType;
     //the IP of the server the player connects to.

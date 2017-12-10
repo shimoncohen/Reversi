@@ -71,13 +71,15 @@ void ServerPlayer::connectToServer() {
 
 void ServerPlayer::recieveOpponentsMove(int x, int y) {
 // Write the exercise arguments to the socket
-    int n = write(clientSocket, &x, sizeof(int));
-    if (n == -1) {
-        throw "Error writing x to socket";
-    }
-    n = write(clientSocket, &y, sizeof(int));
-    if (n == -1) {
-        throw "Error writing y to socket";
+    if(x != -10 && y != -10) {
+        int n = write(clientSocket, &x, sizeof(int));
+        if (n == -1) {
+            throw "Error writing x to socket";
+        }
+        n = write(clientSocket, &y, sizeof(int));
+        if (n == -1) {
+            throw "Error writing y to socket";
+        }
     }
 }
 
@@ -96,16 +98,6 @@ Info ServerPlayer::getMove() {
     if (n == -1) {
         throw "Error reading y from socket";
     }
-    if(newInfo.x == 0 && newInfo.y == 0) {
-        n = read(clientSocket, &newInfo.x, sizeof(int));
-        if (n == -1) {
-            throw "Error reading x from socket";
-        }
-        n = read(clientSocket, &newInfo.y, sizeof(int));
-        if (n == -1) {
-            throw "Error reading y from socket";
-        }
-    }
     return newInfo;
 }
 
@@ -123,8 +115,4 @@ int* ServerPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &m
     move[0] = newInfo.x;
     move[1] = newInfo.y;
     return move;
-}
-
-bool ServerPlayer::isWaiting() {
-
 }
