@@ -1,7 +1,7 @@
 // 315383133 shimon cohen
 // 302228275 Nadav Spitzer
 
-#include "LocalGame.h"
+#include "Game.h"
 #include <fstream>
 #include <stdlib.h>
 #include <string.h>
@@ -44,21 +44,22 @@ int main() {
         case 1:
             first = new HumanPlayer();
             second = new HumanPlayer();
-            g = new LocalGame(size, gameLogic, first, second);
+            g = new Game(size, gameLogic, first, second);
             break;
         case 2:
             first = new HumanPlayer();
             second = new AIPlayer();
-            g = new LocalGame(size, gameLogic, first, second);
+            g = new Game(size, gameLogic, first, second);
             break;
         case 3:
             first = new HumanPlayer();
             second = new ServerPlayer(IPAddress, port);
-            g = new LocalGame(size, gameLogic, first, second);
+            g = new Game(size, gameLogic, first, second);
     }
 	g->runGame();
     delete printer;
     delete g;
+    free(IPAddress);
 	return 0;
 }
 

@@ -15,7 +15,6 @@ public:
     void failedSendingToServer(const char *msg);
     void printInvalidGameMode();
     void boardSizeMessage();
-    void startGameMessage();
     void waitingMessage();
     void printTurn(type playerType);
     void requestMove();
@@ -24,7 +23,7 @@ public:
     void printBoard(Board *board) const;
     void printInvalidMove(char outIn);
     void printPossibleMoves(vector<Point> possibleMoves);
-    void printNoMoves();
+    void printNoMoves(type playerType);
     void printOpponentHasNoMoves();
     void printWinMessage(char winner);
 };

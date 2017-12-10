@@ -2,7 +2,7 @@
 // 302228275 Nadav Spitzer
 
 #include "gtest/gtest.h"
-#include "client/LocalGame.h"
+#include "client/Game.h"
 #define SIZE 4
 
 /*

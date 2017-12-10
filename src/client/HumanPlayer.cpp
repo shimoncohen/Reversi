@@ -58,3 +58,7 @@ int* HumanPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &mo
 void HumanPlayer::recieveOpponentsMove(int x, int y) {
     return;
 }
+
+bool HumanPlayer::needPrint() {
+    return true;
+}

@@ -116,3 +116,7 @@ int* ServerPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &m
     move[1] = newInfo.y;
     return move;
 }
+
+bool ServerPlayer::needPrint() {
+    return false;
+}

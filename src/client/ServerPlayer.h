@@ -5,7 +5,7 @@
 #define ADVANCEDPROGRAMMING1_SERVERPLAYER_H
 
 #include "Player.h"
-#include "ServerGame.h"
+#include "Game.h"
 
 class ServerPlayer : public Player {
 public:
@@ -40,6 +40,7 @@ public:
 	 * operation: sends the players move to the server.
 	*/
     void recieveOpponentsMove(int x, int y);
+    bool needPrint();
 private:
     type playerType;
     //the IP of the server the player connects to.

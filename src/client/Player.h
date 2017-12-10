@@ -43,6 +43,7 @@ public:
 	 * operation: gives the opponents move to the player.
 	*/
     virtual void recieveOpponentsMove(int x, int y) = 0;
+    virtual bool needPrint() = 0;
 };
 
 

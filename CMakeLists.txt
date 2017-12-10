@@ -10,12 +10,12 @@ include_directories(src lib/googletest-release-1.8.0/googletest/include)
 include_directories(lib/googletest-release-1.8.0/googlemock/include)
 
 set(SOURCE_FILES src/client/Board.h src/client/StandartGameLogic.cpp src/client/StandartGameLogic.h
-        src/client/GameLogic.h src/client/LocalGame.cpp src/client/LocalGame.h src/client/Player.h
+        src/client/GameLogic.h src/client/Game.cpp src/client/Game.h src/client/Player.h
         src/client/Enum.h src/client/Point.cpp src/client/Point.h src/client/HumanPlayer.cpp
         src/client/HumanPlayer.h src/client/AIPlayer.cpp src/client/AIPlayer.h src/client/Board.cpp
-        src/client/ConsolePrinter.cpp src/client/ConsolePrinter.h src/client/Printer.h src/client/Game.h
-        src/client/LocalGame.cpp src/client/LocalGame.h src/client/ServerPlayer.cpp src/client/ServerPlayer.h
-        src/client/ServerGame.cpp src/client/ServerGame.h src/server/Server.h src/server/Server.cpp)
+        src/client/ConsolePrinter.cpp src/client/ConsolePrinter.h src/client/Printer.h
+        src/client/Game.cpp src/client/Game.h src/client/ServerPlayer.cpp src/client/ServerPlayer.h
+        src/server/Server.h src/server/Server.cpp)
 
 set(TEST_FILES Tests/ClientTests.cpp src/client/Board.cpp Tests/ServerTests.cpp)
 

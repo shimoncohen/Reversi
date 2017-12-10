@@ -1,25 +1,25 @@
 // 315383133 shimon cohen
 // 302228275 Nadav Spitzer
 
-#include "LocalGame.h"
+#include "Game.h"
 
 #define END -2
 
-LocalGame::LocalGame(int boardSize, GameLogic* newGameLogic, Player* first, Player* second) {
+Game::Game(int boardSize, GameLogic* newGameLogic, Player* first, Player* second) {
     gameLogic = newGameLogic;
     board = new Board(boardSize);
     firstPlayer = first;
     secondPlayer = second;
 }
 
-LocalGame::~LocalGame() {
+Game::~Game() {
     delete board;
     delete firstPlayer;
     delete secondPlayer;
     delete gameLogic;
 }
 
-void LocalGame::assignTypes() {
+void Game::assignTypes() {
     Player *tempPlayer;
     if(secondPlayer->getType() == notDefined) {
         firstPlayer->assignType(blackPlayer);
@@ -34,7 +34,7 @@ void LocalGame::assignTypes() {
     }
 }
 
-void LocalGame::runGame() {
+void Game::runGame() {
     vector<Point> options;
     Printer *printer = new ConsolePrinter();
     char winner;
@@ -45,7 +45,7 @@ void LocalGame::runGame() {
     delete printer;
 }
 
-void LocalGame::doOneTurn(vector<Point> options) {
+void Game::doOneTurn(vector<Point> options) {
     Player *current = firstPlayer, *waitingPlayer = secondPlayer, *tempPlayer;
     Printer *printer = new ConsolePrinter();
     type playerType;
@@ -53,7 +53,7 @@ void LocalGame::doOneTurn(vector<Point> options) {
     int *temp;
     int valid;
     bool end = false;
-    //runs the players turns untill there is a winner.
+    //runs the players turns until there is a winner.
     while (true) {
         string xTest, yTest;
         playerType = current->getType();
@@ -65,6 +65,7 @@ void LocalGame::doOneTurn(vector<Point> options) {
         options = gameLogic->availableMoves(*board, playerType);
         //if the current player has no available moves.
         if (options.size() == 0) {
+            printer->printNoMoves(playerType);
             tempPlayer = current;
             current = waitingPlayer;
             waitingPlayer = tempPlayer;
@@ -72,15 +73,16 @@ void LocalGame::doOneTurn(vector<Point> options) {
         }
         printer->printBoard(board);
         printer->printTurn(playerType);
-        //print all move options.
-        printer->printPossibleMoves(options);
-        printer->requestMove();
+        if(current->needPrint()) {
+            //print all move options.
+            printer->printPossibleMoves(options);
+            printer->requestMove();
+        }
         //let the player make a move.
         while (true) {
             //bool valid = true;
             Board *copyBoard = new Board(*board);
             temp = current->makeMove(*gameLogic, *copyBoard, options);
-//                waitingPlayer->recieveOpponentsMove(temp[0], temp[1]);
             delete copyBoard;
             x = temp[0] + 1;
             y = temp[1] + 1;
@@ -105,7 +107,6 @@ void LocalGame::doOneTurn(vector<Point> options) {
         current = waitingPlayer;
         waitingPlayer = tempPlayer;
     }
-//    }
     printer->printBoard(board);
     delete temp;
     delete printer;

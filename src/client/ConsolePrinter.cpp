@@ -34,10 +34,6 @@ void ConsolePrinter::boardSizeMessage() {
     cout << "Please insert a valid board size (must be greater than or equal to four):" << endl;
 }
 
-void ConsolePrinter::startGameMessage() {
-    cout << "Start game!" << endl << endl;
-}
-
 void ConsolePrinter::waitingMessage() {
     cout << "Waiting for opponents move..." << endl << endl;
 }
@@ -93,8 +89,12 @@ void ConsolePrinter::printPossibleMoves(vector<Point> possibleMoves) {
     cout << endl << endl;
 }
 
-void ConsolePrinter::printNoMoves() {
-    cout << "You have no available moves!" << endl << "Turn goes to opponent." << endl;
+void ConsolePrinter::printNoMoves(type playerType) {
+    if(playerType == blackPlayer) {
+        cout << endl << "X has no available moves!" << endl << "Turn goes to opponent." << endl;
+    } else if(playerType == whitePlayer) {
+        cout << endl << "O has no available moves!" << endl << "Turn goes to opponent." << endl;
+    }
 }
 
 void ConsolePrinter::printOpponentHasNoMoves() {

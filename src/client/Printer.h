@@ -66,13 +66,6 @@ public:
     */
     virtual void boardSizeMessage() = 0;
     /*
-     * function name: startGameMessage.
-     * input: none.
-     * output: none.
-     * operation: prints a start game message.
-    */
-    virtual void startGameMessage() = 0;
-    /*
      * function name: waitingMessage.
      * input: none.
      * output: none.
@@ -134,7 +127,7 @@ public:
      * output: none.
      * operation: prints a message if player has no moves.
     */
-    virtual void printNoMoves() = 0;
+    virtual void printNoMoves(type playerType) = 0;
     /*
      * function name: printOpponentHasNoMoves.
      * input: none.
