@@ -97,21 +97,19 @@ void Server::start() {
 }
 
 // Handle requests from a specific client
-void Server::handleClient(int clientSocket, int *x, int *y) {
+int Server::handleClient(int clientSocket, int *x, int *y) {
     //read the info sent from the client.
     int n = read(clientSocket, x, sizeof(int));
     if (n == -1) {
-        cout << "Error reading x" << endl;
-        return;
+        return 1;
     }
     if (n == 0) {
         cout << "Client disconnected" << endl;
-        return;
+        return 1;
     }
     n = read(clientSocket, y, sizeof(int));
     if (n == -1) {
-        cout << "Error reading y" << endl;
-        return;
+        return 1;
     }
     if(*x == -1 && *y == -1) {
         cout << "Player has no move" << endl;
@@ -120,23 +118,22 @@ void Server::handleClient(int clientSocket, int *x, int *y) {
     } else {
         cout << "Got info: " << "move " << *x + 1 << " " << *y + 1 << endl;
     }
+    return 0;
 }
 
-void Server::writeToClient(int clientSocket, int *x, int *y) {
+int Server::writeToClient(int clientSocket, int *x, int *y) {
     //write the info from one client to the other.
     int n = write(clientSocket, x, sizeof(int));
     if (n == -1) {
-        //cout << "Error reading x" << endl;
-        return;
+        return 1;
     }
     if (n == 0) {
-        //cout << "Client disconnected" << endl;
-        return;
+        cout << "Client disconnected" << endl;
+        return 1;
     }
     n = write(clientSocket, y, sizeof(int));
     if (n == -1) {
-        cout << "Error reading y" << endl;
-        return;
+        return 1;
     }
     if(*x == -1 && *y == -1) {
         cout << "Opponent had no move" << endl;
@@ -145,6 +142,7 @@ void Server::writeToClient(int clientSocket, int *x, int *y) {
     } else {
         cout << "Wrote info: " << "move " << *x + 1 << " " << *y + 1 << endl;
     }
+    return 0;
 }
 
 void Server::stop() {

@@ -106,7 +106,6 @@ void LocalGame::doOneTurn(vector<Point> options) {
         waitingPlayer = tempPlayer;
     }
 //    }
-
     printer->printBoard(board);
     delete temp;
     delete printer;
