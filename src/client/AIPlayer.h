@@ -51,6 +51,12 @@ public:
     */
     int* makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves);//will get gameLogic and moves vector
     void recieveOpponentsMove(int x, int y);
+    /*
+	 * function name: ~AIPlayer.
+	 * input: none.
+	 * output: none.
+     * operation: destructor.
+    */
     bool needPrint();
 };
 

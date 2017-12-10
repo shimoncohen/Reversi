@@ -14,7 +14,8 @@ void settingsReading(int* port, char *IPAddress);
 
 int main() {
     char *IPAddress = (char*)malloc(255 * sizeof(char));
-	int size, choice = 0, port;
+	int choice = 0, port;
+    //int size;
     settingsReading(&port, IPAddress);
     Printer *printer = new ConsolePrinter();
     printer->printGameOpenning();
@@ -25,14 +26,15 @@ int main() {
         printer->printInvalidGameMode();
         cin >> choice;
     }
+    // ***for future use when board size will be decided by the user***
     // getting board size from the user
-    printer->boardSizeMessage();
-    cin >> size;
+//    printer->boardSizeMessage();
+//    cin >> size;
     //dealing with size < 4
-	while(size < 4) {
-        printer->boardSizeMessage();
-        cin >> size;
-    }
+//	while(size < 4) {
+//        printer->boardSizeMessage();
+//        cin >> size;
+//    }
     // creating game logic
     GameLogic* gameLogic = new StandartGameLogic();
     Player *first;
@@ -44,19 +46,23 @@ int main() {
         case 1:
             first = new HumanPlayer();
             second = new HumanPlayer();
-            g = new Game(size, gameLogic, first, second);
+            g = new Game(gameLogic, first, second);
             break;
         case 2:
             first = new HumanPlayer();
             second = new AIPlayer();
-            g = new Game(size, gameLogic, first, second);
+            g = new Game(gameLogic, first, second);
             break;
         case 3:
             first = new HumanPlayer();
             second = new ServerPlayer(IPAddress, port);
-            g = new Game(size, gameLogic, first, second);
+            g = new Game(gameLogic, first, second);
     }
-	g->runGame();
+    try {
+        g->runGame();
+    } catch (const char* msg) {
+        printer->failedMessage(msg);
+    }
     delete printer;
     delete g;
     free(IPAddress);

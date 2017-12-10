@@ -11,8 +11,7 @@ public:
     void printGameOpenning();
     void connectedToServerMessage();
     void waitingForConnectionMessage();
-    void failedConnectingToServer(const char *msg);
-    void failedSendingToServer(const char *msg);
+    void failedMessage(const char *msg);
     void printInvalidGameMode();
     void boardSizeMessage();
     void waitingMessage();
@@ -21,7 +20,7 @@ public:
     void printMove(type playerType, int x, int y);
     void printPoint(int* point);
     void printBoard(Board *board) const;
-    void printInvalidMove(char outIn);
+    void printInvalidMove();
     void printPossibleMoves(vector<Point> possibleMoves);
     void printNoMoves(type playerType);
     void printOpponentHasNoMoves();

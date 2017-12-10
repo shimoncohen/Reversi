@@ -2,7 +2,6 @@
 // 302228275 Nadav Spitzer
 
 #include "ServerPlayer.h"
-#include <iostream>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -52,6 +51,7 @@ void ServerPlayer::connectToServer() {
         throw "Error connecting to server";
     }
     int playerNum;
+    // reading the player's number
     int n = read(clientSocket, &playerNum, sizeof(playerNum));
     if (n == -1) {
         throw "Error reading player num";
@@ -80,6 +80,9 @@ void ServerPlayer::recieveOpponentsMove(int x, int y) {
         if (n == -1) {
             throw "Error writing y to socket";
         }
+        if (n == 0) {
+            throw "Error, opponent disconnected!";
+        }
     }
 }
 
@@ -97,6 +100,9 @@ Info ServerPlayer::getMove() {
     n = read(clientSocket, &newInfo.y, sizeof(int));
     if (n == -1) {
         throw "Error reading y from socket";
+    }
+    if (n == 0) {
+        throw "Error, opponent disconnected!";
     }
     return newInfo;
 }

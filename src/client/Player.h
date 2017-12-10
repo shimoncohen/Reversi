@@ -43,6 +43,13 @@ public:
 	 * operation: gives the opponents move to the player.
 	*/
     virtual void recieveOpponentsMove(int x, int y) = 0;
+    /*
+	 * function name: needPrint.
+	 * input: none.
+	 * output: bool - true or false.
+	 * operation: true if the player needs to print the possible moves (in AIPlayer and local),
+     * otherwise returns false.
+	*/
     virtual bool needPrint() = 0;
 };
 

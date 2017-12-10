@@ -16,12 +16,8 @@ void ConsolePrinter::waitingForConnectionMessage() {
     cout << "Waiting for opponent to join..." << endl;
 }
 
-void ConsolePrinter::failedConnectingToServer(const char *msg) {
-    cout << "Failed to connect to server. Reason:" << msg << endl;
-}
-
-void ConsolePrinter::failedSendingToServer(const char *msg) {
-    cout << "Failed to send move to server.Reason: " << msg << endl;
+void ConsolePrinter::failedMessage(const char *msg) {
+    cout << msg << endl;
 }
 
 void ConsolePrinter::printInvalidGameMode() {
@@ -66,14 +62,7 @@ void ConsolePrinter::printBoard(Board *board) const {
     cout << *board;
 }
 
-void ConsolePrinter::printInvalidMove(char outIn) {
-//    // if char is i then the invalid move is in the board.
-//    if(outIn == 'i') {
-//        cout << "invalid move!" << endl << endl;
-//        // else the invalid move was out of the board boundaries
-//    } else if(outIn == 'o') {
-//        cout << "ERROR: move out of board boundries" << endl << endl;
-//    }
+void ConsolePrinter::printInvalidMove() {
     cout << "invalid move!" << endl << endl;
 }
 

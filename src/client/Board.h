@@ -10,6 +10,8 @@
 #include "Enum.h"
 using namespace std;
 
+#define DEFAULTSIZE 8
+
 enum boardChar {black, white, space};
 
 /*
@@ -23,11 +25,18 @@ private:
 public:
     /*
      * function name: Board.
-     * input: none.
+     * input: board size.
      * output: none.
-     * operation: constructor. initializes the board.
+     * operation: constructor. initializes the board to given size.
     */
     Board(int size);
+    /*
+     * function name: Board.
+     * input: none.
+     * output: none.
+     * operation: constructor. initializes the board to size 8 on 8.
+    */
+    Board();
     /*
      * function name: Board.
      * input: board.

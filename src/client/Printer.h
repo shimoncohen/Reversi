@@ -43,14 +43,7 @@ public:
      * output: none.
      * operation: prints a message that client failed to connected to the server.
     */
-    virtual void failedConnectingToServer(const char *msg) = 0;
-    /*
-     * function name: failedSendingToServer.
-     * input: none.
-     * output: none.
-     * operation: prints a message that client failed to send to the server.
-    */
-    virtual void failedSendingToServer(const char *msg) = 0;
+    virtual void failedMessage(const char *msg) = 0;
     /*
      * function name: printInvalidGameMode.
      * input: none.
@@ -113,7 +106,7 @@ public:
      * output: none.
      * operation: prints a message indicating the player entered an invalid move.
     */
-    virtual void printInvalidMove(char outIn) = 0;
+    virtual void printInvalidMove() = 0;
     /*
      * function name: printPossibleMoves.
      * input: a vector of the players possible moves.

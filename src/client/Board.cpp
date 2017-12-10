@@ -21,6 +21,24 @@ Board::Board(int size) {
     board[size / 2][size / 2] = white;
 }
 
+Board::Board() {
+    boardSize = DEFAULTSIZE;
+    board = new boardChar*[DEFAULTSIZE];
+    for(int i = 0; i < DEFAULTSIZE; i++) {
+        board[i] = new boardChar[DEFAULTSIZE];
+    }
+    //fill the board cells with spaces to indicate free spaces.
+    for(int i = 0; i < DEFAULTSIZE; i++) {
+        for(int k = 0; k < DEFAULTSIZE; k++) {
+            board[i][k] = space;
+        }
+    }
+    board[DEFAULTSIZE / 2 - 1][DEFAULTSIZE / 2 - 1] = white;
+    board[DEFAULTSIZE / 2 - 1][DEFAULTSIZE / 2] = black;
+    board[DEFAULTSIZE / 2][DEFAULTSIZE / 2 - 1] = black;
+    board[DEFAULTSIZE / 2][DEFAULTSIZE / 2] = white;
+}
+
 Board::Board(Board &board1) {
     boardSize = board1.getSize();
     board = new boardChar *[boardSize];

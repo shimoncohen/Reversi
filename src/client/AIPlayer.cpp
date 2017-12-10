@@ -37,7 +37,11 @@ int* AIPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves
         }
     }
     delete simulator;
+    myMove[0] = myMove[0] + 1;
+    myMove[1] = myMove[1] + 1;
     printer.printPoint(myMove);
+    myMove[0] = myMove[0] - 1;
+    myMove[1] = myMove[1] - 1;
     return myMove;
 }
 

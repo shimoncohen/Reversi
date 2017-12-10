@@ -39,6 +39,13 @@ public:
     */
     Game(int boardSize, GameLogic* newGameLogic, Player* first, Player* second);
     /*
+	 * function name: Game.
+	 * input: the gameLogic the game should play by, and the two players.
+	 * output: none.
+     * operation: constructor.
+    */
+    Game(GameLogic* newGameLogic, Player* first, Player* second);
+    /*
 	 * function name: Game input: none.
 	 * output: none.
      * operation: deconstructor.

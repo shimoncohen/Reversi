@@ -6,7 +6,7 @@
 
 /*
  * the player types.
- * a player may be the black or white pieces.
+ * a player may be the black , white pieces or not defined.
  */
 enum type {blackPlayer, whitePlayer, notDefined};
 

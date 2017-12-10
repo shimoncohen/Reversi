@@ -56,7 +56,7 @@ public:
 	 * function name: gameFinalMove.
 	 * input: the game board and the last move.
 	 * output: true if the game ends after given move, false otherwise.
-     * operation: plays give move on board and returns true if the given move was the final move, false otherwise.
+     * operation: plays given move on board and returns true if the given move was the final move, false otherwise.
     */
     virtual bool gameFinalMove(Board &board, type pType, int x, int y) = 0;
 private:

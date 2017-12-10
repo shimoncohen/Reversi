@@ -1,6 +1,5 @@
-//
-// Created by shimon on 12/3/17.
-//
+// 315383133 shimon cohen
+// 302228275 Nadav Spitzer
 
 #include "Server.h"
 #include <sys/socket.h>
@@ -8,7 +7,6 @@
 #include <unistd.h>
 #include <string.h>
 #include <iostream>
-#include <stdio.h>
 #define FIRST 1
 #define SECOND 2
 
@@ -43,13 +41,12 @@ void Server::start() {
     int playerNum = FIRST;
     string board;
     int temp;
-    int x = -10, y = -10;
+    int x, y;
     while (true) {
         x = 0, y = 0;
         cout << "Waiting for client connections..." << endl;
         // Accept a new client connection
-        int firstClientSocket = accept(serverSocket, (struct sockaddr *) &firstClientAddress,
-                                       &firstClientAddressLen);
+        int firstClientSocket = accept(serverSocket, (struct sockaddr *) &firstClientAddress, &firstClientAddressLen);
         int n = write(firstClientSocket, &playerNum, sizeof(playerNum));
         if (n == -1) {
             cout << "Error writing to socket" << endl;
@@ -58,6 +55,7 @@ void Server::start() {
         cout << "First player connected" << endl;
         if (firstClientSocket == -1)
             throw "Error on accept";
+        //assigning the second player.
         playerNum = SECOND;
         int secondClientSocket = accept(serverSocket, (struct sockaddr *) &secondClientAddress,
                                         &secondClientAddressLen);
@@ -89,6 +87,7 @@ void Server::start() {
             if(writeToClient(waitingClient, &x, &y)) {
                 connectSecond = 1;
             }
+            // switching between the players
             temp = currentClient;
             currentClient = waitingClient;
             waitingClient = temp;
