@@ -81,12 +81,20 @@ void Server::start() {
             throw "Error on accept";
         int currentClient = firstClientSocket;
         int waitingClient = secondClientSocket;
+        int connectFirst = 0, connectSecond = 0;
         while(x != -2 || y != -2) {
-            handleClient(currentClient, &x, &y);
-            writeToClient(waitingClient, &x, &y);
+            if(handleClient(currentClient, &x, &y)) {
+                connectFirst = 1;
+            }
+            if(writeToClient(waitingClient, &x, &y)) {
+                connectSecond = 1;
+            }
             temp = currentClient;
             currentClient = waitingClient;
             waitingClient = temp;
+            if(connectFirst == 1 || connectSecond == 1) {
+                break;
+            }
         }
         // end of game
         // Close communication with the client.
@@ -101,7 +109,7 @@ int Server::handleClient(int clientSocket, int *x, int *y) {
     //read the info sent from the client.
     int n = read(clientSocket, x, sizeof(int));
     if (n == -1) {
-        return 1;
+        return 0;
     }
     if (n == 0) {
         cout << "Client disconnected" << endl;
@@ -109,6 +117,10 @@ int Server::handleClient(int clientSocket, int *x, int *y) {
     }
     n = read(clientSocket, y, sizeof(int));
     if (n == -1) {
+        return 0;
+    }
+    if (n == 0) {
+        cout << "Client disconnected" << endl;
         return 1;
     }
     if(*x == -1 && *y == -1) {
@@ -125,7 +137,7 @@ int Server::writeToClient(int clientSocket, int *x, int *y) {
     //write the info from one client to the other.
     int n = write(clientSocket, x, sizeof(int));
     if (n == -1) {
-        return 1;
+        return 0;
     }
     if (n == 0) {
         cout << "Client disconnected" << endl;
@@ -133,6 +145,10 @@ int Server::writeToClient(int clientSocket, int *x, int *y) {
     }
     n = write(clientSocket, y, sizeof(int));
     if (n == -1) {
+        return 0;
+    }
+    if (n == 0) {
+        cout << "Client disconnected" << endl;
         return 1;
     }
     if(*x == -1 && *y == -1) {
