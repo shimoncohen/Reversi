@@ -70,15 +70,14 @@ void ServerPlayer::connectToServer() {
 }
 
 void ServerPlayer::recieveOpponentsMove(int x, int y) {
+    Info info;
+    info.x = x;
+    info.y = y;
 // Write the exercise arguments to the socket
     if(x != -10 && y != -10) {
-        int n = write(clientSocket, &x, sizeof(int));
+        int n = write(clientSocket, &info, sizeof(Info));
         if (n == -1) {
             throw "Error writing x to socket";
-        }
-        n = write(clientSocket, &y, sizeof(int));
-        if (n == -1) {
-            throw "Error writing y to socket";
         }
         if (n == 0) {
             throw "Error, opponent disconnected!";
@@ -93,13 +92,9 @@ Info ServerPlayer::getMove() {
     //Read the result from the server
     int n;
     Info newInfo;
-    n = read(clientSocket, &newInfo.x, sizeof(int));
+    n = read(clientSocket, &newInfo, sizeof(Info));
     if (n == -1) {
         throw "Error reading x from socket";
-    }
-    n = read(clientSocket, &newInfo.y, sizeof(int));
-    if (n == -1) {
-        throw "Error reading y from socket";
     }
     if (n == 0) {
         throw "Error, opponent disconnected!";

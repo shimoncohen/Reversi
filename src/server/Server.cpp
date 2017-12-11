@@ -2,13 +2,6 @@
 // 302228275 Nadav Spitzer
 
 #include "Server.h"
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <unistd.h>
-#include <string.h>
-#include <iostream>
-#define FIRST 1
-#define SECOND 2
 
 using namespace std;
 #define MAX_CONNECTED_CLIENTS 10
@@ -79,21 +72,16 @@ void Server::start() {
             throw "Error on accept";
         int currentClient = firstClientSocket;
         int waitingClient = secondClientSocket;
-        int connectFirst = 0, connectSecond = 0;
         while(x != -2 || y != -2) {
             if(handleClient(currentClient, &x, &y)) {
-                connectFirst = 1;
+                break;
             }
             if(writeToClient(waitingClient, &x, &y)) {
-                connectSecond = 1;
+                break;
             }
-            // switching between the players
             temp = currentClient;
             currentClient = waitingClient;
             waitingClient = temp;
-            if(connectFirst == 1 || connectSecond == 1) {
-                break;
-            }
         }
         // end of game
         // Close communication with the client.
@@ -105,8 +93,9 @@ void Server::start() {
 
 // Handle requests from a specific client
 int Server::handleClient(int clientSocket, int *x, int *y) {
+    Info info;
     //read the info sent from the client.
-    int n = read(clientSocket, x, sizeof(int));
+    int n = read(clientSocket, &info, sizeof(Info));
     if (n == -1) {
         return 0;
     }
@@ -114,14 +103,8 @@ int Server::handleClient(int clientSocket, int *x, int *y) {
         cout << "Client disconnected" << endl;
         return 1;
     }
-    n = read(clientSocket, y, sizeof(int));
-    if (n == -1) {
-        return 0;
-    }
-    if (n == 0) {
-        cout << "Client disconnected" << endl;
-        return 1;
-    }
+    *x = info.x;
+    *y = info.y;
     if(*x == -1 && *y == -1) {
         cout << "Player has no move" << endl;
     } else if(*x == -2 && *y == -2) {
@@ -133,16 +116,11 @@ int Server::handleClient(int clientSocket, int *x, int *y) {
 }
 
 int Server::writeToClient(int clientSocket, int *x, int *y) {
+    Info info;
+    info.x = *x;
+    info.y = *y;
     //write the info from one client to the other.
-    int n = write(clientSocket, x, sizeof(int));
-    if (n == -1) {
-        return 0;
-    }
-    if (n == 0) {
-        cout << "Client disconnected" << endl;
-        return 1;
-    }
-    n = write(clientSocket, y, sizeof(int));
+    int n = write(clientSocket, &info, sizeof(Info));
     if (n == -1) {
         return 0;
     }

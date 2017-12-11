@@ -4,8 +4,20 @@
 #ifndef ADVANCEDPROGRAMMING1_SERVER_H
 #define ADVANCEDPROGRAMMING1_SERVER_H
 
-#include <string>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <string.h>
+#include <iostream>
+#include <poll.h>
+#define FIRST 1
+#define SECOND 2
 using namespace std;
+
+typedef struct Info {
+    int x;
+    int y;
+}Info;
 
 class Server {
 public:
