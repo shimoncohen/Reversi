@@ -12,7 +12,6 @@
 #include "AIPlayer.h"
 #include "Board.h"
 #include "ConsolePrinter.h"
-#include "Game.h"
 #include "ServerPlayer.h"
 
 typedef struct Info {

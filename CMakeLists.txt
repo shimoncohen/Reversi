@@ -20,7 +20,7 @@ set(SOURCE_FILES src/client/Board.h src/client/StandartGameLogic.cpp src/client/
 set(TEST_FILES Tests/ClientTests.cpp src/client/Board.cpp Tests/ServerTests.cpp)
 
 add_executable(game ${SOURCE_FILES} src/client/main.cpp)
-add_executable(server ${SOURCE_FILES} src/server/main.cpp)
-add_executable(tests ${SOURCE_FILES} ${TEST_FILES} Tests/gtest_main.cpp)
+add_executable(server ${SOURCE_FILES} src/server/main.cpp src/server/Command.h src/server/StartCommand.cpp src/server/StartCommand.h src/server/CommandsManager.cpp src/server/CommandsManager.h)
+add_executable(tests ${SOURCE_FILES} ${TEST_FILES} src/client/Tests/gtest_main.cpp)
 
 target_link_libraries(tests gtest gtest_main gmock)
