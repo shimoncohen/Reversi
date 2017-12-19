@@ -67,55 +67,6 @@ Board::~Board() {
     delete[] board;
 }
 
-void Board::print() {
-    // print the board with all of the line and column numbers and dividers between cells.
-    if(boardSize > 9) {
-        cout << "  ";
-    } else {
-        cout << " ";
-    }
-    for(int i = 1; i <= boardSize; i++) {
-        cout << "| " << i << " ";
-    }
-    cout << "|" << endl;
-    cout << "--";
-    for(int k = 0; k < boardSize; k++) {
-        if(k > 8) {
-            cout << "-----";
-            continue;
-        }
-        cout << "----";
-    }
-    cout << endl;
-    for(int i = 0; i < boardSize; i++) {
-        cout << i + 1;
-        if(boardSize > 9 && i < 9) {
-            cout << " ";
-        }
-        cout << "| ";
-        for(int k = 0; k < boardSize; k++) {
-            cout << checkCell(i, k);
-            if(k > 7) {
-                cout << " |  ";
-            } else {
-                cout << " | ";
-            }
-            if(k == boardSize - 1) {
-                cout << endl;
-            }
-        }
-        cout << "--";
-        for(int k = 0; k < boardSize; k++) {
-            if(k > 8) {
-                cout << "-----";
-                continue;
-            }
-            cout << "----";
-        }
-        cout << endl;
-    }
-}
-
 int Board::getSize() {
     return boardSize;
 }
