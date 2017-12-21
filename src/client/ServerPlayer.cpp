@@ -14,17 +14,7 @@ using namespace std;
 ServerPlayer::ServerPlayer(const char *serverIP, int serverPort):
         serverIP(serverIP), serverPort(serverPort),
         clientSocket(0), playerType(notDefined) {
-     try{
-         connectToServer();
-     } catch (const char *msg) {
-         throw msg;
-     }
-}
-
-void ServerPlayer::connectToServer() {
-// Create a socket point
-    ConsolePrinter printer;
-    int playerNum, n;
+    int n;
     string startString = "Start";
     char* start = new char[5], *temp = new char [5];
     strcpy(start, startString.c_str());
@@ -55,6 +45,22 @@ void ServerPlayer::connectToServer() {
     if (connect(clientSocket, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) == -1) {
         throw "Error connecting to server";
     }
+    // recieve start game message
+    while(strcmp(temp, start) != 0) {
+        n = read(clientSocket, temp, sizeof(temp));
+        if (n == -1) {
+            throw "Error reading start game";
+        }
+    }
+    clientMenu();
+    free(start);
+    free(temp);
+}
+
+void ServerPlayer::startGame() {
+// Create a socket point
+    ConsolePrinter printer;
+    int playerNum, n;
     // reading the player's number
     n = read(clientSocket, &playerNum, sizeof(playerNum));
     if (n == -1) {
@@ -67,15 +73,6 @@ void ServerPlayer::connectToServer() {
     } else if(playerNum == 2) {
         playerType = blackPlayer;
     }
-    // recieve start game message
-    while(strcmp(temp, start) != 0) {
-        n = read(clientSocket, temp, sizeof(temp));
-        if (n == -1) {
-            throw "Error reading start game";
-        }
-    }
-    free(start);
-    free(temp);
 }
 
 void ServerPlayer::recieveOpponentsMove(int x, int y) {
@@ -154,4 +151,75 @@ int* ServerPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &m
 
 bool ServerPlayer::needPrint() {
     return false;
+}
+
+void ServerPlayer::clientMenu() {
+    string command, name = "";
+    int oper, n;
+    bool flag = false;
+    ConsolePrinter printer;
+    // printing client's menu before joining game
+    while(!flag) {
+        printer.printClientMenu();
+        // get the operation of the client
+        cin >> oper >> name;
+        // translating the command from a number into string
+        command = translateOperation(oper, name);
+        // sending the command to the server
+        n = write(clientSocket, &command, command.size());
+        if (n == -1) {
+            throw "Error writing command to socket";
+        }
+        if (n == 0) {
+            throw "Error, connection disconnected!";
+        }
+        // reading the servers answer from the socket
+        n = read(clientSocket, &command, command.size());
+        // for problems with reading from the socket
+        if (n == -1) {
+            throw "Error writing command to socket";
+        }
+        if (n == 0) {
+            throw "Error, connection disconnected!";
+        }
+        // in option "join" - entering a name that isn't on the list
+        if (command == "NotExist") {
+            printer.gameNotExist();
+            continue;
+        // in option "start" - entering a name that is already on the list
+        } else if(command == "AlreadyExist") {
+            printer.gameAlreadyExist();
+            continue;
+        // in case user entered an option not from the menu
+        } else if(command == "NotOption") {
+            printer.gameNotOption();
+            continue;
+        }
+        // if the input was legal
+        flag = true;
+    }
+    startGame();
+}
+
+string ServerPlayer::translateOperation(int oper, string name) {
+    switch(oper) {
+        case 1:
+            return "start " + name;
+        case 2:
+            return "list_games";
+        case 3:
+            return "join " + name;
+        default:
+            return "NotOption";
+    }
+}
+
+int ServerPlayer::commandChooser(string com) {
+    if(com.compare("start")) {
+        return 1;
+    } else if(com.compare("list")) {
+        return 2;
+    } else if(com.compare("join")) {
+        return 3;
+    }
 }

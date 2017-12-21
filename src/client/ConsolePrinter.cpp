@@ -99,3 +99,22 @@ void ConsolePrinter::printWinMessage(char winner) {
         cout << winner << " wins!" << endl;
     }
 }
+
+void ConsolePrinter::printClientMenu() {
+    cout << "please choose operation number. If you choose 1 or 3, also enter name of game: " << endl;
+    cout << "1.'start' to start a new game." << endl;
+    cout << "2.'list' to view the list of waiting games." << endl;
+    cout << "3.'join' to join a waiting game." << endl;
+}
+
+void ConsolePrinter::gameNotExist() {
+    cout << "Error! The game doesn't exist." << endl;
+}
+
+void ConsolePrinter::gameAlreadyExist() {
+    cout << "Error! The game already exists." << endl;
+}
+
+void ConsolePrinter::gameNotOption() {
+    cout << "Invalid option! Please choose again." << endl;
+}

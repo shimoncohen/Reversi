@@ -23,7 +23,8 @@ public:
 	 * output: none.
 	 * operation: connects the player to the server.
 	*/
-    void connectToServer();
+    void startGame();
+    //TODO change comments
     /*
 	 * function name: getMove.
 	 * input: none.
@@ -42,6 +43,9 @@ public:
 	*/
     void recieveOpponentsMove(int x, int y);
     bool needPrint();
+    void clientMenu();
+    string translateOperation(int oper, string name);
+    int commandChooser(string com);
 private:
     type playerType;
     //the IP of the server the player connects to.

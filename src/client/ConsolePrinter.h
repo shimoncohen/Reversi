@@ -25,6 +25,10 @@ public:
     void printNoMoves(type playerType);
     void printOpponentHasNoMoves();
     void printWinMessage(char winner);
+    void printClientMenu();
+    void gameAlreadyExist();
+    void gameNotExist();
+    void gameNotOption();
 };
 
 

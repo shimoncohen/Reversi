@@ -135,6 +135,10 @@ public:
      * operation: print a win message according to the player who won.
     */
     virtual void printWinMessage(char winner) = 0;
+    virtual void printClientMenu() = 0;
+    virtual void gameAlreadyExist() = 0;
+    virtual void gameNotExist() = 0;
+    virtual void gameNotOption() = 0;
 };
 
 #endif //ADVANCEDPROGRAMMING1_PRINTER_H
