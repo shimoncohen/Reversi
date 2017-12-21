@@ -2,7 +2,7 @@
 // 302228275 Nadav Spitzer
 
 #include <string>
-#include "GameServer.h"
+#include "Server.h"
 #include <fstream>
 #include <iostream>
 #include <stdlib.h>
@@ -14,9 +14,9 @@ int settingsReading();
 int main() {
     int port;
     port = settingsReading();
-    GameServer server(port);
+    Server server(port);
     try {
-        server.start();
+        server.runServer();
     } catch (const char *msg) {
         cout << "Cannot start server. Reason: " << msg << endl;
         exit(-1);

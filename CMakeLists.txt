@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 project(advancedProgramming1)
 
 #set(CMAKE_CXX_STANDARD 98)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread")
+set(CMAKE_CXX_FLAGS -pthread)
 
 add_subdirectory(lib/googletest-release-1.8.0)
 
