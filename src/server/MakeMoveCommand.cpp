@@ -3,7 +3,7 @@
 
 #include "MakeMoveCommand.h"
 
-void MakeMoveCommand::execute(vector<string> args, int client) {
+void MakeMoveCommand::execute(vector<string> args, vector<Game> games, int client) {
     string moveString = "Play " + args[0] + " " + args[1];
     write(client, &moveString, sizeof(string));
 }

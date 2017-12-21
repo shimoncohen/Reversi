@@ -8,7 +8,8 @@
 #define STARTMESSAGE "Start"
 
 class StartCommand : public Command {
-    void execute(vector<string> args, int client = 0);
+public:
+    void execute(vector<string> args, vector<Game> games = NULL, int client = 0);
 };
 
 

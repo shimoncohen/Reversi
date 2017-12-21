@@ -8,7 +8,7 @@
 
 class MakeMoveCommand : public Command {
 public:
-    void execute(vector<string> args, int client = 0);
+    void execute(vector<string> args, vector<Game> games = NULL, int client = 0);
 };
 
 

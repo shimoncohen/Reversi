@@ -5,7 +5,10 @@
 
 CommandsManager::CommandsManager() {
     commandsMap["start"] = new StartCommand();
+    commandsMap["list_games"] = new GetGameListCommand();
+    commandsMap["join"] = new joinGameCommand();
     commandsMap["Play"] = new MakeMoveCommand();
+    commandsMap["close"] = new CloseGameCommand();
 }
 
 CommandsManager::~CommandsManager() {

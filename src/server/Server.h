@@ -28,6 +28,8 @@ public:
     void runServer();
     static void *handleClient(void* socket);
     static void *handleGame(void* gameToHandle);
+    vector<Game> getGameVector();
+    CommandsManager getCommandManager();
     /*
 	 * function name: stop.
 	 * input: none.

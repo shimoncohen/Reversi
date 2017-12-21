@@ -10,6 +10,9 @@
 #include "Command.h"
 #include "StartCommand.h"
 #include "MakeMoveCommand.h"
+#include "JoinGameCommand.h"
+#include "GetGameListCommand.h"
+#include "CloseGameCommand.h"
 using namespace std;
 
 class CommandsManager {

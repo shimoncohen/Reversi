@@ -4,8 +4,6 @@
 #include <string>
 #include "Server.h"
 #include <fstream>
-#include <iostream>
-#include <stdlib.h>
 #define ENDPORTWORD 5
 using namespace std;
 
