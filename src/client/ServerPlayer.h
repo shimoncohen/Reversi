@@ -6,6 +6,7 @@
 
 #include "Player.h"
 #include "Game.h"
+#include <cstdlib>
 
 class ServerPlayer : public Player {
 public:

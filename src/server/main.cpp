@@ -2,7 +2,7 @@
 // 302228275 Nadav Spitzer
 
 #include <string>
-#include "Server.h"
+#include "GameServer.h"
 #include <fstream>
 #include <iostream>
 #include <stdlib.h>
@@ -14,7 +14,7 @@ int settingsReading();
 int main() {
     int port;
     port = settingsReading();
-    Server server(port);
+    GameServer server(port);
     try {
         server.start();
     } catch (const char *msg) {

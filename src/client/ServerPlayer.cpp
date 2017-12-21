@@ -8,6 +8,7 @@
 #include <netdb.h>
 #include <string.h>
 #include <unistd.h>
+
 using namespace std;
 
 ServerPlayer::ServerPlayer(const char *serverIP, int serverPort):
@@ -23,6 +24,10 @@ ServerPlayer::ServerPlayer(const char *serverIP, int serverPort):
 void ServerPlayer::connectToServer() {
 // Create a socket point
     ConsolePrinter printer;
+    int playerNum, n;
+    string startString = "Start";
+    char* start = new char[5], *temp = new char [5];
+    strcpy(start, startString.c_str());
     clientSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (clientSocket == -1) {
         throw "Error opening socket";
@@ -50,9 +55,8 @@ void ServerPlayer::connectToServer() {
     if (connect(clientSocket, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) == -1) {
         throw "Error connecting to server";
     }
-    int playerNum;
     // reading the player's number
-    int n = read(clientSocket, &playerNum, sizeof(playerNum));
+    n = read(clientSocket, &playerNum, sizeof(playerNum));
     if (n == -1) {
         throw "Error reading player num";
     }
@@ -63,19 +67,43 @@ void ServerPlayer::connectToServer() {
     } else if(playerNum == 2) {
         playerType = blackPlayer;
     }
-    n = read(clientSocket, &playerNum, sizeof(playerNum));
-    if (n == -1) {
-        throw "Error reading start game";
+    // recieve start game message
+    while(strcmp(temp, start) != 0) {
+        n = read(clientSocket, temp, sizeof(temp));
+        if (n == -1) {
+            throw "Error reading start game";
+        }
     }
+    free(start);
+    free(temp);
 }
 
 void ServerPlayer::recieveOpponentsMove(int x, int y) {
     Info info;
     info.x = x;
     info.y = y;
+    string play = "Play ";
+    int temp = x;
+    const char *message;
+    char num;
+    while(temp > 0) {
+        temp %= 10;
+        num =  (char)(temp + 48);
+        play = play + num;
+        temp /= 10;
+    }
+    play = play + " ";
+    temp = y;
+    while(temp > 0) {
+        temp %= 10;
+        num =  (char)(temp + 48);
+        play = play + num;
+        temp /= 10;
+    }
+    message = play.c_str();
 // Write the exercise arguments to the socket
     if(x != -10 && y != -10) {
-        int n = write(clientSocket, &info, sizeof(Info));
+        int n = write(clientSocket, message, sizeof(message));
         if (n == -1) {
             throw "Error writing x to socket";
         }
@@ -83,6 +111,7 @@ void ServerPlayer::recieveOpponentsMove(int x, int y) {
             throw "Error, opponent disconnected!";
         }
     }
+
 }
 
 Info ServerPlayer::getMove() {
@@ -92,13 +121,15 @@ Info ServerPlayer::getMove() {
     //Read the result from the server
     int n;
     Info newInfo;
-    n = read(clientSocket, &newInfo, sizeof(Info));
-    if (n == -1) {
-        throw "Error reading x from socket";
-    }
-    if (n == 0) {
-        throw "Error, opponent disconnected!";
-    }
+    do {
+        n = read(clientSocket, &newInfo, sizeof(Info));
+        if (n == -1) {
+            throw "Error reading x from socket";
+        }
+        if (n == 0) {
+            throw "Error, opponent disconnected!";
+        }
+    } while(newInfo.x < 0 || newInfo.y < 0);
     return newInfo;
 }
 
@@ -112,6 +143,9 @@ type ServerPlayer::getType() {
 
 int* ServerPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves) {
     Info newInfo = getMove();
+    while(newInfo.x > board.getSize() || newInfo.y > board.getSize()) {
+        newInfo = getMove();
+    }
     int* move = new int[2];
     move[0] = newInfo.x;
     move[1] = newInfo.y;

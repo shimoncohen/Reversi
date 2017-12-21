@@ -9,6 +9,7 @@
 #include "iostream"
 #include "Command.h"
 #include "StartCommand.h"
+#include "MakeMoveCommand.h"
 using namespace std;
 
 class CommandsManager {

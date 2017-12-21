@@ -3,6 +3,7 @@
 
 #include "StartCommand.h"
 
-void StartCommand::execute(vector<string> args) {
-
+void StartCommand::execute(vector<string> args, int client) {
+    string startString = STARTMESSAGE;
+    write(client, &startString, sizeof(string));
 }

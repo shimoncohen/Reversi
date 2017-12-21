@@ -6,11 +6,14 @@
 
 #include <vector>
 #include "iostream"
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
 using namespace std;
 
 class Command {
 public:
-    virtual void execute(vector<string> args) = 0;
+    virtual void execute(vector<string> args, int client = 0) = 0;
     virtual ~Command() {}
 };
 

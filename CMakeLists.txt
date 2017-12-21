@@ -14,13 +14,17 @@ set(SOURCE_FILES src/client/Board.h src/client/StandartGameLogic.cpp src/client/
         src/client/Enum.h src/client/Point.cpp src/client/Point.h src/client/HumanPlayer.cpp
         src/client/HumanPlayer.h src/client/AIPlayer.cpp src/client/AIPlayer.h src/client/Board.cpp
         src/client/ConsolePrinter.cpp src/client/ConsolePrinter.h src/client/Printer.h
-        src/client/Game.cpp src/client/Game.h src/client/ServerPlayer.cpp src/client/ServerPlayer.h
-        src/server/Server.h src/server/Server.cpp)
+        src/client/Game.cpp src/client/Game.h src/client/ServerPlayer.cpp src/client/ServerPlayer.h)
 
-set(TEST_FILES Tests/ClientTests.cpp src/client/Board.cpp Tests/ServerTests.cpp)
+set(TEST_FILES src/client/Tests/ClientTests.cpp src/client/Tests/ServerTests.cpp)
+
+set(SERVER_FILES src/server/MakeMoveCommand.cpp src/server/MakeMoveCommand.h src/server/GameServer.h
+        src/server/GameServer.cpp src/server/Command.h src/server/StartCommand.cpp
+        src/server/StartCommand.h src/server/CommandsManager.cpp src/server/CommandsManager.h
+        src/server/Game.cpp src/server/Game.h src/server/Server.cpp src/server/Server.h)
 
 add_executable(game ${SOURCE_FILES} src/client/main.cpp)
-add_executable(server ${SOURCE_FILES} src/server/main.cpp src/server/Command.h src/server/StartCommand.cpp src/server/StartCommand.h src/server/CommandsManager.cpp src/server/CommandsManager.h)
+add_executable(server ${SERVER_FILES} src/server/main.cpp)
 add_executable(tests ${SOURCE_FILES} ${TEST_FILES} src/client/Tests/gtest_main.cpp)
 
 target_link_libraries(tests gtest gtest_main gmock)

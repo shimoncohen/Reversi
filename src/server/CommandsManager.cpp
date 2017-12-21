@@ -5,6 +5,7 @@
 
 CommandsManager::CommandsManager() {
     commandsMap["start"] = new StartCommand();
+    commandsMap["Play"] = new MakeMoveCommand();
 }
 
 CommandsManager::~CommandsManager() {

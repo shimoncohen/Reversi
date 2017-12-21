@@ -5,9 +5,10 @@
 #define ADVANCEDPROGRAMMING1_STARTCOMMAND_H
 
 #include "Command.h"
+#define STARTMESSAGE "Start"
 
 class StartCommand : public Command {
-    void execute(vector<string> args);
+    void execute(vector<string> args, int client = 0);
 };
 
 
