@@ -22,14 +22,25 @@ typedef struct Info {
     int y;
 }Info;
 
+typedef struct CommandAndArgs {
+    string command;
+    vector<string> args;
+}CommandAndArgs;
+
+typedef struct HandleArgs {
+    int socket;
+    Game *game;
+    vector<Game*> games;
+}HandleArgs;
+
 class Server {
 public:
     Server(int port);
     void runServer();
-    static void *handleClient(void* socket);
-    static void *handleGame(void* gameToHandle);
-    vector<Game> getGameVector();
-    CommandsManager getCommandManager();
+    static void *handleClient(void* handleArgs);
+    static void *handleGame(void* handleArgs);
+    vector<Game*> getGameVector();
+    //CommandsManager getCommandManager();
     /*
 	 * function name: stop.
 	 * input: none.
@@ -40,8 +51,9 @@ public:
 private:
     int port;
     int serverSocket;
-    CommandsManager cm;
-    vector<Game> games;
+    //CommandsManager cm;
+    vector<Game*> games;
+    static CommandAndArgs extractCommandAndArgs(char* buffer);
 };
 
 

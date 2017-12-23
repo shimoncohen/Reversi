@@ -9,7 +9,7 @@
 
 class CloseGameCommand : public Command {
 public:
-    void execute(vector<string> args, vector<Game> games = NULL, int client = 0);
+    void execute(vector<string> args, vector<Game*> games, int client = 0);
 };
 
 

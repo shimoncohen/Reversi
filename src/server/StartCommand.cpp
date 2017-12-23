@@ -3,7 +3,7 @@
 
 #include "StartCommand.h"
 
-void StartCommand::execute(vector<string> args, vector<Game> games, int client) {
-    string startString = STARTMESSAGE;
-    write(client, &startString, sizeof(string));
+void StartCommand::execute(vector<string> args, vector<Game*> games, int client) {
+    Game *newGame = new Game(args[0], client, 0);////segmentation fault
+    games.push_back(newGame);
 }

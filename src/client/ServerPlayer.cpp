@@ -41,12 +41,12 @@ ServerPlayer::ServerPlayer(const char *serverIP, int serverPort):
         throw "Error connecting to server";
     }
     // recieve start game message
-    while(strcmp(temp, start) != 0) {
-        n = read(clientSocket, temp, sizeof(temp));
-        if (n == -1) {
-            throw "Error reading start game";
-        }
-    }
+//    while(strcmp(temp, start) != 0) {
+//        n = read(clientSocket, temp, sizeof(temp));
+//        if (n == -1) {
+//            throw "Error reading start game";
+//        }
+//    }
     clientMenu();
     free(start);
     free(temp);
@@ -107,9 +107,8 @@ void ServerPlayer::recieveOpponentsMove(int x, int y) {
 }
 
 Info ServerPlayer::getMove() {
-    Printer *printer = new ConsolePrinter;
-    printer->waitingMessage();
-    delete printer;
+    ConsolePrinter printer;
+    printer.waitingMessage();
     //Read the result from the server
     int n;
     Info newInfo;
@@ -150,6 +149,7 @@ bool ServerPlayer::needPrint() {
 
 void ServerPlayer::clientMenu() {
     string command, name = "";
+    const char* message, *recieve = new char[BUFFERSIZE];
     int oper, n;
     bool flag = false;
     ConsolePrinter printer;
@@ -160,8 +160,13 @@ void ServerPlayer::clientMenu() {
         cin >> oper >> name;
         // translating the command from a number into string
         command = translateOperation(oper, name);
+        while(command.compare("NotOption") == 0) {
+            printer.gameNotOption();
+            command = translateOperation(oper, name);
+        }
+        message = command.c_str();
         // sending the command to the server
-        n = write(clientSocket, &command, command.size());
+        n = write(clientSocket, message, BUFFERSIZE*sizeof(char));
         if (n == -1) {
             throw "Error writing command to socket";
         }
@@ -169,7 +174,9 @@ void ServerPlayer::clientMenu() {
             throw "Error, connection disconnected!";
         }
         // reading the servers answer from the socket
-        n = read(clientSocket, &command, command.size());
+        do {
+            n = read(clientSocket, &recieve, BUFFERSIZE * sizeof(char));
+        } while(recieve == "");
         // for problems with reading from the socket
         if (n == -1) {
             throw "Error writing command to socket";
@@ -186,9 +193,6 @@ void ServerPlayer::clientMenu() {
             printer.gameAlreadyExist();
             continue;
         // in case user entered an option not from the menu
-        } else if(command == "NotOption") {
-            printer.gameNotOption();
-            continue;
         }
         // if the input was legal
         flag = true;

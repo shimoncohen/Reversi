@@ -4,6 +4,6 @@
 
 #include "GetGameListCommand.h"
 
-void GetGameListCommand::execute(vector<string> args, vector<Game> games, int client) {
+void GetGameListCommand::execute(vector<string> args, vector<Game*> games, int client) {
 
 }

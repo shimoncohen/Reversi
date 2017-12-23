@@ -3,11 +3,13 @@
 
 #include "JoinGameCommand.h"
 
-void joinGameCommand::execute(vector<string> args, vector<Game> games, int client) {
+void joinGameCommand::execute(vector<string> args, vector<Game*> games, int client) {
     int i = 0;
     for(i; i < games.size(); i++) {
-        if(games[i].getStatus() == 0 && games[i].getName() == args[0]) {
+        if(games[i]->getStatus() == 0 && games[i]->getName() == args[0]) {
             ////////////
         }
     }
+//    string startString = STARTMESSAGE;
+//    write(client, &startString, sizeof(string));
 }

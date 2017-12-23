@@ -14,6 +14,8 @@
 #include <string.h>
 #include <unistd.h>
 
+#define BUFFERSIZE 200
+
 class ServerPlayer : public Player {
 public:
     /*

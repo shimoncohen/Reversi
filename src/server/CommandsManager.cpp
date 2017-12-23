@@ -7,7 +7,7 @@ CommandsManager::CommandsManager() {
     commandsMap["start"] = new StartCommand();
     commandsMap["list_games"] = new GetGameListCommand();
     commandsMap["join"] = new joinGameCommand();
-    commandsMap["Play"] = new MakeMoveCommand();
+    commandsMap["play"] = new MakeMoveCommand();
     commandsMap["close"] = new CloseGameCommand();
 }
 
@@ -18,7 +18,7 @@ CommandsManager::~CommandsManager() {
     }
 }
 
-void CommandsManager::executeCommand(string command, vector<string> args) {
+void CommandsManager::executeCommand(string command, vector<string> args, vector<Game*> games, int client) {
     Command *commandObj = commandsMap[command];
-    commandObj->execute(args);
+    commandObj->execute(args, games, client);
 }
