@@ -118,3 +118,14 @@ void ConsolePrinter::gameAlreadyExist() {
 void ConsolePrinter::gameNotOption() {
     cout << "Invalid option! Please choose again." << endl;
 }
+
+void ConsolePrinter::printGamesList(int sizeOfList, char *list) {
+    // i list is empty
+    if(sizeOfList == 0) {
+        cout << "List is empty. There are not waiting games." << endl;
+    } else {
+        for (int i = 0; i < sizeOfList; i++) {
+            cout << list[i];
+        }
+    }
+}

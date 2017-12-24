@@ -29,6 +29,7 @@ public:
     void gameAlreadyExist();
     void gameNotExist();
     void gameNotOption();
+    void printGamesList(int sizeOfList, char* list);
 };
 
 

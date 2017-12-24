@@ -139,6 +139,7 @@ public:
     virtual void gameAlreadyExist() = 0;
     virtual void gameNotExist() = 0;
     virtual void gameNotOption() = 0;
+    virtual void printGamesList(int sizeOfList, char* list) = 0;
 };
 
 #endif //ADVANCEDPROGRAMMING1_PRINTER_H

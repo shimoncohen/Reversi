@@ -150,18 +150,27 @@ bool ServerPlayer::needPrint() {
 void ServerPlayer::clientMenu() {
     string command, name = "";
     const char* message, *recieve = new char[BUFFERSIZE];
-    int oper, n;
+    int oper, n, sizeOfList;
     bool flag = false;
     ConsolePrinter printer;
     // printing client's menu before joining game
     while(!flag) {
         printer.printClientMenu();
         // get the operation of the client
-        cin >> oper >> name;
+        cin >> oper;
+        if(oper == 1 || oper == 3) {
+            cin >> name;
+        }
         // translating the command from a number into string
         command = translateOperation(oper, name);
         while(command.compare("NotOption") == 0) {
             printer.gameNotOption();
+            printer.printClientMenu();
+            // get the operation of the client
+            cin >> oper;
+            if(oper == 1 || oper == 3) {
+                cin >> name;
+            }
             command = translateOperation(oper, name);
         }
         message = command.c_str();
@@ -179,7 +188,7 @@ void ServerPlayer::clientMenu() {
         } while(recieve == "");
         // for problems with reading from the socket
         if (n == -1) {
-            throw "Error writing command to socket";
+            throw "Error reading command from socket";
         }
         if (n == 0) {
             throw "Error, connection disconnected!";
@@ -193,6 +202,28 @@ void ServerPlayer::clientMenu() {
             printer.gameAlreadyExist();
             continue;
         // in case user entered an option not from the menu
+        }
+        if(command == "list") {
+            // reading the size of the list
+            n = read(clientSocket, &sizeOfList, sizeof(int));
+            // for problems with reading from the socket
+            if (n == -1) {
+                throw "Error reading command from socket";
+            }
+            if (n == 0) {
+                throw "Error, connection disconnected!";
+            }
+            char list[sizeOfList] = {};
+            // reading the list in string display
+            n = read(clientSocket, &list, sizeOfList * sizeof(char));
+            // for problems with reading from the socket
+            if (n == -1) {
+                throw "Error reading command from socket";
+            }
+            if (n == 0) {
+                throw "Error, connection disconnected!";
+            }
+            printer.printGamesList(sizeOfList, list);
         }
         // if the input was legal
         // TODO get list and print
