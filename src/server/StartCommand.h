@@ -6,6 +6,9 @@
 
 #include "Command.h"
 
+#define EXISTS "AlreadyExist"
+#define EXISTSIZE 12
+
 class StartCommand : public Command {
 public:
     void execute(vector<string> args, vector<Game*> games, int client = 0);

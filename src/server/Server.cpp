@@ -262,10 +262,10 @@ CommandAndArgs Server::extractCommandAndArgs(char* buffer) {
         }
     }
     commandAndArgs.command = command;
-    if(args == 1) {
+    if(args == 0 && arguments[0].compare("") != 0) {
         commandAndArgs.args.push_back(arguments[0]);
     }
-    if(args == 2) {
+    if(args == 1 && arguments[1].compare("") != 0) {
         commandAndArgs.args.push_back(arguments[1]);
     }
     return commandAndArgs;

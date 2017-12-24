@@ -16,6 +16,7 @@ public:
     bool getStatus();
     int getFirstPlayer();
     int getSecondPlayer();
+    void joinGame(int newPlayer);
 private:
     string name;
     int firstPlayerSocket;

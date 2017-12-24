@@ -7,7 +7,7 @@ Game::Game(string gameName, int socket1, int socket2) {
     name = gameName;
     firstPlayerSocket = socket1;
     secondPlayerSocket = socket2;
-    status = 1;
+    status = false;
 }
 
 string Game::getName() {
@@ -24,4 +24,9 @@ int Game::getFirstPlayer() {
 
 int Game::getSecondPlayer() {
     return secondPlayerSocket;
+}
+
+void Game::joinGame(int newPlayer) {
+    secondPlayerSocket = newPlayer;
+    status = true;
 }

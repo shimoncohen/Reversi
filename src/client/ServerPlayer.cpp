@@ -195,6 +195,7 @@ void ServerPlayer::clientMenu() {
         // in case user entered an option not from the menu
         }
         // if the input was legal
+        // TODO get list and print
         flag = true;
     }
     startGame();
