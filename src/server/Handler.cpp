@@ -11,7 +11,11 @@ void Handler::run(int clientSocket) {
     handleArgs->games = &games;
     handleArgs->game = NULL;
     handleArgs->socket = clientSocket;
-    n = pthread_create(&thread, NULL, handleClient, (void*)handleArgs);
+    try {
+        n = pthread_create(&thread, NULL, handleClient, (void *) handleArgs);
+    } catch (const char* msg) {
+        throw msg;
+    }
     if (n) {
         cout << "Error: unable to create thread" << endl;
         exit(-1);
@@ -26,7 +30,11 @@ void Handler::run(int clientSocket) {
     if(game != NULL) {
 //        handleArgs->games = games;
 //        handleArgs->socket = clientSocket;
-        n = pthread_create(&thread, NULL, handleGame, (void*)handleArgs);
+        try {
+            n = pthread_create(&thread, NULL, handleGame, (void *) handleArgs);
+        } catch (const char* msg) {
+            throw msg;
+        }
     }
     if (n) {
         cout << "Error: unable to create thread" << endl;
@@ -44,6 +52,7 @@ void* Handler::handleClient(void* handleArgs) {
     vector<Game*>& temp = *handleArgs1->games;
     int i = 0, args = 0;
     int n = read(handleArgs1->socket, buffer, BUFFERSIZE*sizeof(char));
+    cout << "In handleClient:\nread from client: " << buffer << endl;
     if (n == -1) {
         cout << "Error writing to socket" << endl;
         return NULL;
@@ -53,7 +62,13 @@ void* Handler::handleClient(void* handleArgs) {
         return NULL;
     }
     commandAndArgs = extractCommandAndArgs(buffer);
-    cm.executeCommand(commandAndArgs.command, commandAndArgs.args, temp, handleArgs1->socket);
+    cout << "In handleClient:\nextracted command and arguments:\ncommand: " << commandAndArgs.command 
+         << "\narguments: " << commandAndArgs.args[0] << " " << commandAndArgs.args[1] << endl;
+    try {
+        cm.executeCommand(commandAndArgs.command, commandAndArgs.args, temp, handleArgs1->socket);
+    } catch (const char* msg) {
+        throw msg;
+    }
 //    int playerNum = FIRST;
 //    int n = write((int)socket, &playerNum, sizeof(playerNum));
 //    if (n == -1) {
@@ -79,17 +94,20 @@ void* Handler::handleGame(void* handleArgs) {
 
     Game *currentGame = handleArgs1->game;
 
-
     n = write(currentGame->getFirstPlayer(), &startMessage, sizeof(startMessage));
     if (n == -1) {
         cout << "Error writing to socket" << endl;
         return NULL;
     }
+    cout << "In handleGame:\nsent message: " << startMessage << "to first player" << endl;
+
     n = write(currentGame->getSecondPlayer(), &startMessage, sizeof(startMessage));
     if (n == -1) {
         cout << "Error writing to socket" << endl;
         return NULL;
     }
+    cout << "In handleGame:\nsent message: " << startMessage << "to second player" << endl;
+    
     if (currentGame->getSecondPlayer() == -1)
         throw "Error on accept";
     int currentClient = currentGame->getFirstPlayer();
@@ -105,13 +123,20 @@ void* Handler::handleGame(void* handleArgs) {
             cout << "Client disconnected" << endl;
             return NULL;
         }
+        cout << "In handleGame:\nread: " << buffer << endl;
 //        while(buffer[i] != '\0') {
 //            command.append(buffer[i]);
 //            //command = command + buffer[i];
 //            i++;
 //        }
         commandAndArgs = extractCommandAndArgs(buffer);
-        cm.executeCommand(commandAndArgs.command, commandAndArgs.args, *handleArgs1->games, handleArgs1->socket);
+        cout << "In handleGame:\nextracted command and arguments:\ncommand: " << commandAndArgs.command
+             << "\narguments: " << commandAndArgs.args[0] << " " << commandAndArgs.args[1] << endl;
+        try {
+            cm.executeCommand(commandAndArgs.command, commandAndArgs.args, *handleArgs1->games, handleArgs1->socket);
+        } catch (const char* msg) {
+            throw msg;
+        }
 //        for(i; i < BUFFERSIZE && buffer[i] != '\0'; i++) {
 //            if(flag == 1 && buffer[i] == ' ') {
 //                flag = 2;

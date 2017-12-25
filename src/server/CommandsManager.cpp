@@ -20,5 +20,9 @@ CommandsManager::~CommandsManager() {
 
 void CommandsManager::executeCommand(string command, vector<string> args, vector<Game*> &games, int client) {
     Command *commandObj = commandsMap[command];
-    commandObj->execute(args, games, client);
+    try {
+        commandObj->execute(args, games, client);
+    } catch (const char* msg) {
+        throw msg;
+    }
 }

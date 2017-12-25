@@ -24,6 +24,7 @@ void Server::runServer() {
     }
     // Start listening to incoming connections
     listen(serverSocket, MAX_CONNECTED_CLIENTS);
+    cout << "In runServer:\nlistening to port\n" << endl;
     // Define the client socket's structures
     struct sockaddr_in firstClientAddress;
     socklen_t firstClientAddressLen;
@@ -34,7 +35,12 @@ void Server::runServer() {
         cout << "Waiting for client connections..." << endl;
         // Accept a new client connection
         *clientSocket = accept(serverSocket, (struct sockaddr *) &firstClientAddress, &firstClientAddressLen);
-        handler.run(*clientSocket);
+        cout << "In runServer:\naccepted new client\n" << endl;
+        try {
+            handler.run(*clientSocket);
+        } catch (const char* msg) {
+            throw msg;
+        }
 //        int n;
 //        pthread_t thread;
 //        HandleArgs *handleArgs = new HandleArgs();
