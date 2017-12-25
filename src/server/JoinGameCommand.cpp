@@ -15,8 +15,8 @@ void joinGameCommand::execute(vector<string> args, vector<Game*> &games, int cli
     }
     string startString = STARTMESSAGE;
     if(joined != NULL) {
-        write(joined->getFirstPlayer(), &startString, sizeof(string));
-        write(joined->getSecondPlayer(), &startString, sizeof(string));
+        write(joined->getFirstPlayer(), &startString, STARTMESSAGESIZE*sizeof(char));
+        write(joined->getSecondPlayer(), &startString, STARTMESSAGESIZE*sizeof(char));
     } else {
         //send not exists
     }

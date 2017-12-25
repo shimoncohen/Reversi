@@ -41,7 +41,7 @@ void* Handler::handleClient(void* handleArgs) {
     char buffer[BUFFERSIZE];
     string command, arguments[SECOND];
     HandleArgs *handleArgs1 = (HandleArgs*)handleArgs;
-    vector<Game*> *temp = handleArgs1->games;
+    vector<Game*>& temp = *handleArgs1->games;
     int i = 0, args = 0;
     int n = read(handleArgs1->socket, buffer, BUFFERSIZE*sizeof(char));
     if (n == -1) {
@@ -53,7 +53,7 @@ void* Handler::handleClient(void* handleArgs) {
         return NULL;
     }
     commandAndArgs = extractCommandAndArgs(buffer);
-    cm.executeCommand(commandAndArgs.command, commandAndArgs.args, *temp, handleArgs1->socket);
+    cm.executeCommand(commandAndArgs.command, commandAndArgs.args, temp, handleArgs1->socket);
 //    int playerNum = FIRST;
 //    int n = write((int)socket, &playerNum, sizeof(playerNum));
 //    if (n == -1) {
