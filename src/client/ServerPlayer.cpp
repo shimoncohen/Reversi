@@ -149,7 +149,8 @@ bool ServerPlayer::needPrint() {
 
 void ServerPlayer::clientMenu() {
     string command, name = "";
-    const char* message, *recieve = new char[BUFFERSIZE];
+    const char* message;
+    char *recieve = new char[BUFFERSIZE];
     int oper, n, sizeOfList;
     bool flag = false;
     ConsolePrinter printer;
@@ -183,9 +184,11 @@ void ServerPlayer::clientMenu() {
             throw "Error, connection disconnected!";
         }
         // reading the servers answer from the socket
-        do {
-            n = read(clientSocket, &recieve, BUFFERSIZE * sizeof(char));
-        } while(recieve == "");
+        if(oper == 1 || oper == 3) {
+            do {
+                n = read(clientSocket, recieve, BUFFERSIZE * sizeof(char));
+            } while (recieve == "");
+        }
         // for problems with reading from the socket
         if (n == -1) {
             throw "Error reading command from socket";
@@ -194,18 +197,18 @@ void ServerPlayer::clientMenu() {
             throw "Error, connection disconnected!";
         }
         // in option "join" - entering a name that isn't on the list
-        if (command == "NotExist") {
+        if (recieve == "NotExist") {
             printer.gameNotExist();
             continue;
         // in option "start" - entering a name that is already on the list
-        } else if(command == "AlreadyExist") {
+        } else if(recieve == "AlreadyExist") {
             printer.gameAlreadyExist();
             continue;
         // in case user entered an option not from the menu
         }
-        if(command == "list") {
+        if(command == "list_games") {
             // reading the size of the list
-            n = read(clientSocket, &sizeOfList, sizeof(int));
+            n = read(clientSocket, &sizeOfList, sizeof(sizeOfList));
             // for problems with reading from the socket
             if (n == -1) {
                 throw "Error reading command from socket";
@@ -213,9 +216,9 @@ void ServerPlayer::clientMenu() {
             if (n == 0) {
                 throw "Error, connection disconnected!";
             }
-            char list[sizeOfList] = {};
+            char *list = new char[BUFFERSIZE];
             // reading the list in string display
-            n = read(clientSocket, &list, sizeOfList * sizeof(char));
+            n = read(clientSocket, list, BUFFERSIZE * sizeof(char));
             // for problems with reading from the socket
             if (n == -1) {
                 throw "Error reading command from socket";
@@ -224,6 +227,8 @@ void ServerPlayer::clientMenu() {
                 throw "Error, connection disconnected!";
             }
             printer.printGamesList(sizeOfList, list);
+            free(list);
+            continue;
         }
         // if the input was legal
         // TODO get list and print

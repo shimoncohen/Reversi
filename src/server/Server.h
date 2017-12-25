@@ -7,6 +7,7 @@
 
 #include "CommandsManager.h"
 #include "Game.h"
+#include "Handler.h"
 #include <string.h>
 #include <cstdlib>
 #include <pthread.h>
@@ -22,24 +23,13 @@ typedef struct Info {
     int y;
 }Info;
 
-typedef struct CommandAndArgs {
-    string command;
-    vector<string> args;
-}CommandAndArgs;
-
-typedef struct HandleArgs {
-    int socket;
-    Game *game;
-    vector<Game*> games;
-}HandleArgs;
-
 class Server {
 public:
     Server(int port);
     void runServer();
-    static void *handleClient(void* handleArgs);
-    static void *handleGame(void* handleArgs);
-    vector<Game*> getGameVector();
+    //static void *handleClient(void* handleArgs);
+    //static void *handleGame(void* handleArgs);
+    //vector<Game*> getGameVector();
     //CommandsManager getCommandManager();
     /*
 	 * function name: stop.
@@ -53,7 +43,7 @@ private:
     int serverSocket;
     //CommandsManager cm;
     vector<Game*> games;
-    static CommandAndArgs extractCommandAndArgs(char* buffer);
+    //static CommandAndArgs extractCommandAndArgs(char* buffer);
 };
 
 

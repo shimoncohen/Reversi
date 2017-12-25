@@ -3,7 +3,7 @@
 
 #include "JoinGameCommand.h"
 
-void joinGameCommand::execute(vector<string> args, vector<Game*> games, int client) {
+void joinGameCommand::execute(vector<string> args, vector<Game*> &games, Game* game, int client) {
     int i = 0;
     Game* joined = NULL;
     for(i; i < games.size(); i++) {

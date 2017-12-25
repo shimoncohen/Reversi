@@ -3,7 +3,7 @@
 
 #include "MakeMoveCommand.h"
 
-void MakeMoveCommand::execute(vector<string> args, vector<Game*> games, int client) {
+void MakeMoveCommand::execute(vector<string> args, vector<Game*> &games, Game* game, int client) {
     string moveString = "Play " + args[0] + " " + args[1];
     for(int i = 0; i < games.size(); i++) {
         if(games[i]->getFirstPlayer() == client) {

@@ -19,11 +19,17 @@ typedef struct CommandAndArgs {
     vector<string> args;
 }CommandAndArgs;
 
+typedef struct HandleArgs {
+    int socket;
+    Game *game;
+    vector<Game*> games;
+}HandleArgs;
+
 class Handler {
 public:
-    //Handler(Server server);
     static void *handleClient(void* socket);
     static void *handleGame(void* gameToHandle);
+    vector<Game*> games;
 private:
     //Server serverToHandle;
     static CommandAndArgs extractCommandAndArgs(char* buffer);

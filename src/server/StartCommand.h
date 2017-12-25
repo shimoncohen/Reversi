@@ -7,11 +7,13 @@
 #include "Command.h"
 
 #define EXISTS "AlreadyExist"
-#define EXISTSIZE 12
+#define EXISTSIZE 15
+#define DOSENTEXIST "DosentExist"
+#define DOSENTEXISTSIZE 13
 
 class StartCommand : public Command {
 public:
-    void execute(vector<string> args, vector<Game*> games, int client = 0);
+    void execute(vector<string> args, vector<Game*> &games, Game* game, int client = 0);
 };
 
 

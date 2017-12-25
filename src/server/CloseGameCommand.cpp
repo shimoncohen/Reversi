@@ -4,7 +4,7 @@
 
 #include "CloseGameCommand.h"
 
-void CloseGameCommand::execute(vector<string> args, vector<Game*> games, int client) {
+void CloseGameCommand::execute(vector<string> args, vector<Game*> &games, Game* game, int client) {
     string closeString = "Close";
     for(int i = 0; i < games.size(); i++) {
         if(games[i]->getFirstPlayer() == client) {
