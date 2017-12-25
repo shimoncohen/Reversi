@@ -15,15 +15,6 @@ void Server::runServer() {
         throw "Error opening socket";
     }
     struct sockaddr_in serverAddress;
-    struct sockaddr_in firstClientAddress;
-    //struct sockaddr_in secondClientAddress;
-    socklen_t firstClientAddressLen;
-    HandleArgs *handleArgs = new HandleArgs();
-    //socklen_t secondClientAddressLen;
-    int n;
-    pthread_t thread;
-    Handler handler;
-    // Assign a local address to the socket
     bzero((void *) &serverAddress, sizeof(serverAddress));
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_addr.s_addr = INADDR_ANY;
@@ -34,35 +25,42 @@ void Server::runServer() {
     // Start listening to incoming connections
     listen(serverSocket, MAX_CONNECTED_CLIENTS);
     // Define the client socket's structures
+    struct sockaddr_in firstClientAddress;
+    socklen_t firstClientAddressLen;
+    Handler handler;
+    int *clientSocket;
+    // Define the client socket's structures
     while (true) {
         cout << "Waiting for client connections..." << endl;
         // Accept a new client connection
-        int clientSocket = accept(serverSocket, (struct sockaddr *) &firstClientAddress, &firstClientAddressLen);
-        handleArgs->games = games;
-        handleArgs->game = NULL;
-        handleArgs->socket = clientSocket;
-        n = pthread_create(&thread, NULL, handler.handleClient, (void*)handleArgs);
-        if (n) {
-            cout << "Error: unable to create thread" << endl;
-            exit(-1);
-        }
-        int i = 0;
-        Game* game = NULL;
-        for(i; i < games.size(); i++) {
-            if(games[i]->getFirstPlayer() == clientSocket || games[i]->getSecondPlayer() == clientSocket) {
-                game = games[i];
-            }
-        }
-        if(game != NULL) {
-            handleArgs->games = games;
-            handleArgs->game = game;
-            handleArgs->socket = clientSocket;
-            n = pthread_create(&thread, NULL, handler.handleGame, (void *)handleArgs);
-        }
-        if (n) {
-            cout << "Error: unable to create thread" << endl;
-            exit(-1);
-        }
+        *clientSocket = accept(serverSocket, (struct sockaddr *) &firstClientAddress, &firstClientAddressLen);
+        handler.run(*clientSocket);
+//        int n;
+//        pthread_t thread;
+//        HandleArgs *handleArgs = new HandleArgs();
+//        handleArgs->games = games;
+//        handleArgs->socket = clientSocket;
+//        n = pthread_create(&thread, NULL, handler.handleClient, (void*)handleArgs);
+//        if (n) {
+//            cout << "Error: unable to create thread" << endl;
+//            exit(-1);
+//        }
+//        int i = 0;
+//        Game* game = NULL;
+//        for(i; i < games.size(); i++) {
+//            if(games[i]->getFirstPlayer() == clientSocket || games[i]->getSecondPlayer() == clientSocket) {
+//                game = games[i];
+//            }
+//        }
+//        if(game != NULL) {
+////        handleArgs->games = games;
+////        handleArgs->socket = clientSocket;
+//            n = pthread_create(&thread, NULL, handler.handleGame, (void *)handleArgs);
+//        }
+//        if (n) {
+//            cout << "Error: unable to create thread" << endl;
+//            exit(-1);
+//        }
         //assigning the second player.
 //        playerNum = SECOND;
 //        int secondClientSocket = accept(serverSocket, (struct sockaddr *) &secondClientAddress,

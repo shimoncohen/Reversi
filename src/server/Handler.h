@@ -9,6 +9,7 @@
 #include "Game.h"
 #include <vector>
 #include <string.h>
+#include <cstdlib>
 
 #define FIRST 1
 #define SECOND 2
@@ -21,17 +22,18 @@ typedef struct CommandAndArgs {
 
 typedef struct HandleArgs {
     int socket;
-    Game *game;
-    vector<Game*> games;
+    Game* game;
+    vector<Game*> *games;
 }HandleArgs;
 
 class Handler {
 public:
+    void run(int clientSocket);
     static void *handleClient(void* socket);
     static void *handleGame(void* gameToHandle);
-    vector<Game*> games;
 private:
     //Server serverToHandle;
+    vector<Game*> games;
     static CommandAndArgs extractCommandAndArgs(char* buffer);
 };
 

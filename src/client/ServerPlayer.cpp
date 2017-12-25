@@ -24,8 +24,7 @@ ServerPlayer::ServerPlayer(const char *serverIP, int serverPort):
     }
     // Get a hostent structure for the given host address
     struct hostent *server;
-    server = gethostbyaddr((const void *) &address, sizeof
-            address, AF_INET);
+    server = gethostbyaddr((const void *) &address, sizeof address, AF_INET);
     if (server == NULL) {
         throw "Host is unreachable";
     }

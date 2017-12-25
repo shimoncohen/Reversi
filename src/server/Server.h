@@ -42,7 +42,7 @@ private:
     int port;
     int serverSocket;
     //CommandsManager cm;
-    vector<Game*> games;
+    //vector<Game*> games;
     //static CommandAndArgs extractCommandAndArgs(char* buffer);
 };
 

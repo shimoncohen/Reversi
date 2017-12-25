@@ -18,7 +18,7 @@ CommandsManager::~CommandsManager() {
     }
 }
 
-void CommandsManager::executeCommand(string command, vector<string> args, vector<Game*> &games, Game* game, int client) {
+void CommandsManager::executeCommand(string command, vector<string> args, vector<Game*> &games, int client) {
     Command *commandObj = commandsMap[command];
-    commandObj->execute(args, games, game, client);
+    commandObj->execute(args, games, client);
 }

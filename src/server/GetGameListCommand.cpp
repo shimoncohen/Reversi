@@ -4,7 +4,7 @@
 
 #include "GetGameListCommand.h"
 
-void GetGameListCommand::execute(vector<string> args, vector<Game*> &games, Game* game, int client) {
+void GetGameListCommand::execute(vector<string> args, vector<Game*> &games, int client) {
     int n, size = 0;
     string list = "";
     const char* send;

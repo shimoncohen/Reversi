@@ -12,7 +12,7 @@
 
 class GetGameListCommand : public Command {
 public:
-    void execute(vector<string> args, vector<Game*> &games, Game* game, int client = 0);
+    void execute(vector<string> args, vector<Game*> &games, int client = 0);
 };
 
 

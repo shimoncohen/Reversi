@@ -3,7 +3,7 @@
 
 #include "StartCommand.h"
 
-void StartCommand::execute(vector<string> args, vector<Game*> &games, Game* game, int client) {
+void StartCommand::execute(vector<string> args, vector<Game*> &games, int client) {
     Game* newGame = NULL;
     for(int i = 0; i < games.size(); i++) {
         if(games[i]->getName().compare(args[0]) == 0) {
