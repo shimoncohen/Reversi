@@ -55,7 +55,11 @@ int main() {
             break;
         case 3:
             first = new HumanPlayer();
-            second = new ServerPlayer(IPAddress, port);
+            try {
+                second = new ServerPlayer(IPAddress, port);
+            } catch (const char* msg) {
+                throw msg;
+            }
             g = new Game(gameLogic, first, second);
     }
     try {

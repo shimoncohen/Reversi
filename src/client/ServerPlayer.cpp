@@ -9,10 +9,51 @@ using namespace std;
 ServerPlayer::ServerPlayer(const char *serverIP, int serverPort):
         serverIP(serverIP), serverPort(serverPort),
         clientSocket(0), playerType(notDefined) {
-    int n;
-    string startString = "Start";
-    char* start = new char[5], *temp = new char [5];
-    strcpy(start, startString.c_str());
+//    clientSocket = socket(AF_INET, SOCK_STREAM, 0);
+//    if (clientSocket == -1) {
+//        throw "Error opening socket";
+//    }
+//    // Convert the ip string to a network address
+//    struct in_addr address;
+//    if (!inet_aton(serverIP, &address)) {
+//        throw "Can't parse IP address";
+//    }
+//    // Get a hostent structure for the given host address
+//    struct hostent *server;
+//    server = gethostbyaddr((const void *) &address, sizeof
+//            address, AF_INET);
+//    if (server == NULL) {
+//        throw "Host is unreachable";
+//    }
+//// Create a structure for the server address
+//    struct sockaddr_in serverAddress;
+//    bzero((char *) &address, sizeof(address));
+//    serverAddress.sin_family = AF_INET;
+//    memcpy((char *) &serverAddress.sin_addr.s_addr, (char*) server->h_addr, server->h_length);
+//// htons converts values between host and network byteorders
+//    serverAddress.sin_port = htons(serverPort);
+//    // Establish a connection with the TCP server
+//    if (connect(clientSocket, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) == -1) {
+//        throw "Error connecting to server";
+//    }
+    // recieve start game message
+//    while(strcmp(temp, start) != 0) {
+//        n = read(clientSocket, temp, sizeof(temp));
+//        if (n == -1) {
+//            throw "Error reading start game";
+//        }
+//    }
+
+
+    // starting the client's opperation
+    try {
+        clientMenu();
+    } catch (const char* msg) {
+        throw msg;
+    }
+}
+
+void ServerPlayer::connectToServer() {
     clientSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (clientSocket == -1) {
         throw "Error opening socket";
@@ -39,22 +80,17 @@ ServerPlayer::ServerPlayer(const char *serverIP, int serverPort):
     if (connect(clientSocket, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) == -1) {
         throw "Error connecting to server";
     }
-    // recieve start game message
-//    while(strcmp(temp, start) != 0) {
-//        n = read(clientSocket, temp, sizeof(temp));
-//        if (n == -1) {
-//            throw "Error reading start game";
-//        }
-//    }
-    clientMenu();
-    free(start);
-    free(temp);
 }
 
 void ServerPlayer::startGame() {
 // Create a socket point
     ConsolePrinter printer;
     int playerNum, n;
+    try {
+        connectToServer();
+    } catch(const char* msg) {
+        throw msg;
+    }
     // reading the player's number
     n = read(clientSocket, &playerNum, sizeof(playerNum));
     if (n == -1) {
@@ -67,6 +103,7 @@ void ServerPlayer::startGame() {
     } else if(playerNum == 2) {
         playerType = blackPlayer;
     }
+    close(clientSocket);
 }
 
 void ServerPlayer::recieveOpponentsMove(int x, int y) {
@@ -155,6 +192,12 @@ void ServerPlayer::clientMenu() {
     ConsolePrinter printer;
     // printing client's menu before joining game
     while(!flag) {
+        // connecting to the server socket
+        try {
+            connectToServer();
+        } catch (const char* msg) {
+            throw msg;
+        }
         printer.printClientMenu();
         // get the operation of the client
         cin >> oper;
@@ -186,7 +229,7 @@ void ServerPlayer::clientMenu() {
         if(oper == 1 || oper == 3) {
             do {
                 n = read(clientSocket, recieve, BUFFERSIZE * sizeof(char));
-            } while (recieve == "");
+            } while (strcmp(recieve, "") == 0);
         }
         // for problems with reading from the socket
         if (n == -1) {
@@ -196,12 +239,16 @@ void ServerPlayer::clientMenu() {
             throw "Error, connection disconnected!";
         }
         // in option "join" - entering a name that isn't on the list
-        if (recieve == "NotExist") {
+        if (strcmp(recieve, "NotExist") == 0) {
             printer.gameNotExist();
+            // closing the socket
+            close(clientSocket);
             continue;
         // in option "start" - entering a name that is already on the list
-        } else if(recieve == "AlreadyExist") {
+        } else if(strcmp(recieve, "AlreadyExist") == 0) {
             printer.gameAlreadyExist();
+            // closing the socket
+            close(clientSocket);
             continue;
         // in case user entered an option not from the menu
         }
@@ -227,13 +274,20 @@ void ServerPlayer::clientMenu() {
             }
             printer.printGamesList(sizeOfList, list);
             free(list);
-            continue;
+            //continue;
         }
         // if the input was legal
-        // TODO get list and print
         flag = true;
     }
-    startGame();
+    // closing the socket
+    close(clientSocket);
+    //if(command == "start" || command == "join") {
+    try {
+        startGame();
+    } catch (const char* msg) {
+        throw msg;
+    }
+    //}
 }
 
 string ServerPlayer::translateOperation(int oper, string name) {

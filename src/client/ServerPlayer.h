@@ -25,14 +25,15 @@ public:
 	 * operation: constructor.
 	*/
     ServerPlayer(const char *serverIP, int serverPort);
+    //TODO change comments
     /*
 	 * function name: connectToServer.
 	 * input: none.
 	 * output: none.
 	 * operation: connects the player to the server.
 	*/
+    void connectToServer();
     void startGame();
-    //TODO change comments
     /*
 	 * function name: getMove.
 	 * input: none.
