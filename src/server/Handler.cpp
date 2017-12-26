@@ -1,6 +1,5 @@
-//
-// Created by shimon on 12/23/17.
-//
+// 315383133 shimon cohen
+// 302228275 Nadav Spitzer
 
 #include "Handler.h"
 
@@ -52,7 +51,7 @@ void* Handler::handleClient(void* handleArgs) {
     vector<Game*>& temp = *handleArgs1->games;
     int i = 0, args = 0;
     int n = read(handleArgs1->socket, buffer, BUFFERSIZE*sizeof(char));
-    cout << "In handleClient:\nread from client: " << buffer << endl;
+    //cout << "In handleClient:" << endl << "read from client: " << &buffer << endl;
     if (n == -1) {
         cout << "Error writing to socket" << endl;
         return NULL;
@@ -62,8 +61,8 @@ void* Handler::handleClient(void* handleArgs) {
         return NULL;
     }
     commandAndArgs = extractCommandAndArgs(buffer);
-    cout << "In handleClient:\nextracted command and arguments:\ncommand: " << commandAndArgs.command 
-         << "\narguments: " << commandAndArgs.args[0] << " " << commandAndArgs.args[1] << endl;
+//    cout << "In handleClient:\nextracted command and arguments:\ncommand: " << commandAndArgs.command
+//         << "\narguments: " << commandAndArgs.args[0] << " " << commandAndArgs.args[1] << endl;
     try {
         cm.executeCommand(commandAndArgs.command, commandAndArgs.args, temp, handleArgs1->socket);
     } catch (const char* msg) {
@@ -99,15 +98,15 @@ void* Handler::handleGame(void* handleArgs) {
         cout << "Error writing to socket" << endl;
         return NULL;
     }
-    cout << "In handleGame:\nsent message: " << startMessage << "to first player" << endl;
+    //cout << "In handleGame:\nsent message: " << startMessage << "to first player" << endl;
 
     n = write(currentGame->getSecondPlayer(), &startMessage, sizeof(startMessage));
     if (n == -1) {
         cout << "Error writing to socket" << endl;
         return NULL;
     }
-    cout << "In handleGame:\nsent message: " << startMessage << "to second player" << endl;
-    
+    //cout << "In handleGame:\nsent message: " << startMessage << "to second player" << endl;
+
     if (currentGame->getSecondPlayer() == -1)
         throw "Error on accept";
     int currentClient = currentGame->getFirstPlayer();
@@ -123,15 +122,15 @@ void* Handler::handleGame(void* handleArgs) {
             cout << "Client disconnected" << endl;
             return NULL;
         }
-        cout << "In handleGame:\nread: " << buffer << endl;
+        //cout << "In handleGame:\nread: " << buffer << endl;
 //        while(buffer[i] != '\0') {
 //            command.append(buffer[i]);
 //            //command = command + buffer[i];
 //            i++;
 //        }
         commandAndArgs = extractCommandAndArgs(buffer);
-        cout << "In handleGame:\nextracted command and arguments:\ncommand: " << commandAndArgs.command
-             << "\narguments: " << commandAndArgs.args[0] << " " << commandAndArgs.args[1] << endl;
+//        cout << "In handleGame:\nextracted command and arguments:\ncommand: " << commandAndArgs.command
+//             << "\narguments: " << commandAndArgs.args[0] << " " << commandAndArgs.args[1] << endl;
         try {
             cm.executeCommand(commandAndArgs.command, commandAndArgs.args, *handleArgs1->games, handleArgs1->socket);
         } catch (const char* msg) {

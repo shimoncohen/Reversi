@@ -86,11 +86,11 @@ void ServerPlayer::startGame() {
 // Create a socket point
     ConsolePrinter printer;
     int playerNum, n;
-    try {
-        connectToServer();
-    } catch(const char* msg) {
-        throw msg;
-    }
+//    try {
+//        connectToServer();
+//    } catch(const char* msg) {
+//        throw msg;
+//    }
     // reading the player's number
     n = read(clientSocket, &playerNum, sizeof(playerNum));
     if (n == -1) {
@@ -104,6 +104,7 @@ void ServerPlayer::startGame() {
         playerType = blackPlayer;
     }
     close(clientSocket);
+    clientSocket = 0;
 }
 
 void ServerPlayer::recieveOpponentsMove(int x, int y) {
@@ -243,18 +244,21 @@ void ServerPlayer::clientMenu() {
             printer.gameNotExist();
             // closing the socket
             close(clientSocket);
+            clientSocket = 0;
             continue;
         // in option "start" - entering a name that is already on the list
         } else if(strcmp(recieve, "AlreadyExist") == 0) {
             printer.gameAlreadyExist();
             // closing the socket
             close(clientSocket);
+            clientSocket = 0;
             continue;
         // in case user entered an option not from the menu
         }
         if(command == "list_games") {
             // reading the size of the list
             n = read(clientSocket, &sizeOfList, sizeof(sizeOfList));
+            cout << "In clientMenu:\nread message size: " << sizeOfList << endl;
             // for problems with reading from the socket
             if (n == -1) {
                 throw "Error reading command from socket";
@@ -265,6 +269,7 @@ void ServerPlayer::clientMenu() {
             char *list = new char[BUFFERSIZE];
             // reading the list in string display
             n = read(clientSocket, list, BUFFERSIZE * sizeof(char));
+            cout << "In clientMenu:\nread message: " << list << endl;
             // for problems with reading from the socket
             if (n == -1) {
                 throw "Error reading command from socket";
@@ -274,13 +279,16 @@ void ServerPlayer::clientMenu() {
             }
             printer.printGamesList(sizeOfList, list);
             free(list);
-            //continue;
+            close(clientSocket);
+            clientSocket = 0;
+            continue;
         }
         // if the input was legal
         flag = true;
     }
     // closing the socket
-    close(clientSocket);
+//    close(clientSocket);
+//    clientSocket = 0;
     //if(command == "start" || command == "join") {
     try {
         startGame();

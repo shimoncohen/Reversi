@@ -1,6 +1,5 @@
-//
-// Created by shimon on 12/20/17.
-//
+// 315383133 shimon cohen
+// 302228275 Nadav Spitzer
 
 #include "Server.h"
 
@@ -32,15 +31,15 @@ void Server::runServer() {
     int *clientSocket;
     // Define the client socket's structures
     while (true) {
-        cout << "Waiting for client connections..." << endl;
+        //cout << "Waiting for client connections..." << endl;
         // Accept a new client connection
         *clientSocket = accept(serverSocket, (struct sockaddr *) &firstClientAddress, &firstClientAddressLen);
-        cout << "In runServer:\naccepted new client\n" << endl;
-        try {
-            handler.run(*clientSocket);
-        } catch (const char* msg) {
-            throw msg;
-        }
+        //cout << "In runServer:" << endl << "accepted new client" << endl << endl;
+//        try {
+        handler.run(*clientSocket);
+//        } catch (const char* msg) {
+//            throw msg;
+//        }
 //        int n;
 //        pthread_t thread;
 //        HandleArgs *handleArgs = new HandleArgs();

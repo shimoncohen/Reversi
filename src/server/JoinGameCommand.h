@@ -7,6 +7,10 @@
 #include "Command.h"
 #define STARTMESSAGE "Start"
 #define STARTMESSAGESIZE 6
+#define NOTEXIST "NotExist"
+#define NOTEXISTSIZE 9
+#define FIRST 1
+#define SECOND 2
 
 class joinGameCommand : public Command {
 public:

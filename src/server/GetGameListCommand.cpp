@@ -1,11 +1,10 @@
-//
-// Created by shimon on 12/21/17.
-//
+// 315383133 shimon cohen
+// 302228275 Nadav Spitzer
 
 #include "GetGameListCommand.h"
 
 void GetGameListCommand::execute(vector<string> args, vector<Game*> &games, int client) {
-    cout << "Entered execute GetGameListCommand" << endl;
+    //cout << "Entered execute GetGameListCommand" << endl;
     int n, size = 0;
     string list = "";
     const char* send;
@@ -18,7 +17,7 @@ void GetGameListCommand::execute(vector<string> args, vector<Game*> &games, int 
     size = games.size();
     // sending the size of the list in string display
     n = write(client, &size, sizeof(int));
-    cout << "In execute GetGameListCommand:\nwrote size of string " << size << endl;
+    //cout << "In execute GetGameListCommand:\nwrote size of string " << size << endl;
     if (n == -1) {
         throw "Error writing command to socket";
     }
@@ -29,10 +28,10 @@ void GetGameListCommand::execute(vector<string> args, vector<Game*> &games, int 
     if(size != 0) {
         send = list.c_str();
         n = write(client, send, size * sizeof(char));
-        cout << "In execute GetGameListCommand:\nwrote message: " << send << endl;
+        //cout << "In execute GetGameListCommand:\nwrote message: " << send << endl;
     } else {
         n = write(client, &NOGAMES, NOGAMESIZE * sizeof(char));
-        cout << "In execute GetGameListCommand:\nwrote no available games" << size << endl;
+        //cout << "In execute GetGameListCommand:\nwrote no available games" << size << endl;
     }
     if (n == -1) {
         throw "Error writing command to socket";
