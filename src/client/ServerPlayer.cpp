@@ -96,6 +96,7 @@ void ServerPlayer::startGame() {
     if (n == -1) {
         throw "Error reading player num";
     }
+    cout << "player num: " << playerNum << endl;
     printer.connectedToServerMessage();
     if(playerNum == 1) {
         printer.waitingForConnectionMessage();
@@ -286,6 +287,7 @@ void ServerPlayer::clientMenu() {
         // if the input was legal
         flag = true;
     }
+    cout << "received command is: " << command << endl;
     // closing the socket
 //    close(clientSocket);
 //    clientSocket = 0;
