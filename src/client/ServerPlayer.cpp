@@ -104,36 +104,48 @@ void ServerPlayer::startGame() {
     } else if(playerNum == 2) {
         playerType = blackPlayer;
     }
-    close(clientSocket);
-    clientSocket = 0;
+//    close(clientSocket);
+//    clientSocket = 0;
 }
 
 void ServerPlayer::recieveOpponentsMove(int x, int y) {
-    Info info;
-    info.x = x;
-    info.y = y;
-    string play = "Play ";
-    int temp = x;
+
+    ////// try
+    //connectToServer();
+    ////// catch
+
+    string play = "play ";
     const char *message;
-    char num;
-    while(temp > 0) {
-        temp %= 10;
-        num =  (char)(temp + 48);
-        play = play + num;
-        temp /= 10;
+    if(x != -2 && y != -2) {
+        int temp = x + 1;
+        char num;
+        while (temp > 0) {
+            temp %= 10;
+            num = (char) (temp + 48);
+            play = play + num;
+            temp /= 10;
+        }
+        play = play + " ";
+        temp = y + 1;
+        while (temp > 0) {
+            temp %= 10;
+            num = (char) (temp + 48);
+            play = play + num;
+            temp /= 10;
+        }
+    } else {
+        play.append("End");
     }
-    play = play + " ";
-    temp = y;
-    while(temp > 0) {
-        temp %= 10;
-        num =  (char)(temp + 48);
-        play = play + num;
-        temp /= 10;
-    }
+//    play = play + " " + gameName;
+//    if(playerType == blackPlayer) {
+//        play = play + " blackPlayer";
+//    } else {
+//        play = play + " whitePlayer";
+//    }
     message = play.c_str();
 // Write the exercise arguments to the socket
     if(x != -10 && y != -10) {
-        int n = write(clientSocket, message, sizeof(message));
+        int n = write(clientSocket, message, BUFFERSIZE*sizeof(char));
         if (n == -1) {
             throw "Error writing x to socket";
         }
@@ -147,17 +159,24 @@ void ServerPlayer::recieveOpponentsMove(int x, int y) {
 Info ServerPlayer::getMove() {
     ConsolePrinter printer;
     printer.waitingMessage();
+
+    ////// try
+    //connectToServer();
+    ////// catch
+
     //Read the result from the server
-    int n;
+    int n, x, y;
+    char buffer[BUFFERSIZE];
     Info newInfo;
     do {
-        n = read(clientSocket, &newInfo, sizeof(Info));
+        n = read(clientSocket, buffer, BUFFERSIZE*sizeof(char));
         if (n == -1) {
             throw "Error reading x from socket";
         }
         if (n == 0) {
             throw "Error, opponent disconnected!";
         }
+        newInfo = extractCommandAndArgs(buffer);
     } while(newInfo.x < 0 || newInfo.y < 0);
     return newInfo;
 }
@@ -193,13 +212,18 @@ void ServerPlayer::clientMenu() {
     bool flag = false;
     ConsolePrinter printer;
     // printing client's menu before joining game
+    try {
+        connectToServer();
+    } catch (const char* msg) {
+        throw msg;
+    }
     while(!flag) {
         // connecting to the server socket
-        try {
-            connectToServer();
-        } catch (const char* msg) {
-            throw msg;
-        }
+//        try {
+//            connectToServer();
+//        } catch (const char* msg) {
+//            throw msg;
+//        }
         printer.printClientMenu();
         // get the operation of the client
         cin >> oper;
@@ -244,15 +268,15 @@ void ServerPlayer::clientMenu() {
         if (strcmp(recieve, "NotExist") == 0) {
             printer.gameNotExist();
             // closing the socket
-            close(clientSocket);
-            clientSocket = 0;
+//            close(clientSocket);
+//            clientSocket = 0;
             continue;
         // in option "start" - entering a name that is already on the list
         } else if(strcmp(recieve, "AlreadyExist") == 0) {
             printer.gameAlreadyExist();
             // closing the socket
-            close(clientSocket);
-            clientSocket = 0;
+//            close(clientSocket);
+//            clientSocket = 0;
             continue;
         // in case user entered an option not from the menu
         }
@@ -280,18 +304,16 @@ void ServerPlayer::clientMenu() {
             }
             printer.printGamesList(sizeOfList, list);
             free(list);
-            close(clientSocket);
-            clientSocket = 0;
+//            close(clientSocket);
+//            clientSocket = 0;
             continue;
         }
         // if the input was legal
         flag = true;
     }
     cout << "received command is: " << command << endl;
-    // closing the socket
-//    close(clientSocket);
-//    clientSocket = 0;
     //if(command == "start" || command == "join") {
+    //gameName = name;
     try {
         startGame();
     } catch (const char* msg) {
@@ -313,12 +335,43 @@ string ServerPlayer::translateOperation(int oper, string name) {
     }
 }
 
-int ServerPlayer::commandChooser(string com) {
-    if(com.compare("start")) {
-        return 1;
-    } else if(com.compare("list")) {
-        return 2;
-    } else if(com.compare("join")) {
-        return 3;
+Info ServerPlayer::extractCommandAndArgs(char* buffer) {
+    Info parsed;
+    int i = 0, args = 0;
+    string command, arguments[TWO];
+    for(i; i < BUFFERSIZE; i++) {
+        if(buffer[i] != '\0') {
+            if(buffer[i] != ' ') {
+                command.append(sizeof(char) ,buffer[i]);
+                //command = command + buffer[i];
+            } else {
+                break;
+            }
+        } else {
+            break;
+        }
     }
+    if(buffer[i] != '\0') {
+        i++;
+    }
+    for(i; i < BUFFERSIZE; i++) {
+        if(buffer[i] != '\0') {
+            if(buffer[i] != ' ') {
+                arguments[args].append(sizeof(char), buffer[i]);
+                //arguments[args] = arguments[args] + buffer[i];
+            } else {
+                args += 1;
+            }
+        } else {
+            break;
+        }
+    }
+//    if(args == 0 && arguments[0].compare("") != 0) {
+//        parsed.x = atoi(arguments[0].c_str());
+//    }
+    if(args == 1 && arguments[1].compare("") != 0) {
+        parsed.x = atoi(arguments[0].c_str()) - 1;
+        parsed.y = atoi(arguments[1].c_str()) - 1;
+    }
+    return parsed;
 }

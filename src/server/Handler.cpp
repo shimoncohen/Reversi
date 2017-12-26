@@ -19,26 +19,26 @@ void Handler::run(int clientSocket) {
         cout << "Error: unable to create thread" << endl;
         exit(-1);
     }
-    int i = 0;
-    Game* game = NULL;
-    for(i; i < games.size(); i++) {
-        if(games[i]->getFirstPlayer() == clientSocket || games[i]->getSecondPlayer() == clientSocket) {
-            game = games[i];
-        }
-    }
-    if(game != NULL) {
-//        handleArgs->games = games;
-//        handleArgs->socket = clientSocket;
-        try {
-            n = pthread_create(&thread, NULL, handleGame, (void *) handleArgs);
-        } catch (const char* msg) {
-            throw msg;
-        }
-    }
-    if (n) {
-        cout << "Error: unable to create thread" << endl;
-        exit(-1);
-    }
+//    int i = 0;
+//    Game* game = NULL;
+//    for(i; i < games.size(); i++) {
+//        if(games[i]->getFirstPlayer() == clientSocket || games[i]->getSecondPlayer() == clientSocket) {
+//            game = games[i];
+//        }
+//    }
+//    if(game != NULL) {
+////        handleArgs->games = games;
+////        handleArgs->socket = clientSocket;
+//        try {
+//            n = pthread_create(&thread, NULL, handleGame, (void *) handleArgs);
+//        } catch (const char* msg) {
+//            throw msg;
+//        }
+//    }
+//    if (n) {
+//        cout << "Error: unable to create thread" << endl;
+//        exit(-1);
+//    }
 }
 
 void* Handler::handleClient(void* handleArgs) {
@@ -93,18 +93,18 @@ void* Handler::handleGame(void* handleArgs) {
 
     Game *currentGame = handleArgs1->game;
 
-    n = write(currentGame->getFirstPlayer(), &startMessage, sizeof(startMessage));
-    if (n == -1) {
-        cout << "Error writing to socket" << endl;
-        return NULL;
-    }
+    //n = write(currentGame->getFirstPlayer(), &startMessage, sizeof(startMessage));
+//    if (n == -1) {
+//        cout << "Error writing to socket" << endl;
+//        return NULL;
+//    }
     //cout << "In handleGame:\nsent message: " << startMessage << "to first player" << endl;
 
-    n = write(currentGame->getSecondPlayer(), &startMessage, sizeof(startMessage));
-    if (n == -1) {
-        cout << "Error writing to socket" << endl;
-        return NULL;
-    }
+    //n = write(currentGame->getSecondPlayer(), &startMessage, sizeof(startMessage));
+//    if (n == -1) {
+//        cout << "Error writing to socket" << endl;
+//        return NULL;
+//    }
     //cout << "In handleGame:\nsent message: " << startMessage << "to second player" << endl;
 
     if (currentGame->getSecondPlayer() == -1)
@@ -132,7 +132,7 @@ void* Handler::handleGame(void* handleArgs) {
 //        cout << "In handleGame:\nextracted command and arguments:\ncommand: " << commandAndArgs.command
 //             << "\narguments: " << commandAndArgs.args[0] << " " << commandAndArgs.args[1] << endl;
         try {
-            cm.executeCommand(commandAndArgs.command, commandAndArgs.args, *handleArgs1->games, handleArgs1->socket);
+            cm.executeCommand(commandAndArgs.command, commandAndArgs.args, *handleArgs1->games, currentClient);
         } catch (const char* msg) {
             throw msg;
         }
@@ -176,7 +176,7 @@ void* Handler::handleGame(void* handleArgs) {
 
 CommandAndArgs Handler::extractCommandAndArgs(char* buffer) {
     int i = 0, args = 0;
-    string startMessage = STARTMESSAGE, command, arguments[SECOND];
+    string startMessage = STARTMESSAGE, command, arguments[FOUR];
     CommandAndArgs commandAndArgs;
     for(i; i < BUFFERSIZE; i++) {
         if(buffer[i] != '\0') {
@@ -189,9 +189,9 @@ CommandAndArgs Handler::extractCommandAndArgs(char* buffer) {
         } else {
             break;
         }
-    }
+    } // play 3 2 , i = 4
     if(buffer[i] != '\0') {
-        i++;
+        i++; // i = 5
     }
     for(i; i < BUFFERSIZE; i++) {
         if(buffer[i] != '\0') {
@@ -200,60 +200,23 @@ CommandAndArgs Handler::extractCommandAndArgs(char* buffer) {
                 //arguments[args] = arguments[args] + buffer[i];
             } else {
                 args += 1;
-                i++;
             }
         } else {
             break;
         }
     }
     commandAndArgs.command = command;
-    if(args == 0 && arguments[0].compare("") != 0) {
-        commandAndArgs.args.push_back(arguments[0]);
+    for(int j = 0; j <= args; j++) {
+        if(arguments[j].compare("") != 0) {
+            commandAndArgs.args.push_back(arguments[j]);
+        }
     }
-    if(args == 1 && arguments[1].compare("") != 0) {
-        commandAndArgs.args.push_back(arguments[1]);
-    }
-    return commandAndArgs;
-}
-
-//CommandAndArgs Handler::extractCommandAndArgs(char buffer[BUFFERSIZE]) {
-//    int i = 0, args = 0;
-//    string startMessage = STARTMESSAGE, command, arguments[SECOND];
-//    CommandAndArgs commandAndArgs;
-//    for(i; i < BUFFERSIZE; i++) {
-//        if(buffer[i] != '\0') {
-//            if(buffer[i] != ' ') {
-//                command.append(sizeof(char) ,buffer[i]);
-//                //command = command + buffer[i];
-//            } else {
-//                break;
-//            }
-//        } else {
-//            break;
-//        }
-//    }
-//    if(buffer[i] != '\0') {
-//        i++;
-//    }
-//    for(i; i < BUFFERSIZE; i++) {
-//        if(buffer[i] != '\0') {
-//            if(buffer[i] != ' ') {
-//                arguments[args].append(sizeof(char), buffer[i]);
-//                //arguments[args] = arguments[args] + buffer[i];
-//            } else {
-//                args += 1;
-//                i++;
-//            }
-//        } else {
-//            break;
-//        }
-//    }
-//    commandAndArgs.command = command;
-//    if(args == 1) {
+//    if(args == 0 && arguments[0].compare("") != 0) {
 //        commandAndArgs.args.push_back(arguments[0]);
 //    }
-//    if(args == 2) {
+//    if(args == 1 && arguments[1].compare("") != 0) {
+//        commandAndArgs.args.push_back(arguments[0]);
 //        commandAndArgs.args.push_back(arguments[1]);
 //    }
-//    return commandAndArgs;
-//}
+    return commandAndArgs;
+}

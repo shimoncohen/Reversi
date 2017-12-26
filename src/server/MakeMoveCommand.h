@@ -5,6 +5,7 @@
 #define ADVANCEDPROGRAMMING1_MAKEMOVECOMMAND_H
 
 #include "Command.h"
+#define BUFFERSIZE 200
 
 class MakeMoveCommand : public Command {
 public:

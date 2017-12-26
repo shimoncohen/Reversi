@@ -10,7 +10,7 @@
 #include "Enum.h"
 using namespace std;
 
-#define DEFAULTSIZE 8
+#define DEFAULTSIZE 4
 
 enum boardChar {black, white, space};
 

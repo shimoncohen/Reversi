@@ -13,6 +13,7 @@
 
 #define FIRST 1
 #define SECOND 2
+#define FOUR 4
 #define BUFFERSIZE 200
 
 typedef struct CommandAndArgs {

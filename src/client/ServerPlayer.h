@@ -15,6 +15,7 @@
 #include <unistd.h>
 
 #define BUFFERSIZE 200
+#define TWO 2
 
 class ServerPlayer : public Player {
 public:
@@ -54,7 +55,6 @@ public:
     bool needPrint();
     void clientMenu();
     string translateOperation(int oper, string name);
-    int commandChooser(string com);
 private:
     type playerType;
     //the IP of the server the player connects to.
@@ -63,6 +63,8 @@ private:
     int serverPort;
     //the client socket number.
     int clientSocket;
+    //string gameName;
+    Info extractCommandAndArgs(char* buffer);
 };
 
 

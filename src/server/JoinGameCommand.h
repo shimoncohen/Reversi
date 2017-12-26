@@ -5,6 +5,7 @@
 #define ADVANCEDPROGRAMMING1_JOINGAMECOMMAND_H
 
 #include "Command.h"
+#include "Handler.h"
 #define STARTMESSAGE "Start"
 #define STARTMESSAGESIZE 6
 #define NOTEXIST "NotExist"
