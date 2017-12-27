@@ -3,8 +3,6 @@
 
 #include "Game.h"
 
-#define END -2
-
 Game::Game(int boardSize, GameLogic* newGameLogic, Player* first, Player* second) {
     gameLogic = newGameLogic;
     board = new Board(boardSize);
@@ -117,6 +115,12 @@ void Game::doOneTurn(vector<Point> options) {
                 delete printer;
                 throw msg;
             }
+            if(temp[0] == -2 && temp[1] == -2) {
+                end = true;
+                x = -2;
+                y = -2;
+                break;
+            }
             delete copyBoard;
             x = temp[0] + 1;
             y = temp[1] + 1;
@@ -129,6 +133,9 @@ void Game::doOneTurn(vector<Point> options) {
                 printer->printInvalidMove();
                 continue;
             }
+        }
+        if(end) {
+            continue;
         }
         x -= 1, y -= 1;
         printer->printMove(playerType, x + 1, y + 1);

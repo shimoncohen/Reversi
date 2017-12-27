@@ -85,6 +85,7 @@ void* Handler::handleGame(void* handleArgs) {
     HandleArgs *handleArgs1 = (HandleArgs*)handleArgs;
     //vector<string> arguments;
     int n, temp, i = 0;
+    int playerNum = FIRST, firstPlayer, secondPlayer;
     //int x = 0, y = 0, temp;
     //int i = 0, tempX = 0, tempY = 0, flag = 0;
     string startMessage = STARTMESSAGE;
@@ -92,7 +93,12 @@ void* Handler::handleGame(void* handleArgs) {
 
 
     Game *currentGame = handleArgs1->game;
-
+    firstPlayer = currentGame->getFirstPlayer();
+    secondPlayer = currentGame->getSecondPlayer();
+    write(firstPlayer, &playerNum, sizeof(int));
+    playerNum = SECOND;
+    write(secondPlayer, &playerNum, sizeof(int));
+    //write(secondPlayer, &playerNum, sizeof(int));
     //n = write(currentGame->getFirstPlayer(), &startMessage, sizeof(startMessage));
 //    if (n == -1) {
 //        cout << "Error writing to socket" << endl;
@@ -131,10 +137,12 @@ void* Handler::handleGame(void* handleArgs) {
         commandAndArgs = extractCommandAndArgs(buffer);
 //        cout << "In handleGame:\nextracted command and arguments:\ncommand: " << commandAndArgs.command
 //             << "\narguments: " << commandAndArgs.args[0] << " " << commandAndArgs.args[1] << endl;
-        try {
-            cm.executeCommand(commandAndArgs.command, commandAndArgs.args, *handleArgs1->games, currentClient);
-        } catch (const char* msg) {
-            throw msg;
+        if(commandAndArgs.command.compare("End") != 0) {
+            try {
+                cm.executeCommand(commandAndArgs.command, commandAndArgs.args, *handleArgs1->games, currentClient);
+            } catch (const char *msg) {
+                throw msg;
+            }
         }
 //        for(i; i < BUFFERSIZE && buffer[i] != '\0'; i++) {
 //            if(flag == 1 && buffer[i] == ' ') {
@@ -169,6 +177,9 @@ void* Handler::handleGame(void* handleArgs) {
 
     // end of game
     // Close communication with the client.
+
+    deleteGame(*handleArgs1->games, handleArgs1->game->getName());
+
     close(currentGame->getFirstPlayer());
     close(currentGame->getSecondPlayer());
     //delete gameToHandle;
@@ -219,4 +230,13 @@ CommandAndArgs Handler::extractCommandAndArgs(char* buffer) {
 //        commandAndArgs.args.push_back(arguments[1]);
 //    }
     return commandAndArgs;
+}
+
+void Handler::deleteGame(vector<Game*> &games, string gameName) {
+    int i = 0;
+    for (i; i < games.size(); i++) {
+        if (games.at(i)->getName().compare(gameName) == 0) {
+            games.erase(games.begin() + i);
+        }
+    }
 }

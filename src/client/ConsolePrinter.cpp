@@ -107,12 +107,12 @@ void ConsolePrinter::printClientMenu() {
     cout << "3.'join' to join a waiting game." << endl;
 }
 
-void ConsolePrinter::gameNotExist() {
-    cout << "Error! The game doesn't exist." << endl;
-}
-
-void ConsolePrinter::gameAlreadyExist() {
-    cout << "Error! The game already exists." << endl;
+void ConsolePrinter::gameDeniedMessage(string msg) {
+    if(msg.compare("NotExist") == 0) {
+        cout << "Error! The game doesn't exist." << endl;
+    } else if(msg.compare("AlreadyExist") == 0) {
+        cout << "Error! The game already exists." << endl;
+    }
 }
 
 void ConsolePrinter::gameNotOption() {

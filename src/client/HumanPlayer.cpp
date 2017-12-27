@@ -25,7 +25,14 @@ int* HumanPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &mo
     int *choice = new int[2];
     choice[0] = 0;
     choice[1] = 0;
-    cin >> temp1 >> temp2;
+    cin >> temp1;
+    // if player wants to close the game
+    if(temp1.compare("close") == 0) {
+        choice[0] = -2;
+        choice[1] = -2;
+        return choice;
+    }
+    cin >> temp2;
     //check if what the user entered are numbers.
     for (int i = 0; i < temp1.size(); i++) {
         if (!isdigit(temp1[i])) {

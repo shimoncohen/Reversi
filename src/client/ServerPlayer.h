@@ -65,6 +65,7 @@ private:
     int clientSocket;
     //string gameName;
     Info extractCommandAndArgs(char* buffer);
+    void reconnect();
 };
 
 

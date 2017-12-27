@@ -14,6 +14,8 @@
 #include "ConsolePrinter.h"
 #include "ServerPlayer.h"
 
+#define END -2
+
 typedef struct Info {
     int x;
     int y;

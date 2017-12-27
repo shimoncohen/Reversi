@@ -6,7 +6,7 @@
 void joinGameCommand::execute(vector<string> args, vector<Game*> &games, int client) {
     //cout << "Entered execute joinGameCommand" << endl;
     int i = 0, n;
-    int playerNum = FIRST, firstPlayer, secondPlayer;
+    int secondPlayer;
     Game* joined = NULL;
     for(i; i < games.size(); i++) {
         if(games[i]->getStatus() == 0 && games[i]->getName() == args[0]) {
@@ -17,21 +17,17 @@ void joinGameCommand::execute(vector<string> args, vector<Game*> &games, int cli
     }
     if(joined != NULL) {
         pthread_t thread;
-        firstPlayer = joined->getFirstPlayer();
         secondPlayer = joined->getSecondPlayer();
         //write(joined->getFirstPlayer(), &STARTMESSAGE, STARTMESSAGESIZE*sizeof(char));
         write(secondPlayer, &STARTMESSAGE, STARTMESSAGESIZE*sizeof(char));
-        write(firstPlayer, &playerNum, sizeof(playerNum));
-        playerNum = SECOND;
-        write(secondPlayer, &playerNum, sizeof(playerNum));
 
         HandleArgs *handleArgs = new HandleArgs();
         handleArgs->games = &games;
         handleArgs->game = joined;
         handleArgs->socket = client;
-        
+
         try {
-                n = pthread_create(&thread, NULL, Handler::handleGame, (void *)handleArgs);
+            n = pthread_create(&thread, NULL, Handler::handleGame, (void*)handleArgs);
         } catch (const char* msg) {
             throw msg;
         }

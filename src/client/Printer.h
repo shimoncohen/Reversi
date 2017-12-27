@@ -136,8 +136,8 @@ public:
     */
     virtual void printWinMessage(char winner) = 0;
     virtual void printClientMenu() = 0;
-    virtual void gameAlreadyExist() = 0;
-    virtual void gameNotExist() = 0;
+    virtual void gameDeniedMessage(string msg) = 0;
+    //virtual void gameNotExist() = 0;
     virtual void gameNotOption() = 0;
     virtual void printGamesList(int sizeOfList, char* list) = 0;
 };

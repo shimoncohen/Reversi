@@ -85,14 +85,14 @@ void ServerPlayer::connectToServer() {
 void ServerPlayer::startGame() {
 // Create a socket point
     ConsolePrinter printer;
-    int playerNum, n;
+    int playerNum = 0, n = 0;
 //    try {
 //        connectToServer();
 //    } catch(const char* msg) {
 //        throw msg;
 //    }
     // reading the player's number
-    n = read(clientSocket, &playerNum, sizeof(playerNum));
+    n = read(clientSocket, &playerNum, sizeof(int));
     if (n == -1) {
         throw "Error reading player num";
     }
@@ -134,7 +134,7 @@ void ServerPlayer::recieveOpponentsMove(int x, int y) {
             temp /= 10;
         }
     } else {
-        play.append("End");
+        play = "End";
     }
 //    play = play + " " + gameName;
 //    if(playerType == blackPlayer) {
@@ -265,25 +265,16 @@ void ServerPlayer::clientMenu() {
             throw "Error, connection disconnected!";
         }
         // in option "join" - entering a name that isn't on the list
-        if (strcmp(recieve, "NotExist") == 0) {
-            printer.gameNotExist();
-            // closing the socket
-//            close(clientSocket);
-//            clientSocket = 0;
+        if (strcmp(recieve, "NotExist") == 0 || strcmp(recieve, "AlreadyExist") == 0) {
+            printer.gameDeniedMessage(recieve);
+            //closing the socket
+            reconnect();
             continue;
         // in option "start" - entering a name that is already on the list
-        } else if(strcmp(recieve, "AlreadyExist") == 0) {
-            printer.gameAlreadyExist();
-            // closing the socket
-//            close(clientSocket);
-//            clientSocket = 0;
-            continue;
-        // in case user entered an option not from the menu
         }
         if(command == "list_games") {
             // reading the size of the list
             n = read(clientSocket, &sizeOfList, sizeof(sizeOfList));
-            cout << "In clientMenu:\nread message size: " << sizeOfList << endl;
             // for problems with reading from the socket
             if (n == -1) {
                 throw "Error reading command from socket";
@@ -294,7 +285,6 @@ void ServerPlayer::clientMenu() {
             char *list = new char[BUFFERSIZE];
             // reading the list in string display
             n = read(clientSocket, list, BUFFERSIZE * sizeof(char));
-            cout << "In clientMenu:\nread message: " << list << endl;
             // for problems with reading from the socket
             if (n == -1) {
                 throw "Error reading command from socket";
@@ -304,8 +294,7 @@ void ServerPlayer::clientMenu() {
             }
             printer.printGamesList(sizeOfList, list);
             free(list);
-//            close(clientSocket);
-//            clientSocket = 0;
+            reconnect();
             continue;
         }
         // if the input was legal
@@ -374,4 +363,14 @@ Info ServerPlayer::extractCommandAndArgs(char* buffer) {
         parsed.y = atoi(arguments[1].c_str()) - 1;
     }
     return parsed;
+}
+
+void ServerPlayer::reconnect() {
+    close(clientSocket);
+    clientSocket = 0;
+    try {
+        connectToServer();
+    } catch (const char* msg) {
+        throw msg;
+    }
 }

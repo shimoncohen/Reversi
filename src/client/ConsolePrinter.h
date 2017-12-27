@@ -26,8 +26,8 @@ public:
     void printOpponentHasNoMoves();
     void printWinMessage(char winner);
     void printClientMenu();
-    void gameAlreadyExist();
-    void gameNotExist();
+    void gameDeniedMessage(string msg);
+    //void gameNotExist();
     void gameNotOption();
     void printGamesList(int sizeOfList, char* list);
 };

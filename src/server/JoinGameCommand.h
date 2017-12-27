@@ -7,9 +7,9 @@
 #include "Command.h"
 #include "Handler.h"
 #define STARTMESSAGE "Start"
-#define STARTMESSAGESIZE 6
+#define STARTMESSAGESIZE 10
 #define NOTEXIST "NotExist"
-#define NOTEXISTSIZE 9
+#define NOTEXISTSIZE 10
 #define FIRST 1
 #define SECOND 2
 

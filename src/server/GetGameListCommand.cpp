@@ -14,7 +14,7 @@ void GetGameListCommand::execute(vector<string> args, vector<Game*> &games, int 
             list.append("\n");
         }
     }
-    size = games.size();
+    size = list.size();
     // sending the size of the list in string display
     n = write(client, &size, sizeof(int));
     //cout << "In execute GetGameListCommand:\nwrote size of string " << size << endl;

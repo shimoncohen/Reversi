@@ -36,6 +36,7 @@ private:
     //Server serverToHandle;
     vector<Game*> games;
     static CommandAndArgs extractCommandAndArgs(char* buffer);
+    static void deleteGame(vector<Game*> &games, string gameName);
 };
 
 
