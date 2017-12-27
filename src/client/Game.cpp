@@ -68,14 +68,14 @@ void Game::doOneTurn(vector<Point> options) {
     int x = -10, y = -10;
     int *temp;
     int valid;
-    bool end = false;
+    bool end = false, noMoves = false;
     //runs the players turns until there is a winner.
     while (true) {
         string xTest, yTest;
         playerType = current->getType();
         // in case of server game writes the opponent's move into the socket
         try {
-        current->recieveOpponentsMove(x, y);
+            current->recieveOpponentsMove(x, y);
         } catch (const char* msg) {
             delete printer;
             throw msg;
@@ -94,6 +94,7 @@ void Game::doOneTurn(vector<Point> options) {
             tempPlayer = current;
             current = waitingPlayer;
             waitingPlayer = tempPlayer;
+            noMoves = true;
             continue;
         }
         // printing the board and which player is going to play.

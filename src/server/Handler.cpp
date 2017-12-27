@@ -137,7 +137,7 @@ void* Handler::handleGame(void* handleArgs) {
         commandAndArgs = extractCommandAndArgs(buffer);
 //        cout << "In handleGame:\nextracted command and arguments:\ncommand: " << commandAndArgs.command
 //             << "\narguments: " << commandAndArgs.args[0] << " " << commandAndArgs.args[1] << endl;
-        if(commandAndArgs.command.compare("End") != 0) {
+        if(commandAndArgs.command.compare("End") != 0 && commandAndArgs.command.compare("NoMoves") != 0) {
             try {
                 cm.executeCommand(commandAndArgs.command, commandAndArgs.args, *handleArgs1->games, currentClient);
             } catch (const char *msg) {

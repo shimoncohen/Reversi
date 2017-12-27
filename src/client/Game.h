@@ -15,6 +15,7 @@
 #include "ServerPlayer.h"
 
 #define END -2
+#define NOMOVES -1
 
 typedef struct Info {
     int x;

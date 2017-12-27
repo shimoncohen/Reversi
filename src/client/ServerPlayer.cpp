@@ -116,7 +116,11 @@ void ServerPlayer::recieveOpponentsMove(int x, int y) {
 
     string play = "play ";
     const char *message;
-    if(x != -2 && y != -2) {
+    if(x == -2 && y == -2) {
+        play = "End";
+    } else if(x == -1 && y == -1) {
+        play = "NoMoves";
+    } else {
         int temp = x + 1;
         char num;
         while (temp > 0) {
@@ -133,8 +137,6 @@ void ServerPlayer::recieveOpponentsMove(int x, int y) {
             play = play + num;
             temp /= 10;
         }
-    } else {
-        play = "End";
     }
 //    play = play + " " + gameName;
 //    if(playerType == blackPlayer) {
@@ -157,8 +159,6 @@ void ServerPlayer::recieveOpponentsMove(int x, int y) {
 }
 
 Info ServerPlayer::getMove() {
-    ConsolePrinter printer;
-    printer.waitingMessage();
 
     ////// try
     //connectToServer();
@@ -177,7 +177,7 @@ Info ServerPlayer::getMove() {
             throw "Error, opponent disconnected!";
         }
         newInfo = extractCommandAndArgs(buffer);
-    } while(newInfo.x < 0 || newInfo.y < 0);
+    } while((newInfo.x < 0 || newInfo.y < 0) && (newInfo.x != -2 && newInfo.y != -2));
     return newInfo;
 }
 
@@ -190,10 +190,13 @@ type ServerPlayer::getType() {
 }
 
 int* ServerPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &moves) {
-    Info newInfo = getMove();
-    while(newInfo.x > board.getSize() || newInfo.y > board.getSize()) {
+    ConsolePrinter printer;
+    printer.waitingMessage();
+    Info newInfo;
+    do {
         newInfo = getMove();
-    }
+    } while(newInfo.x > board.getSize() || newInfo.y > board.getSize()
+            || gameLogic.validOption(board, newInfo.x + 1, newInfo.y + 1, moves) == false);
     int* move = new int[2];
     move[0] = newInfo.x;
     move[1] = newInfo.y;
