@@ -28,8 +28,8 @@ int* HumanPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &mo
     cin >> temp1;
     // if player wants to close the game
     if(temp1.compare("close") == 0) {
-        choice[0] = -2;
-        choice[1] = -2;
+        choice[0] = -3;
+        choice[1] = -3;
         return choice;
     }
     cin >> temp2;

@@ -14,7 +14,9 @@
 #include "ConsolePrinter.h"
 #include "ServerPlayer.h"
 
+#define NOMOVES -1
 #define END -2
+#define CLOSE -3
 #define NOMOVES -1
 
 typedef struct Info {

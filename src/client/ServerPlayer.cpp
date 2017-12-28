@@ -116,9 +116,11 @@ void ServerPlayer::recieveOpponentsMove(int x, int y) {
 
     string play = "play ";
     const char *message;
-    if(x == -2 && y == -2) {
+    if(x == CLOSE && y == CLOSE) {
+        play = "close";
+    } else if(x == END && y == END) {
         play = "End";
-    } else if(x == -1 && y == -1) {
+    } else if(x == NOMOVES && y == NOMOVES) {
         play = "NoMoves";
     } else {
         int temp = x + 1;
@@ -176,6 +178,11 @@ Info ServerPlayer::getMove() {
         if (n == 0) {
             throw "Error, opponent disconnected!";
         }
+        if(strcmp(buffer, "close") == 0) {
+            newInfo.x = -3;
+            newInfo.y = -3;
+            return newInfo;
+        }
         newInfo = extractCommandAndArgs(buffer);
     } while((newInfo.x < 0 || newInfo.y < 0) && (newInfo.x != -2 && newInfo.y != -2));
     return newInfo;
@@ -195,6 +202,9 @@ int* ServerPlayer::makeMove(GameLogic &gameLogic, Board &board, vector<Point> &m
     Info newInfo;
     do {
         newInfo = getMove();
+        if(newInfo.x == -3 && newInfo.y == -3) {
+            break;
+        }
     } while(newInfo.x > board.getSize() || newInfo.y > board.getSize()
             || gameLogic.validOption(board, newInfo.x + 1, newInfo.y + 1, moves) == false);
     int* move = new int[2];

@@ -188,7 +188,8 @@ void* Handler::handleGame(void* handleArgs) {
         temp = currentClient;
         currentClient = waitingClient;
         waitingClient = temp;
-    } while(strcmp(commandAndArgs.command.c_str(), "End") != 0);
+    } while(strcmp(commandAndArgs.command.c_str(), "End") != 0 
+            && strcmp(commandAndArgs.command.c_str(), "close") != 0);
 
     ///////////////send command to CM//////////////
 

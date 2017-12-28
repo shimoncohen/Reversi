@@ -7,6 +7,9 @@
 
 #include "Command.h"
 
+#define CLOSE "close"
+#define CLOSESIZE 8
+
 class CloseGameCommand : public Command {
 public:
     void execute(vector<string> args, vector<Game*> &game, /*vector<pthread_t*> &threadVector,*/ int client = 0);

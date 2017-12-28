@@ -68,7 +68,7 @@ void Game::doOneTurn(vector<Point> options) {
     int x = -10, y = -10;
     int *temp;
     int valid;
-    bool end = false, noMoves = false;
+    bool end = false;
     //runs the players turns until there is a winner.
     while (true) {
         string xTest, yTest;
@@ -82,7 +82,11 @@ void Game::doOneTurn(vector<Point> options) {
         }
         // in case the game ends
         if(end) {
-            waitingPlayer->recieveOpponentsMove(END, END);
+            if(x == END && y == END) {
+                waitingPlayer->recieveOpponentsMove(END, END);
+            } else {
+                waitingPlayer->recieveOpponentsMove(CLOSE, CLOSE);
+            }
             break;
         }
         // returns the vector of the player's available moves
@@ -94,7 +98,6 @@ void Game::doOneTurn(vector<Point> options) {
             tempPlayer = current;
             current = waitingPlayer;
             waitingPlayer = tempPlayer;
-            noMoves = true;
             continue;
         }
         // printing the board and which player is going to play.
@@ -116,10 +119,15 @@ void Game::doOneTurn(vector<Point> options) {
                 delete printer;
                 throw msg;
             }
-            if(temp[0] == -2 && temp[1] == -2) {
+            if(temp[0] == END && temp[1] == END) {
                 end = true;
                 x = -2;
                 y = -2;
+                break;
+            } else if(temp[0] == CLOSE && temp[1] == CLOSE) {
+                end = true;
+                x = -3;
+                y = -3;
                 break;
             }
             delete copyBoard;
