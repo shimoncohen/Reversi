@@ -3,16 +3,15 @@
 
 #include "JoinGameCommand.h"
 
-pthread_mutex_t list_mutex;
+pthread_mutex_t gamesLockJoin;
 
 void joinGameCommand::execute(vector<string> args, vector<Game*> &games, /*vector<pthread_t*> &threadVector,*/
                               int client) {
     //cout << "Entered execute joinGameCommand" << endl;
-    pthread_mutex_t gamesLock;
     int i = 0, n;
     int secondPlayer;
     Game* joined = NULL;
-    pthread_mutex_lock(&gamesLock);
+    pthread_mutex_lock(&gamesLockJoin);
     for(i; i < games.size(); i++) {
         if(games[i]->getStatus() == 0 && games[i]->getName() == args[0]) {
             games[i]->joinGame(client);
@@ -20,7 +19,7 @@ void joinGameCommand::execute(vector<string> args, vector<Game*> &games, /*vecto
             break;
         }
     }
-    pthread_mutex_unlock(&gamesLock);
+    pthread_mutex_unlock(&gamesLockJoin);
     if(joined != NULL) {
         pthread_t thread;
         secondPlayer = joined->getSecondPlayer();
@@ -29,9 +28,9 @@ void joinGameCommand::execute(vector<string> args, vector<Game*> &games, /*vecto
 
         HandleArgs *handleArgs = new HandleArgs();
 
-        pthread_mutex_lock(&gamesLock);
+        pthread_mutex_lock(&gamesLockJoin);
         handleArgs->games = &games;
-        pthread_mutex_unlock(&gamesLock);
+        pthread_mutex_unlock(&gamesLockJoin);
 
         handleArgs->game = joined;
         handleArgs->socket = client;
