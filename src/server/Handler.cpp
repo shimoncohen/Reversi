@@ -26,7 +26,7 @@ void Handler::run(int clientSocket) {
         cout << "Error: unable to create thread" << endl;
         exit(-1);
     }
-    printThreadVectorSize();
+    //printThreadVectorSize();
 }
 
 void* Handler::handleClient(void* handleArgs) {
@@ -74,8 +74,14 @@ void* Handler::handleGame(void* handleArgs) {
     pthread_mutex_unlock(&gamesLockHander);
     pthread_mutex_lock(&gamesLockHander);
     vector<pthread_t*> &threadTemp = *handleArgs1->threadVector;
-    // unlock the vector of games
+    pthread_mutex_unlock(&gamesLockHander);
+    pthread_mutex_lock(&gamesLockHander);
+    vector<Game*> &tempGames = *handleArgs1->games;
+    pthread_mutex_unlock(&gamesLockHander);
+    pthread_mutex_lock(&gamesLockHander);
     firstPlayer = currentGame->getFirstPlayer();
+    pthread_mutex_unlock(&gamesLockHander);
+    pthread_mutex_lock(&gamesLockHander);
     secondPlayer = currentGame->getSecondPlayer();
     pthread_mutex_unlock(&gamesLockHander);
 
@@ -90,10 +96,10 @@ void* Handler::handleGame(void* handleArgs) {
         cout << "Error writing to socket" << endl;
         return NULL;
     }
-    if (currentGame->getSecondPlayer() == -1)
+    if (secondPlayer == -1)
         throw "Error on accept";
-    int currentClient = currentGame->getFirstPlayer();
-    int waitingClient = currentGame->getSecondPlayer();
+    int currentClient = firstPlayer;
+    int waitingClient = secondPlayer;
     do {
         //read the info sent from the client.
         int n = read(currentClient, buffer, BUFFERSIZE*sizeof(char));
@@ -108,7 +114,7 @@ void* Handler::handleGame(void* handleArgs) {
         if(commandAndArgs.command.compare("End") != 0 && commandAndArgs.command.compare("NoMoves") != 0) {
             try {
                 cm.executeCommand(commandAndArgs.command, commandAndArgs.args,
-                                  *handleArgs1->games, threadTemp, currentClient);
+                                  tempGames, threadTemp, currentClient);
             } catch (const char *msg) {
                 throw msg;
             }
@@ -127,8 +133,8 @@ void* Handler::handleGame(void* handleArgs) {
     deleteThread(*handleArgs1->threadVector, handleArgs1->game->getThread());
     pthread_mutex_unlock(&gamesLockHander);
 
-    close(currentGame->getFirstPlayer());
-    close(currentGame->getSecondPlayer());
+    close(firstPlayer);
+    close(secondPlayer);
     pthread_exit(NULL);
 }
 
@@ -192,13 +198,13 @@ void Handler::deleteThread(vector<pthread_t *> &threads, pthread_t pthread) {
     pthread_mutex_unlock(&gamesLockHander);
 }
 
-void Handler::printThreadVectorSize() {
-    cout << "threads: ";
-    pthread_mutex_lock(&gamesLockHander);
-    cout << threadVector.size() << endl;
-    pthread_mutex_unlock(&gamesLockHander);
-    cout << "games: ";
-    pthread_mutex_lock(&gamesLockHander);
-    cout << games.size() << endl;
-    pthread_mutex_unlock(&gamesLockHander);
-}
+//void Handler::printThreadVectorSize() {
+//    cout << "threads: ";
+//    pthread_mutex_lock(&gamesLockHander);
+//    cout << threadVector.size() << endl;
+//    pthread_mutex_unlock(&gamesLockHander);
+//    cout << "games: ";
+//    pthread_mutex_lock(&gamesLockHander);
+//    cout << games.size() << endl;
+//    pthread_mutex_unlock(&gamesLockHander);
+//}

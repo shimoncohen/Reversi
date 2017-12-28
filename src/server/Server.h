@@ -26,6 +26,7 @@ typedef struct Info {
 class Server {
 public:
     Server(int port);
+    //~Server();
     void runServer();
     //static void *handleClient(void* handleArgs);
     //static void *handleGame(void* handleArgs);
@@ -38,6 +39,7 @@ public:
      * operation: Stops the server's activity.
     */
     void stop();
+    //static void *handleAccepts(void* serverSocket);
 private:
     int port;
     int serverSocket;
