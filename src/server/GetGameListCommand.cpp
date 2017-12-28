@@ -5,7 +5,7 @@
 
 pthread_mutex_t gamesLockList;
 
-void GetGameListCommand::execute(vector<string> args, vector<Game*> &games, /*vector<pthread_t*> &threadVector,*/
+void GetGameListCommand::execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector,
                                  int client) {
     //cout << "Entered execute GetGameListCommand" << endl;
     int n, size = 0;

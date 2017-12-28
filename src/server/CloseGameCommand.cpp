@@ -7,7 +7,7 @@
 pthread_mutex_t gamesLockClose;
 
 void CloseGameCommand::execute(vector<string> args, vector<Game*> &games,
-                               /*vector<pthread_t*> &threadVector,*/ int client) {
+                               vector<pthread_t*> &threadVector, int client) {
     //cout << "Entered execute CloseGameCommand" << endl;
     int i;
     for(i = 0; i < games.size(); i++) {

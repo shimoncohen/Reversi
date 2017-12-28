@@ -5,7 +5,7 @@
 
 pthread_mutex_t gamesLockJoin;
 
-void joinGameCommand::execute(vector<string> args, vector<Game*> &games, /*vector<pthread_t*> &threadVector,*/
+void joinGameCommand::execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector,
                               int client) {
     //cout << "Entered execute joinGameCommand" << endl;
     int i = 0, n;

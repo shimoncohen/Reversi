@@ -15,7 +15,7 @@
 
 class joinGameCommand : public Command {
 public:
-    void execute(vector<string> args, vector<Game*> &games, /*vector<pthread_t*> &threadVector,*/ int client = 0);
+    void execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector, int client = 0);
 };
 
 

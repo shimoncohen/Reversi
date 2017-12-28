@@ -6,7 +6,7 @@
 pthread_mutex_t gamesLockMove;
 
 void MakeMoveCommand::execute(vector<string> args, vector<Game*> &games,
-                             /* vector<pthread_t*> &threadVector,*/ int client) {
+                              vector<pthread_t*> &threadVector, int client) {
     //cout << "Entered execute MakeMoveCommand" << endl;
     string moveString = "Play " + args[0] + " " + args[1];
     const char *message = moveString.c_str();

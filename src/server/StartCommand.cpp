@@ -5,7 +5,7 @@
 
 pthread_mutex_t gamesLockStart;
 
-void StartCommand::execute(vector<string> args, vector<Game*> &games, /*vector<pthread_t*> &threadVector,*/ int client) {
+void StartCommand::execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector, int client) {
     //cout << "Entered execute StartCommand\n" << endl;
     Game* newGame = NULL;
     pthread_mutex_lock(&gamesLockStart);
