@@ -30,12 +30,13 @@ typedef struct HandleArgs {
 class Handler {
 public:
     void run(int clientSocket);
+    void closeThreads();
     static void *handleClient(void* socket);
     static void *handleGame(void* gameToHandle);
 private:
     vector<Game*> games;
     vector<pthread_t*> threadVector;
-    //void printThreadVectorSize();
+    void printThreadVectorSize();
     static CommandAndArgs extractCommandAndArgs(char* buffer);
     static void deleteGame(vector<Game*> &games, string gameName);
     static void deleteThread(vector<pthread_t*> &threads, pthread_t pthread);

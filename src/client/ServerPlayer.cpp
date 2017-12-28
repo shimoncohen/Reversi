@@ -9,42 +9,6 @@ using namespace std;
 ServerPlayer::ServerPlayer(const char *serverIP, int serverPort):
         serverIP(serverIP), serverPort(serverPort),
         clientSocket(0), playerType(notDefined) {
-//    clientSocket = socket(AF_INET, SOCK_STREAM, 0);
-//    if (clientSocket == -1) {
-//        throw "Error opening socket";
-//    }
-//    // Convert the ip string to a network address
-//    struct in_addr address;
-//    if (!inet_aton(serverIP, &address)) {
-//        throw "Can't parse IP address";
-//    }
-//    // Get a hostent structure for the given host address
-//    struct hostent *server;
-//    server = gethostbyaddr((const void *) &address, sizeof
-//            address, AF_INET);
-//    if (server == NULL) {
-//        throw "Host is unreachable";
-//    }
-//// Create a structure for the server address
-//    struct sockaddr_in serverAddress;
-//    bzero((char *) &address, sizeof(address));
-//    serverAddress.sin_family = AF_INET;
-//    memcpy((char *) &serverAddress.sin_addr.s_addr, (char*) server->h_addr, server->h_length);
-//// htons converts values between host and network byteorders
-//    serverAddress.sin_port = htons(serverPort);
-//    // Establish a connection with the TCP server
-//    if (connect(clientSocket, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) == -1) {
-//        throw "Error connecting to server";
-//    }
-    // recieve start game message
-//    while(strcmp(temp, start) != 0) {
-//        n = read(clientSocket, temp, sizeof(temp));
-//        if (n == -1) {
-//            throw "Error reading start game";
-//        }
-//    }
-
-
     // starting the client's opperation
     try {
         clientMenu();
@@ -69,12 +33,12 @@ void ServerPlayer::connectToServer() {
     if (server == NULL) {
         throw "Host is unreachable";
     }
-// Create a structure for the server address
+    // Create a structure for the server address
     struct sockaddr_in serverAddress;
     bzero((char *) &address, sizeof(address));
     serverAddress.sin_family = AF_INET;
     memcpy((char *) &serverAddress.sin_addr.s_addr, (char*) server->h_addr, server->h_length);
-// htons converts values between host and network byteorders
+    // htons converts values between host and network byteorders
     serverAddress.sin_port = htons(serverPort);
     // Establish a connection with the TCP server
     if (connect(clientSocket, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) == -1) {
@@ -86,11 +50,6 @@ void ServerPlayer::startGame() {
 // Create a socket point
     ConsolePrinter printer;
     int playerNum = 0, n = 0;
-//    try {
-//        connectToServer();
-//    } catch(const char* msg) {
-//        throw msg;
-//    }
     // reading the player's number
     n = read(clientSocket, &playerNum, sizeof(int));
     if (n == -1) {
@@ -104,8 +63,6 @@ void ServerPlayer::startGame() {
     } else if(playerNum == 2) {
         playerType = blackPlayer;
     }
-//    close(clientSocket);
-//    clientSocket = 0;
 }
 
 void ServerPlayer::recieveOpponentsMove(int x, int y) {
@@ -140,17 +97,14 @@ void ServerPlayer::recieveOpponentsMove(int x, int y) {
             temp /= 10;
         }
     }
-//    play = play + " " + gameName;
-//    if(playerType == blackPlayer) {
-//        play = play + " blackPlayer";
-//    } else {
-//        play = play + " whitePlayer";
-//    }
     message = play.c_str();
 // Write the exercise arguments to the socket
     if(x != -10 && y != -10) {
         int n = write(clientSocket, message, BUFFERSIZE*sizeof(char));
         if (n == -1) {
+            if(x == -3 && y == -3) {
+                throw "Game closed";
+            }
             throw "Error writing x to socket";
         }
         if (n == 0) {
@@ -181,6 +135,7 @@ Info ServerPlayer::getMove() {
         if(strcmp(buffer, "close") == 0) {
             newInfo.x = -3;
             newInfo.y = -3;
+            close(clientSocket);
             return newInfo;
         }
         newInfo = extractCommandAndArgs(buffer);
@@ -268,15 +223,15 @@ void ServerPlayer::clientMenu() {
         if(oper == 1 || oper == 3) {
             do {
                 n = read(clientSocket, recieve, BUFFERSIZE * sizeof(char));
+                if (n == -1) {
+                    throw "Error reading command from socket";
+                }
+                if (n == 0) {
+                    throw "Error, connection disconnected!";
+                }
             } while (strcmp(recieve, "") == 0);
         }
         // for problems with reading from the socket
-        if (n == -1) {
-            throw "Error reading command from socket";
-        }
-        if (n == 0) {
-            throw "Error, connection disconnected!";
-        }
         if(command == "list_games") {
             // reading the size of the list
             n = read(clientSocket, &sizeOfList, sizeof(sizeOfList));

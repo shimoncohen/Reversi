@@ -19,19 +19,22 @@
 #define SECOND 2
 
 typedef struct Info {
-    int x;
-    int y;
+    Handler *handler;
+    int *running;
 }Info;
+
+typedef struct AcceptStruct {
+    Handler *handler;
+    int *running;
+    int *clientSocket;
+    int *serverSocket;
+}AcceptStruct;
 
 class Server {
 public:
     Server(int port);
     //~Server();
     void runServer();
-    //static void *handleClient(void* handleArgs);
-    //static void *handleGame(void* handleArgs);
-    //vector<Game*> getGameVector();
-    //CommandsManager getCommandManager();
     /*
 	 * function name: stop.
 	 * input: none.
@@ -39,13 +42,13 @@ public:
      * operation: Stops the server's activity.
     */
     void stop();
-    //static void *handleAccepts(void* serverSocket);
+    static void *acceptNewClient(void* acceptStruct);
+    static void *waitForCloseMessage(void* handler);
+    //static void handleAccepts(void* serverSocket);
 private:
     int port;
+    int running;
     int serverSocket;
-    //CommandsManager cm;
-    //vector<Game*> games;
-    //static CommandAndArgs extractCommandAndArgs(char* buffer);
 };
 
 

@@ -58,7 +58,7 @@ int main() {
             try {
                 second = new ServerPlayer(IPAddress, port);
             } catch (const char* msg) {
-                throw msg;
+                printer->failedMessage(msg);
             }
             g = new Game(gameLogic, first, second);
     }

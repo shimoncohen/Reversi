@@ -29,6 +29,22 @@ void Handler::run(int clientSocket) {
     //printThreadVectorSize();
 }
 
+void Handler::closeThreads() {
+    printThreadVectorSize();
+    pthread_mutex_lock(&gamesLockHander);
+    for(int i = 0; i < games.size(); i++) {
+        write(games[i]->getFirstPlayer(), CLOSE, CLOSESIZE*sizeof(char));
+        write(games[i]->getSecondPlayer(), CLOSE, CLOSESIZE*sizeof(char));
+    }
+    pthread_mutex_unlock(&gamesLockHander);
+    pthread_mutex_lock(&gamesLockHander);
+    for(int i = threadVector.size() - 1; i >= 0; i--) {
+        //threadVector.erase(threadVector.begin() + i);
+        threadVector.pop_back();
+    }
+    pthread_mutex_unlock(&gamesLockHander);
+}
+
 void* Handler::handleClient(void* handleArgs) {
     CommandsManager cm;
     CommandAndArgs commandAndArgs;
@@ -198,13 +214,13 @@ void Handler::deleteThread(vector<pthread_t *> &threads, pthread_t pthread) {
     pthread_mutex_unlock(&gamesLockHander);
 }
 
-//void Handler::printThreadVectorSize() {
-//    cout << "threads: ";
-//    pthread_mutex_lock(&gamesLockHander);
-//    cout << threadVector.size() << endl;
-//    pthread_mutex_unlock(&gamesLockHander);
-//    cout << "games: ";
-//    pthread_mutex_lock(&gamesLockHander);
-//    cout << games.size() << endl;
-//    pthread_mutex_unlock(&gamesLockHander);
-//}
+void Handler::printThreadVectorSize() {
+    cout << "threads: ";
+    pthread_mutex_lock(&gamesLockHander);
+    cout << threadVector.size() << endl;
+    pthread_mutex_unlock(&gamesLockHander);
+    cout << "games: ";
+    pthread_mutex_lock(&gamesLockHander);
+    cout << games.size() << endl;
+    pthread_mutex_unlock(&gamesLockHander);
+}
