@@ -277,14 +277,6 @@ void ServerPlayer::clientMenu() {
         if (n == 0) {
             throw "Error, connection disconnected!";
         }
-        // in option "join" - entering a name that isn't on the list
-        if (strcmp(recieve, "NotExist") == 0 || strcmp(recieve, "AlreadyExist") == 0) {
-            printer.gameDeniedMessage(recieve);
-            //closing the socket
-            reconnect();
-            continue;
-        // in option "start" - entering a name that is already on the list
-        }
         if(command == "list_games") {
             // reading the size of the list
             n = read(clientSocket, &sizeOfList, sizeof(sizeOfList));
@@ -309,6 +301,13 @@ void ServerPlayer::clientMenu() {
             free(list);
             reconnect();
             continue;
+            // in option "join" - entering a name that isn't on the list
+        } else if (strcmp(recieve, "NotExist") == 0 || strcmp(recieve, "AlreadyExist") == 0) {
+            printer.gameDeniedMessage(recieve);
+            //closing the socket and re-connecting
+            reconnect();
+            continue;
+            // in option "start" - entering a name that is already on the list
         }
         // if the input was legal
         flag = true;
