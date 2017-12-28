@@ -83,7 +83,7 @@ char StandartGameLogic::gameWon(Board &board) {
         for(int k = 0; k < board.getSize(); k++) {
             if(board.checkCell(i, k) == 'x') {
                 blackPieces++;
-            } else {
+            } else if(board.checkCell(i, k) == 'o'){
                 whitePieces++;
             }
         }

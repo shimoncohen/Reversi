@@ -303,7 +303,6 @@ void ServerPlayer::clientMenu() {
         // if the input was legal
         flag = true;
     }
-    cout << "received command is: " << command << endl;
     //if(command == "start" || command == "join") {
     //gameName = name;
     try {

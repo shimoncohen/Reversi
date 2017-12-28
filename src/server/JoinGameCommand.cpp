@@ -3,11 +3,16 @@
 
 #include "JoinGameCommand.h"
 
-void joinGameCommand::execute(vector<string> args, vector<Game*> &games, int client) {
+pthread_mutex_t list_mutex;
+
+void joinGameCommand::execute(vector<string> args, vector<Game*> &games, /*vector<pthread_t*> &threadVector,*/
+                              int client) {
     //cout << "Entered execute joinGameCommand" << endl;
+    pthread_mutex_t gamesLock;
     int i = 0, n;
     int secondPlayer;
     Game* joined = NULL;
+    pthread_mutex_lock(&gamesLock);
     for(i; i < games.size(); i++) {
         if(games[i]->getStatus() == 0 && games[i]->getName() == args[0]) {
             games[i]->joinGame(client);
@@ -15,6 +20,7 @@ void joinGameCommand::execute(vector<string> args, vector<Game*> &games, int cli
             break;
         }
     }
+    pthread_mutex_unlock(&gamesLock);
     if(joined != NULL) {
         pthread_t thread;
         secondPlayer = joined->getSecondPlayer();
@@ -22,12 +28,20 @@ void joinGameCommand::execute(vector<string> args, vector<Game*> &games, int cli
         write(secondPlayer, &STARTMESSAGE, STARTMESSAGESIZE*sizeof(char));
 
         HandleArgs *handleArgs = new HandleArgs();
+
+        pthread_mutex_lock(&gamesLock);
         handleArgs->games = &games;
+        pthread_mutex_unlock(&gamesLock);
+
         handleArgs->game = joined;
         handleArgs->socket = client;
 
         try {
             n = pthread_create(&thread, NULL, Handler::handleGame, (void*)handleArgs);
+            // inserting the thread to the list
+            /*pthread_mutex_lock(&list_mutex);
+            threadVector.push_back(&thread);
+            pthread_mutex_unlock(&list_mutex);*/
         } catch (const char* msg) {
             throw msg;
         }
@@ -37,6 +51,7 @@ void joinGameCommand::execute(vector<string> args, vector<Game*> &games, int cli
         }
         //cout << "In execute joinGameCommand:\nsent players in game " << joined->getName() << " start message" << endl;
     } else {
+
         write(client, &NOTEXIST, NOTEXISTSIZE*sizeof(char));
         //cout << "In execute joinGameCommand:\nsent NotExist message" << endl;
     }

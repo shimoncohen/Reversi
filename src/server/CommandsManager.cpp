@@ -18,10 +18,11 @@ CommandsManager::~CommandsManager() {
     }
 }
 
-void CommandsManager::executeCommand(string command, vector<string> args, vector<Game*> &games, int client) {
+void CommandsManager::executeCommand(string command, vector<string> args, vector<Game*> &games,
+                                     /*vector<pthread_t*> &threadVector,*/ int client) {
     Command *commandObj = commandsMap[command];
     try {
-        commandObj->execute(args, games, client);
+        commandObj->execute(args, games, /*threadVector,*/ client);
     } catch (const char* msg) {
         throw msg;
     }

@@ -19,7 +19,8 @@ class CommandsManager {
 public:
     CommandsManager();
     ~CommandsManager();
-    void executeCommand(string command, vector <string> args, vector<Game*> &games, int client = 0);
+    void executeCommand(string command, vector <string> args, vector<Game*> &games, /*vector<pthread_t*> &threadVector,*/
+                        int client = 0);
 private:
     map<string, Command *> commandsMap;
 };

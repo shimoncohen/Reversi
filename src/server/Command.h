@@ -15,7 +15,8 @@ using namespace std;
 
 class Command {
 public:
-    virtual void execute(vector<string> args, vector<Game*> &games, int client = 0) = 0;
+    virtual void execute(vector<string> args, vector<Game*> &games,
+                         /*vector<pthread_t*> &threadVector,*/ int client = 0) = 0;
     virtual ~Command() {}
 };
 

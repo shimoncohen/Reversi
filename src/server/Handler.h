@@ -25,6 +25,7 @@ typedef struct HandleArgs {
     int socket;
     Game* game;
     vector<Game*> *games;
+    //vector<pthread_t*> *threadVector;
 }HandleArgs;
 
 class Handler {
@@ -35,6 +36,7 @@ public:
 private:
     //Server serverToHandle;
     vector<Game*> games;
+    //vector<pthread_t*> threadVector;
     static CommandAndArgs extractCommandAndArgs(char* buffer);
     static void deleteGame(vector<Game*> &games, string gameName);
 };

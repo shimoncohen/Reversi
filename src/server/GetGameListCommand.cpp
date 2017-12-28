@@ -3,17 +3,23 @@
 
 #include "GetGameListCommand.h"
 
-void GetGameListCommand::execute(vector<string> args, vector<Game*> &games, int client) {
+void GetGameListCommand::execute(vector<string> args, vector<Game*> &games, /*vector<pthread_t*> &threadVector,*/
+                                 int client) {
     //cout << "Entered execute GetGameListCommand" << endl;
+    pthread_mutex_t gamesLock;
     int n, size = 0;
     string list = "";
     const char* send;
+
+    pthread_mutex_lock(&gamesLock);
     for(int i = 0; i < games.size(); i++) {
         if(games[i]->getStatus() == 0) {
             list.append(games[i]->getName());
             list.append("\n");
         }
     }
+    pthread_mutex_unlock(&gamesLock);
+
     size = list.size();
     // sending the size of the list in string display
     n = write(client, &size, sizeof(int));
