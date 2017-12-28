@@ -8,6 +8,7 @@ Game::Game(string gameName, int socket1, int socket2) {
     firstPlayerSocket = socket1;
     secondPlayerSocket = socket2;
     status = false;
+    gamesThread = NULL;
 }
 
 string Game::getName() {
@@ -26,7 +27,15 @@ int Game::getSecondPlayer() {
     return secondPlayerSocket;
 }
 
+pthread_t Game::getThread() {
+    return gamesThread;
+}
+
 void Game::joinGame(int newPlayer) {
     secondPlayerSocket = newPlayer;
     status = true;
+}
+
+void Game::setThread(pthread_t newGameThread) {
+    gamesThread = newGameThread;
 }

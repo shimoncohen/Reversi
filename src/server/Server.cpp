@@ -28,12 +28,12 @@ void Server::runServer() {
     struct sockaddr_in firstClientAddress;
     socklen_t firstClientAddressLen;
     Handler handler;
-    int *clientSocket;
+    int *clientSocket = new int[1];
     const char* error;
     bool errorFlag = false;
     // Define the client socket's structures
     while (true) {
-        //cout << "Waiting for client connections..." << endl;
+        cout << "Waiting for client connections..." << endl;
         // Accept a new client connection
         *clientSocket = accept(serverSocket, (struct sockaddr *) &firstClientAddress, &firstClientAddressLen);
         //cout << "In runServer:" << endl << "accepted new client" << endl << endl;
@@ -82,6 +82,7 @@ void Server::runServer() {
 //            return;
 //        }
     }
+    delete clientSocket;
     throw error;
 }
 

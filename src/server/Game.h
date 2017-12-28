@@ -16,12 +16,15 @@ public:
     bool getStatus();
     int getFirstPlayer();
     int getSecondPlayer();
+    pthread_t getThread();
     void joinGame(int newPlayer);
+    void setThread(pthread_t newGameThread);
 private:
     string name;
     int firstPlayerSocket;
     int secondPlayerSocket;
     bool status;
+    pthread_t gamesThread;
 };
 
 
