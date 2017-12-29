@@ -17,8 +17,27 @@ using namespace std;
 
 class CommandsManager {
 public:
+    /*
+	 * function name: CommandsManager.
+	 * input: none.
+	 * output: none.
+     * operation: constructor.
+    */
     CommandsManager();
+    /*
+	 * function name: ~CommandsManager.
+	 * input: none.
+	 * output: none.
+     * operation: destructor.
+    */
     ~CommandsManager();
+    /*
+	 * function name: executeCommand.
+	 * input: vector of string, a vector of all the games in the server, a vector
+     * of all the threads running currently, the number of client's socket.
+	 * output: none.
+     * operation: creates the desired command and executes the command according to its type.
+    */
     void executeCommand(string command, vector <string> args, vector<Game*> &games, vector<pthread_t*> &threadVector,
                         int client = 0);
 private:

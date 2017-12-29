@@ -8,7 +8,7 @@ Game::Game(string gameName, int socket1, int socket2) {
     firstPlayerSocket = socket1;
     secondPlayerSocket = socket2;
     status = false;
-    gamesThread = NULL;
+    gamesThread = 0;
 }
 
 string Game::getName() {

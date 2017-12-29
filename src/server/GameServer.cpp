@@ -7,6 +7,7 @@ using namespace std;
 #define MAX_CONNECTED_CLIENTS 10
 #define STARTMESSAGE "Start"
 #define BUFFERSIZE 200
+
 GameServer::GameServer(int port): port(port), serverSocket(0) {
     cout << "GameServer" << endl;
 }
@@ -33,6 +34,7 @@ void GameServer::start() {
     struct sockaddr_in secondClientAddress;
     socklen_t firstClientAddressLen;
     socklen_t secondClientAddressLen;
+    // set first player num as 1
     int playerNum = FIRST;
     string board, startMessage = STARTMESSAGE;
     int temp;
@@ -42,6 +44,7 @@ void GameServer::start() {
         cout << "Waiting for client connections..." << endl;
         // Accept a new client connection
         int firstClientSocket = accept(serverSocket, (struct sockaddr *) &firstClientAddress, &firstClientAddressLen);
+        // sending message to the player about his position (first or second)
         int n = write(firstClientSocket, &playerNum, sizeof(playerNum));
         if (n == -1) {
             cout << "Error writing to socket" << endl;
@@ -54,16 +57,19 @@ void GameServer::start() {
         playerNum = SECOND;
         int secondClientSocket = accept(serverSocket, (struct sockaddr *) &secondClientAddress,
                                         &secondClientAddressLen);
+        // sending message to the player about his position (first or second)
         n = write(secondClientSocket, &playerNum, sizeof(playerNum));
         if (n == -1) {
             cout << "Error writing to socket" << endl;
             return;
         }
+        // sending start message to the player
         n = write(firstClientSocket, &startMessage, sizeof(startMessage));
         if (n == -1) {
             cout << "Error writing to socket" << endl;
             return;
         }
+        // sending start message to the player
         n = write(secondClientSocket, &startMessage, sizeof(startMessage));
         if (n == -1) {
             cout << "Error writing to socket" << endl;
@@ -72,8 +78,10 @@ void GameServer::start() {
         cout << "Second player connected" << endl;
         if (secondClientSocket == -1)
             throw "Error on accept";
+        // setting the order of the players (current player is the one playing, waiting player waits for his turn).
         int currentClient = firstClientSocket;
         int waitingClient = secondClientSocket;
+        // -2 represents end of game.
         while(x != -2 || y != -2) {
             if(handleClient(currentClient, &x, &y)) {
                 break;
@@ -81,6 +89,7 @@ void GameServer::start() {
             if(writeToClient(waitingClient, &x, &y)) {
                 break;
             }
+            // switchig between the players
             temp = currentClient;
             currentClient = waitingClient;
             waitingClient = temp;
@@ -148,6 +157,7 @@ int GameServer::writeToClient(int clientSocket, int *x, int *y) {
         cout << "Client disconnected" << endl;
         return 1;
     }
+    // in case the player has no move -1,-1 was sent to him
     if(*x == -1 && *y == -1) {
         cout << "Opponent had no move" << endl;
     } else if(*x == -2 && *y == -2) {

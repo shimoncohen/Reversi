@@ -14,6 +14,7 @@
 #define SECOND 2
 using namespace std;
 
+// the struct Info contains coordinate as two numbers
 typedef struct Info {
     int x;
     int y;

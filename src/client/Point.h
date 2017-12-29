@@ -14,7 +14,7 @@ private:
 public:
     /*
 	 * function name: Point.
-	 * input: none.
+	 * input: two numbers as coordinate.
 	 * output: none.
      * operation: constructor.
     */

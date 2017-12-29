@@ -1,6 +1,5 @@
-//
-// Created by shimon on 12/20/17.
-//
+// 315383133 shimon cohen
+// 302228275 Nadav Spitzer
 
 #ifndef ADVANCEDPROGRAMMING1_SERVER_H
 #define ADVANCEDPROGRAMMING1_SERVER_H
@@ -39,10 +38,22 @@ public:
 	 * function name: stop.
 	 * input: none.
 	 * output: none.
-     * operation: Stops the server's activity.
+     * operation: Stops the server's activity. closes the socket.
     */
     void stop();
+    /*
+	 * function name: acceptNewClient.
+	 * input: a struct with info about the client we want to accept.
+	 * output: none.
+     * operation: receives a struct with client info and accepts a new client.
+    */
     static void *acceptNewClient(void* acceptStruct);
+    /*
+	 * function name: waitForCloseMessage.
+	 * input: a handler.
+	 * output: none.
+     * operation: the process waits for "exit" as input. when entered, closes all threads, games and the server.
+    */
     static void *waitForCloseMessage(void* handler);
     //static void handleAccepts(void* serverSocket);
 private:

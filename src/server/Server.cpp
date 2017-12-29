@@ -54,7 +54,6 @@ void Server::runServer() {
         throw msg;
     }
     //*clientSocket = accept(serverSocket, (struct sockaddr *) &firstClientAddress, &firstClientAddressLen);
-    //cout << "In runServer:" << endl << "accepted new client" << endl << endl;
     while(running);
     delete clientSocket;
 }
@@ -67,6 +66,7 @@ void* Server::acceptNewClient(void *acceptStruct) {
     Handler *handler = acceptStruct1->handler;
     while (*acceptStruct1->running) {
         cout << "Waiting for client connections..." << endl;
+        // accepting the client
         *acceptStruct1->clientSocket = accept(serverSocket, (struct sockaddr *) &firstClientAddress,
                                               &firstClientAddressLen);
         try {
@@ -80,6 +80,7 @@ void* Server::acceptNewClient(void *acceptStruct) {
 void *Server::waitForCloseMessage(void* info) {
     Info *info1 = (Info*)info;
     string close;
+    // waiting to receive "exit"
     do {
         cin >> close;
     } while(close.compare("exit") != 0);

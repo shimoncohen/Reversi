@@ -7,27 +7,31 @@ pthread_mutex_t gamesLockMove;
 
 void MakeMoveCommand::execute(vector<string> args, vector<Game*> &games,
                               vector<pthread_t*> &threadVector, int client) {
-    //cout << "Entered execute MakeMoveCommand" << endl;
     string moveString = "Play " + args[0] + " " + args[1];
     int tempPlayer, i;
     const char *message = moveString.c_str();
+    // locking the games vector to prevent changes.
     pthread_mutex_lock(&gamesLockMove);
     for(i = 0; i < games.size(); i++) {
+        // searching for a specific  player socket.
         if(games[i]->getFirstPlayer() == client) {
             tempPlayer = games[i]->getSecondPlayer();
+            // unlock the vector.
             pthread_mutex_unlock(&gamesLockMove);
+            // writing a move to the player.
             write(tempPlayer, message, BUFFERSIZE*sizeof(char));
-            //cout << "In execute StartCommand:\nwrote " << moveString << " to second player" << endl;
             break;
         } else if(games[i]->getSecondPlayer() == client) {
             tempPlayer = games[i]->getFirstPlayer();
+            // unlock the vector.
             pthread_mutex_unlock(&gamesLockMove);
+            // writing a move to the player.
             write(tempPlayer, message, BUFFERSIZE*sizeof(char));
-            //cout << "In execute StartCommand:\nwrote " << moveString << " to first player" << endl;
             break;
         }
     }
     if(i >= games.size()) {
+        // unlock the vector.
         pthread_mutex_unlock(&gamesLockMove);
     }
 }

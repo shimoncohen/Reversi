@@ -1,6 +1,5 @@
-//
-// Created by shimon on 12/21/17.
-//
+// 315383133 shimon cohen
+// 302228275 Nadav Spitzer
 
 #ifndef ADVANCEDPROGRAMMING1_GETGAMELISTCOMMAND_H
 #define ADVANCEDPROGRAMMING1_GETGAMELISTCOMMAND_H

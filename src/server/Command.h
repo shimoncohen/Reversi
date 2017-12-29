@@ -15,8 +15,21 @@ using namespace std;
 
 class Command {
 public:
+    /*
+	 * function name: execute.
+	 * input: vector of string, a vector of all the games in the server, a vector
+     * of all the threads running currently, the number of client's socket.
+	 * output: none.
+     * operation: executes the command according to its type.
+    */
     virtual void execute(vector<string> args, vector<Game*> &games,
                          vector<pthread_t*> &threadVector, int client = 0) = 0;
+    /*
+	 * function name: ~Command.
+	 * input: none.
+	 * output: none.
+     * operation: destructor.
+    */
     virtual ~Command() {}
 };
 

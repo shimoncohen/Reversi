@@ -26,22 +26,26 @@ void Handler::run(int clientSocket) {
         cout << "Error: unable to create thread" << endl;
         exit(-1);
     }
-    //printThreadVectorSize();
 }
 
 void Handler::closeThreads() {
     printThreadVectorSize();
+    // locking the vector of games to prevent changes.
     pthread_mutex_lock(&gamesLockHander);
     for(int i = 0; i < games.size(); i++) {
+        // sending close messages to both players.
         write(games[i]->getFirstPlayer(), CLOSE, CLOSESIZE*sizeof(char));
         write(games[i]->getSecondPlayer(), CLOSE, CLOSESIZE*sizeof(char));
     }
+    // unlock the vector.
     pthread_mutex_unlock(&gamesLockHander);
+    // locking the vector of games to prevent changes.
     pthread_mutex_lock(&gamesLockHander);
     for(int i = threadVector.size() - 1; i >= 0; i--) {
         //threadVector.erase(threadVector.begin() + i);
         threadVector.pop_back();
     }
+    // unlock the vector.
     pthread_mutex_unlock(&gamesLockHander);
 }
 
@@ -52,12 +56,17 @@ void* Handler::handleClient(void* handleArgs) {
     char buffer[BUFFERSIZE];
     string command;
     HandleArgs *handleArgs1 = (HandleArgs*)handleArgs;
+    // locking the vector of games to prevent changes.
     pthread_mutex_lock(&gamesLockHander);
     vector<Game*>& temp = *handleArgs1->games;
+    // unlock the vector.
     pthread_mutex_unlock(&gamesLockHander);
+    // locking the vector of threads to prevent changes.
     pthread_mutex_lock(&gamesLockHander);
     vector<pthread_t*> &threadTemp = *handleArgs1->threadVector;
+    // unlock the vector.
     pthread_mutex_unlock(&gamesLockHander);
+    // reading the command from the client.
     int n = read(handleArgs1->socket, buffer, BUFFERSIZE*sizeof(char));
     if (n == -1) {
         cout << "Error writing to socket" << endl;
@@ -67,6 +76,7 @@ void* Handler::handleClient(void* handleArgs) {
         cout << "Client disconnected" << endl;
         return NULL;
     }
+    // converting the command.
     commandAndArgs = extractCommandAndArgs(buffer);
     try {
         cm.executeCommand(commandAndArgs.command, commandAndArgs.args, temp, threadTemp,
@@ -84,28 +94,38 @@ void* Handler::handleGame(void* handleArgs) {
     int playerNum = FIRST, firstPlayer, secondPlayer;
     string startMessage = STARTMESSAGE;
     char buffer[BUFFERSIZE];
-    // lock the vector of games
+    // lock the vector of games.
     pthread_mutex_lock(&gamesLockHander);
     Game *currentGame = handleArgs1->game;
+    // unlock the vector.
     pthread_mutex_unlock(&gamesLockHander);
+    // lock the vector of threads.
     pthread_mutex_lock(&gamesLockHander);
     vector<pthread_t*> &threadTemp = *handleArgs1->threadVector;
+    // unloc the vector.
     pthread_mutex_unlock(&gamesLockHander);
+    // lock the vector of games.
     pthread_mutex_lock(&gamesLockHander);
     vector<Game*> &tempGames = *handleArgs1->games;
+    // unlock the vector.
     pthread_mutex_unlock(&gamesLockHander);
+    // lock the the current game.
     pthread_mutex_lock(&gamesLockHander);
     firstPlayer = currentGame->getFirstPlayer();
+    // unlock the game.
     pthread_mutex_unlock(&gamesLockHander);
+    // lock the current game.
     pthread_mutex_lock(&gamesLockHander);
     secondPlayer = currentGame->getSecondPlayer();
+    // unlock the game.
     pthread_mutex_unlock(&gamesLockHander);
-
+    // writing the position number to the first player.
     n = write(firstPlayer, &playerNum, sizeof(int));
     if (n == -1) {
         cout << "Error writing to socket" << endl;
         return NULL;
     }
+    // writing the position number to the second player.
     playerNum = SECOND;
     n = write(secondPlayer, &playerNum, sizeof(int));
     if (n == -1) {
@@ -126,27 +146,36 @@ void* Handler::handleGame(void* handleArgs) {
             cout << "Client disconnected" << endl;
             return NULL;
         }
+        // extracting the command from the buffer.
         commandAndArgs = extractCommandAndArgs(buffer);
+        // we will exectue the command as long as it's not "End" or "NoMoves".
         if(commandAndArgs.command.compare("End") != 0 && commandAndArgs.command.compare("NoMoves") != 0) {
             try {
+                // executing the command
                 cm.executeCommand(commandAndArgs.command, commandAndArgs.args,
                                   tempGames, threadTemp, currentClient);
             } catch (const char *msg) {
                 throw msg;
             }
         }
+        // switching between the players.
         temp = currentClient;
         currentClient = waitingClient;
         waitingClient = temp;
+    // end ing the game if the command is either "End" or "close".
     } while(strcmp(commandAndArgs.command.c_str(), "End") != 0
             && strcmp(commandAndArgs.command.c_str(), "close") != 0);
     // end of game
     // Close communication with the client.
+    // lock the vector of games.
     pthread_mutex_lock(&gamesLockHander);
     deleteGame(*handleArgs1->games, handleArgs1->game->getName());
+    // unlock the vector.
     pthread_mutex_unlock(&gamesLockHander);
+    // lock the vector of threads.
     pthread_mutex_lock(&gamesLockHander);
     deleteThread(*handleArgs1->threadVector, handleArgs1->game->getThread());
+    // unlock the vector.
     pthread_mutex_unlock(&gamesLockHander);
 
     close(firstPlayer);
@@ -161,6 +190,7 @@ CommandAndArgs Handler::extractCommandAndArgs(char* buffer) {
     for(i; i < BUFFERSIZE; i++) {
         if(buffer[i] != '\0') {
             if(buffer[i] != ' ') {
+                // seperating the command from the string.
                 command.append(sizeof(char) ,buffer[i]);
             } else {
                 break;
@@ -174,6 +204,7 @@ CommandAndArgs Handler::extractCommandAndArgs(char* buffer) {
     }
     for(i; i < BUFFERSIZE; i++) {
         if(buffer[i] != '\0') {
+            // seperating the arguments.
             if(buffer[i] != ' ') {
                 arguments[args].append(sizeof(char), buffer[i]);
             } else {
@@ -184,6 +215,7 @@ CommandAndArgs Handler::extractCommandAndArgs(char* buffer) {
         }
     }
     commandAndArgs.command = command;
+    // inserting the arguments to a vector of strings.
     for(int j = 0; j <= args; j++) {
         if(arguments[j].compare("") != 0) {
             commandAndArgs.args.push_back(arguments[j]);
@@ -194,23 +226,29 @@ CommandAndArgs Handler::extractCommandAndArgs(char* buffer) {
 
 void Handler::deleteGame(vector<Game*> &games, string gameName) {
     int i = 0;
+    // lock the vector of games to prevent changes.
     pthread_mutex_lock(&gamesLockHander);
     for (i; i < games.size(); i++) {
+        // if the game's name in the list is equal to the game's name we sent, we will erase it from the list.
         if (games.at(i)->getName().compare(gameName) == 0) {
             games.erase(games.begin() + i);
         }
     }
+    // unlock the vector.
     pthread_mutex_unlock(&gamesLockHander);
 }
 
 void Handler::deleteThread(vector<pthread_t *> &threads, pthread_t pthread) {
     int i = 0;
+    // lock the vector of threads to prevent changes.
     pthread_mutex_lock(&gamesLockHander);
     for (i; i < threads.size(); i++) {
+        // if the thread in the list is equal to the thread we sent, we will erase it from the list.
         if (*threads.at(i) == pthread) {
             threads.erase(threads.begin() + i);
         }
     }
+    // unlock the vector.
     pthread_mutex_unlock(&gamesLockHander);
 }
 
