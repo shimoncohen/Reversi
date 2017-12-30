@@ -9,10 +9,10 @@ void Handler::run(int clientSocket) {
     int n;
     pthread_t thread;
     HandleArgs *handleArgs = new HandleArgs();
-    pthread_mutex_trylock(&gamesLockHander);
+    pthread_mutex_lock(&gamesLockHander);
     handleArgs->games = &games;
     pthread_mutex_unlock(&gamesLockHander);
-    pthread_mutex_trylock(&gamesLockHander);
+    pthread_mutex_lock(&gamesLockHander);
     handleArgs->threadVector = &threadVector;
     pthread_mutex_unlock(&gamesLockHander);
     handleArgs->game = NULL;

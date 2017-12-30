@@ -190,6 +190,7 @@ void ServerPlayer::clientMenu() {
         // get the operation of the client
         cin >> oper;
         if(oper == 0) {
+            close(clientSocket);
             throw "You requested to cancel.\n";
         }
         if(oper == 1 || oper == 3) {
