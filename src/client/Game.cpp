@@ -50,7 +50,7 @@ void Game::runGame() {
     assignTypes();
     //starts the game
     try {
-    doOneTurn(options);
+        doOneTurn(options);
     } catch (const char* msg) {
         delete printer;
         throw msg;

@@ -64,9 +64,9 @@ private:
 	 * function name: printThreadVectorSize.
 	 * input: none.
 	 * output: none.
-     * operation: prints the current size of the thread vector.
+     * operation: prints the current sizes of the thread vector and games vector.
     */
-    void printThreadVectorSize();
+    void printThreadAndGamesVectorSize();
     /*
 	 * function name: extractCommandAndArgs.
 	 * input: a buffer string with the command the server read.

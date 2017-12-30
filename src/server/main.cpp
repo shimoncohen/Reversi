@@ -20,6 +20,7 @@ int main() {
         exit(-1);
     }
     server.stop();
+    cout << "Server closed." << endl;
 }
 
 /*

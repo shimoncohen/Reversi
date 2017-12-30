@@ -186,15 +186,12 @@ void ServerPlayer::clientMenu() {
         throw msg;
     }
     while(!flag) {
-        // connecting to the server socket
-//        try {
-//            connectToServer();
-//        } catch (const char* msg) {
-//            throw msg;
-//        }
         printer.printClientMenu();
         // get the operation of the client
         cin >> oper;
+        if(oper == 0) {
+            throw "You requested to cancel.\n";
+        }
         if(oper == 1 || oper == 3) {
             cin >> name;
         }
@@ -267,14 +264,11 @@ void ServerPlayer::clientMenu() {
         // if the input was legal
         flag = true;
     }
-    //if(command == "start" || command == "join") {
-    //gameName = name;
     try {
         startGame();
     } catch (const char* msg) {
         throw msg;
     }
-    //}
 }
 
 string ServerPlayer::translateOperation(int oper, string name) {

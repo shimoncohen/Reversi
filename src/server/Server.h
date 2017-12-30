@@ -11,7 +11,6 @@
 #include <cstdlib>
 #include <pthread.h>
 #define MAX_CONNECTED_CLIENTS 10
-#define THREADS_NUM 5
 #define STARTMESSAGE "Start"
 #define BUFFERSIZE 200
 #define FIRST 1
@@ -32,7 +31,6 @@ typedef struct AcceptStruct {
 class Server {
 public:
     Server(int port);
-    //~Server();
     void runServer();
     /*
 	 * function name: stop.
@@ -55,7 +53,6 @@ public:
      * operation: the process waits for "exit" as input. when entered, closes all threads, games and the server.
     */
     static void *waitForCloseMessage(void* handler);
-    //static void handleAccepts(void* serverSocket);
 private:
     int port;
     int running;

@@ -102,6 +102,7 @@ void ConsolePrinter::printWinMessage(char winner) {
 
 void ConsolePrinter::printClientMenu() {
     cout << "please choose operation number. If you choose 1 or 3, also enter name of game: " << endl;
+    cout << "0. cancel" << endl;
     cout << "1.'start' to start a new game." << endl;
     cout << "2.'list' to view the list of waiting games." << endl;
     cout << "3.'join' to join a waiting game." << endl;
@@ -124,8 +125,10 @@ void ConsolePrinter::printGamesList(int sizeOfList, char *list) {
     if(sizeOfList == 0) {
         cout << "List is empty. There are not waiting games." << endl;
     } else {
+        cout << "List of available games:" << endl;
         for (int i = 0; i < sizeOfList; i++) {
             cout << list[i];
         }
+        cout << endl;
     }
 }
