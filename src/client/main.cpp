@@ -5,7 +5,6 @@
 #include <fstream>
 #define ENDPORTWORD 5
 #define ENDIPWORD 3
-#define CANCLECHOICE
 
 using namespace std;
 
@@ -18,21 +17,11 @@ int main() {
     settingsReading(&port, IPAddress);
     Printer *printer = new ConsolePrinter();
     printer->printGameOpenning();
-    // choosing game style. 1) PvP . 2) PvAI.
-    // dealing with impossible option
-//    while(choice != 1 && choice != 2 && choice != 3) {
-//        printer->printInvalidGameMode();
-//        cin >> choice;
-//    }
     // ***for future use when board size will be decided by the user***
     // getting board size from the user
-//    printer->boardSizeMessage();
-//    cin >> size;
-    //dealing with size < 4
-//	while(size < 4) {
-//        printer->boardSizeMessage();
-//        cin >> size;
-//    }
+    // printer->boardSizeMessage();
+    // cin >> size;
+
     // creating game logic
     GameLogic* gameLogic = new StandartGameLogic();
     Player *first;

@@ -5,6 +5,7 @@
 #define ADVANCEDPROGRAMMING1_MAKEMOVECOMMAND_H
 
 #include "Command.h"
+#include <cstring>
 #define BUFFERSIZE 200
 
 /*

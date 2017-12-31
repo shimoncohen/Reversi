@@ -123,11 +123,15 @@ void Game::doOneTurn(vector<Point> options) {
                 end = true;
                 x = -2;
                 y = -2;
+                delete copyBoard;
+                delete[] temp;
                 break;
             } else if(temp[0] == CLOSE && temp[1] == CLOSE) {
                 end = true;
                 x = -3;
                 y = -3;
+                delete copyBoard;
+                delete[] temp;
                 break;
             }
             delete copyBoard;
