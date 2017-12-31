@@ -3,6 +3,7 @@
 
 #include "Handler.h"
 
+// creating mutexes
 pthread_mutex_t gamesLockHandlerRun;
 pthread_mutex_t gamesLockHandlerCloseThreads;
 pthread_mutex_t gamesLockHandlerHandleClient;
@@ -41,7 +42,7 @@ void Handler::closeThreads() {
         int second =games[i]->getSecondPlayer();
         if(second == 0) {
             write(first, CLOSE, CLOSESIZE * sizeof(char));
-            
+
         } else {
             // sending close messages to both players.
             write(first, CLOSE, CLOSESIZE * sizeof(char));

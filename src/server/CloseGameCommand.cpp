@@ -32,8 +32,4 @@ void CloseGameCommand::execute(vector<string> args, vector<Game*> &games,
 //        pthread_mutex_unlock(&lockClose);
 //    }
     pthread_mutex_unlock(&lockClose);
-//    i -= 1;
-//    pthread_mutex_lock(&gamesLockClose);
-//    games.erase(games.begin() + i);
-//    pthread_mutex_unlock(&gamesLockClose);
 }

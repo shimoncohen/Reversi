@@ -3,6 +3,7 @@
 
 #include "StartCommand.h"
 
+// creating mutexes
 pthread_mutex_t gamesLockStart;
 
 void StartCommand::execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector, int client) {

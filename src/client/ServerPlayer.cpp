@@ -108,18 +108,21 @@ void ServerPlayer::recieveOpponentsMove(int x, int y) {
     if(x != -10 && y != -10) {
         int n = write(clientSocket, message, BUFFERSIZE*sizeof(char));
         if (n == -1) {
+            delete[] message;
             if(x == -3 && y == -3) {
                 throw "Game closed";
             }
             throw "Error writing x to socket";
         }
         if (n == 0) {
+            delete[] message;
             if(x == -3 && y == -3) {
                 throw "Game closed";
             }
             throw "Error, opponent disconnected!";
         }
     }
+    delete[] message;
 }
 
 Info ServerPlayer::getMove() {

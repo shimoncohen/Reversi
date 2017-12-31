@@ -17,5 +17,4 @@ public:
     void execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector, int client = 0);
 };
 
-
 #endif //ADVANCEDPROGRAMMING1_GETGAMELISTCOMMAND_H

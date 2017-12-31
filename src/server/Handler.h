@@ -62,7 +62,9 @@ public:
     */
     static void *handleGame(void* gameToHandle);
 private:
+    // the games running or waiting in the server
     vector<Game*> games;
+    // the threads of the games in the server
     vector<pthread_t*> threadVector;
     /*
 	 * function name: printThreadVectorSize.

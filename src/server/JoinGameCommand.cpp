@@ -58,13 +58,10 @@ void joinGameCommand::execute(vector<string> args, vector<Game*> &games, vector<
             pthread_mutex_unlock(&lockJoin);
             // locking the threads vector to prevent changes.
             pthread_mutex_lock(&lockJoin);
+            // inserting the thread to the list
             threadVector.push_back(&thread);
             // unlock the vector.
             pthread_mutex_unlock(&lockJoin);
-            // inserting the thread to the list
-            /*pthread_mutex_lock(&list_mutex);
-            threadVector.push_back(&thread);
-            pthread_mutex_unlock(&list_mutex);*/
         } catch (const char* msg) {
             throw msg;
         }
@@ -76,5 +73,4 @@ void joinGameCommand::execute(vector<string> args, vector<Game*> &games, vector<
         // in case the game doesn't exist we sent a proper message.
         write(client, &NOTEXIST, NOTEXISTSIZE*sizeof(char));
     }
-    // send player nums
 }
