@@ -75,6 +75,8 @@ public:
 	 * output: none.
      * operation: runs a whole turn.
      *            runs a players turn.
+     *            move -3 -3 // CLOSE CLOSE indicates the closing of the game
+     *            move -2 -2 // END END indicates the ending of the game
     */
     void doOneTurn(vector<Point> v);
 };
