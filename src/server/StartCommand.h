@@ -11,6 +11,9 @@
 #define DOSENTEXIST "DosentExist"
 #define DOSENTEXISTSIZE 13
 
+/*
+ * Command in charge of creating a new game and adding it to the games list
+ */
 class StartCommand : public Command {
 public:
     void execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector, int client = 0);

@@ -9,6 +9,9 @@
 #define CLOSE "close"
 #define CLOSESIZE 8
 
+/*
+ * Command in charge of closing a specific game
+ */
 class CloseGameCommand : public Command {
 public:
     void execute(vector<string> args, vector<Game*> &game, vector<pthread_t*> &threadVector, int client = 0);

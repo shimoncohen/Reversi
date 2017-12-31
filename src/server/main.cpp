@@ -14,11 +14,13 @@ int main() {
     port = settingsReading();
     Server server(port);
     try {
+        // run the server
         server.runServer();
     } catch (const char *msg) {
         cout << "Cannot start server. Reason: " << msg << endl;
         exit(-1);
     }
+    // stop the server from running
     server.stop();
     cout << "Server closed." << endl;
 }

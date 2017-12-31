@@ -13,6 +13,9 @@
 
 using namespace std;
 
+/*
+ * General command interface.
+ */
 class Command {
 public:
     /*

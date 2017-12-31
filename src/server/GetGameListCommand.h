@@ -9,6 +9,9 @@
 #define NOGAMES "no available games\n"
 #define NOGAMESIZE 19
 
+/*
+ * Command in charge of sending a client the waiting games list
+ */
 class GetGameListCommand : public Command {
 public:
     void execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector, int client = 0);

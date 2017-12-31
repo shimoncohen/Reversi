@@ -13,6 +13,9 @@
 #define FIRST 1
 #define SECOND 2
 
+/*
+ * Command in charge of adding a second player to a waiting game and then run the new game
+ */
 class joinGameCommand : public Command {
 public:
     void execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector, int client = 0);

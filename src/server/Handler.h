@@ -27,6 +27,10 @@ typedef struct HandleArgs {
     vector<pthread_t*> *threadVector;
 }HandleArgs;
 
+/*
+ * Handler is in charge of handling everything in the server from idividual clients to full games,
+ * Also in charge of some of the aervers closing functions.
+ */
 class Handler {
 public:
     /*

@@ -15,6 +15,10 @@
 #include "CloseGameCommand.h"
 using namespace std;
 
+/*
+ * Command manager gives a commands execute function by given label.
+ * Holds a map of executes by label.
+ */
 class CommandsManager {
 public:
     /*

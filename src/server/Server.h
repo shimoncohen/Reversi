@@ -16,11 +16,17 @@
 #define FIRST 1
 #define SECOND 2
 
+/*
+ * Holds the info sent to the waitForCloseMessage function
+ */
 typedef struct Info {
     Handler *handler;
     int *running;
 }Info;
 
+/*
+ * Holds info sent to static functions in handler
+ */
 typedef struct AcceptStruct {
     Handler *handler;
     int *running;
@@ -28,6 +34,9 @@ typedef struct AcceptStruct {
     int *serverSocket;
 }AcceptStruct;
 
+/*
+ * In charge of accepting new clients and closing server if needed
+ */
 class Server {
 public:
     Server(int port);
@@ -55,6 +64,7 @@ public:
     static void *waitForCloseMessage(void* handler);
 private:
     int port;
+    // indicates if surver is running
     int running;
     int serverSocket;
 };

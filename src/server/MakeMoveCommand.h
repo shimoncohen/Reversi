@@ -7,6 +7,9 @@
 #include "Command.h"
 #define BUFFERSIZE 200
 
+/*
+ * Command in charge of sending a given move to the players opponent
+ */
 class MakeMoveCommand : public Command {
 public:
     void execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector, int client = 0);
