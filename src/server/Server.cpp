@@ -3,7 +3,10 @@
 
 #include "Server.h"
 
-pthread_mutex_t lockServer;
+pthread_mutex_t lockServerRun;
+pthread_mutex_t lockServerAccept;
+pthread_mutex_t lockServerWait;
+pthread_mutex_t lockServerClose;
 
 Server::Server(int port): port(port), serverSocket(0) {
     cout << "GameServer" << endl;
@@ -35,32 +38,45 @@ void Server::runServer() {
     Info *info = new Info();
     info->handler = &handler;
     info->running = &running;
+    // Accept a new client connection
+    AcceptStruct *acceptStruct = new AcceptStruct();
+    pthread_mutex_lock(&lockServerRun);
+    acceptStruct->serverSocket = &serverSocket;
+    pthread_mutex_unlock(&lockServerRun);
+    acceptStruct->clientSocket = clientSocket;
+    pthread_mutex_lock(&lockServerRun);
+    acceptStruct->handler = &handler;
+    pthread_mutex_unlock(&lockServerRun);
+    pthread_mutex_lock(&lockServerRun);
+    acceptStruct->running = &running;
+    pthread_mutex_unlock(&lockServerRun);
     try {
         pthread_create(&thread, NULL, waitForCloseMessage, (void *)info);
     } catch (const char *msg) {
+        delete info;
+        delete acceptStruct;
         delete[] clientSocket;
         throw msg;
     }
-    // Accept a new client connection
-    AcceptStruct *acceptStruct = new AcceptStruct();
-    acceptStruct->serverSocket = &serverSocket;
-    acceptStruct->clientSocket = clientSocket;
-    acceptStruct->running = &running;
-    acceptStruct->handler = &handler;
     try {
         pthread_create(&thread, NULL, acceptNewClient, (void *) acceptStruct);
     } catch (const char *msg) {
+        delete info;
+        delete acceptStruct;
         delete[] clientSocket;
         throw msg;
     }
     // as long as exit command has not been entered
     while(true) {
-        pthread_mutex_lock(&lockServer);
+        pthread_mutex_lock(&lockServerRun);
         if(running == 0) {
+            pthread_mutex_unlock(&lockServerRun);
             break;
         }
-        pthread_mutex_unlock(&lockServer);
+        pthread_mutex_unlock(&lockServerRun);
     }
+    delete info;
+    delete acceptStruct;
     delete[] clientSocket;
 }
 
@@ -68,33 +84,34 @@ void* Server::acceptNewClient(void *acceptStruct) {
     struct sockaddr_in firstClientAddress;
     socklen_t firstClientAddressLen;
     AcceptStruct *acceptStruct1 = (AcceptStruct*)acceptStruct;
-    pthread_mutex_lock(&lockServer);
+    pthread_mutex_lock(&lockServerAccept);
     int serverSocket = *acceptStruct1->serverSocket;
-    pthread_mutex_unlock(&lockServer);
-    pthread_mutex_lock(&lockServer);
+    pthread_mutex_unlock(&lockServerAccept);
+    pthread_mutex_lock(&lockServerAccept);
     Handler *handler = acceptStruct1->handler;
-    pthread_mutex_unlock(&lockServer);
-    pthread_mutex_lock(&lockServer);
+    pthread_mutex_unlock(&lockServerAccept);
+    pthread_mutex_lock(&lockServerAccept);
     int isRunning = *acceptStruct1->running;
-    pthread_mutex_unlock(&lockServer);
+    pthread_mutex_unlock(&lockServerAccept);
     while (isRunning) {
         cout << "Waiting for client connections..." << endl;
         // accepting the client
         int tempClientSocket = accept(serverSocket, (struct sockaddr *) &firstClientAddress,
                                               &firstClientAddressLen);
-        pthread_mutex_lock(&lockServer);
+        pthread_mutex_lock(&lockServerAccept);
         *acceptStruct1->clientSocket = tempClientSocket;
-        pthread_mutex_unlock(&lockServer);
-        pthread_mutex_lock(&lockServer);
+        pthread_mutex_unlock(&lockServerAccept);
+        pthread_mutex_lock(&lockServerAccept);
         try {
             handler->run(tempClientSocket);
         } catch (const char* msg) {
+            pthread_mutex_unlock(&lockServerAccept);
             throw msg;
         }
-        pthread_mutex_unlock(&lockServer);
-        pthread_mutex_lock(&lockServer);
+        pthread_mutex_unlock(&lockServerAccept);
+        pthread_mutex_lock(&lockServerAccept);
         isRunning = *acceptStruct1->running;
-        pthread_mutex_unlock(&lockServer);
+        pthread_mutex_unlock(&lockServerAccept);
     }
 }
 
@@ -107,14 +124,16 @@ void *Server::waitForCloseMessage(void* info) {
     } while(close.compare("exit") != 0);
     // close all of the servers threads
     // let server know that exit command has been entered
-    pthread_mutex_lock(&lockServer);
-    *info1->running = 0;
-    pthread_mutex_unlock(&lockServer);
-    pthread_mutex_lock(&lockServer);
+    pthread_mutex_lock(&lockServerWait);
     info1->handler->closeThreads();
-    pthread_mutex_unlock(&lockServer);
+    pthread_mutex_unlock(&lockServerWait);
+    pthread_mutex_lock(&lockServerWait);
+    *info1->running = 0;
+    pthread_mutex_unlock(&lockServerWait);
 }
 
 void Server::stop() {
+    pthread_mutex_lock(&lockServerClose);
     close(serverSocket);
+    pthread_mutex_unlock(&lockServerClose);
 }

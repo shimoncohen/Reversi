@@ -15,7 +15,6 @@ void CloseGameCommand::execute(vector<string> args, vector<Game*> &games,
         if (games[i]->getFirstPlayer() == client) {
             tempPlayer = games[i]->getSecondPlayer();
             // unlock the vector
-            pthread_mutex_unlock(&lockClose);
             // sending "close" message to the second player
             write(tempPlayer, &CLOSE, CLOSESIZE * sizeof(char));
             break;
@@ -23,16 +22,16 @@ void CloseGameCommand::execute(vector<string> args, vector<Game*> &games,
         } else if (games[i]->getSecondPlayer() == client) {
             tempPlayer = games[i]->getFirstPlayer();
             // unlock the vector
-            pthread_mutex_unlock(&lockClose);
             // sending "close" message to the second player
             write(tempPlayer, &CLOSE, CLOSESIZE * sizeof(char));
             break;
         }
     }
     // in case the vector is still locked
-    if(i >= games.size()) {
-        pthread_mutex_unlock(&lockClose);
-    }
+//    if(i >= games.size()) {
+//        pthread_mutex_unlock(&lockClose);
+//    }
+    pthread_mutex_unlock(&lockClose);
 //    i -= 1;
 //    pthread_mutex_lock(&gamesLockClose);
 //    games.erase(games.begin() + i);

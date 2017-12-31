@@ -77,7 +77,7 @@ void ServerPlayer::recieveOpponentsMove(int x, int y) {
     ////// catch
 
     string play = "play ";
-    const char *message;
+    char *message = new char[BUFFERSIZE];
     if(x == CLOSE && y == CLOSE) {
         play = "close";
     } else if(x == END && y == END) {
@@ -102,7 +102,8 @@ void ServerPlayer::recieveOpponentsMove(int x, int y) {
             temp /= 10;
         }
     }
-    message = play.c_str();
+    strcpy(message, play.c_str());
+    //message = play.c_str();
     // Write the arguments to the socket
     if(x != -10 && y != -10) {
         int n = write(clientSocket, message, BUFFERSIZE*sizeof(char));
@@ -119,7 +120,6 @@ void ServerPlayer::recieveOpponentsMove(int x, int y) {
             throw "Error, opponent disconnected!";
         }
     }
-
 }
 
 Info ServerPlayer::getMove() {
