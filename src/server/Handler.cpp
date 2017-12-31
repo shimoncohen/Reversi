@@ -33,8 +33,6 @@ void Handler::closeThreads() {
     pthread_mutex_lock(&gamesLockHander);
     for(int i = 0; i < games.size(); i++) {
         if(games[i]->getSecondPlayer() == 0) {
-            int playerNum = FIRST;
-            write(games[i]->getFirstPlayer(), &playerNum, sizeof(int));
             write(games[i]->getFirstPlayer(), CLOSE, CLOSESIZE * sizeof(char));
         } else {
             // sending close messages to both players.
@@ -47,7 +45,6 @@ void Handler::closeThreads() {
     // locking the vector of games to prevent changes.
     pthread_mutex_lock(&gamesLockHander);
     for(int i = threadVector.size() - 1; i >= 0; i--) {
-        //threadVector.erase(threadVector.begin() + i);
         threadVector.pop_back();
     }
     // unlock the vector.

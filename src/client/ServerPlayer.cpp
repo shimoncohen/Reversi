@@ -49,12 +49,17 @@ void ServerPlayer::connectToServer() {
 void ServerPlayer::startGame() {
 // Create a socket point
     ConsolePrinter printer;
+    char buffer[BUFFERSIZE];
     int playerNum = 0, n = 0;
     // reading the player's number
-    n = read(clientSocket, &playerNum, sizeof(int));
+    n = read(clientSocket, buffer, BUFFERSIZE*sizeof(char));
     if (n == -1) {
         throw "Error reading player num";
     }
+    if(strcmp(buffer, "close") == 0) {
+        throw "Game closed";
+    }
+    playerNum = buffer[0];
     cout << "player num: " << playerNum << endl;
     printer.connectedToServerMessage();
     if(playerNum == 1) {
@@ -98,7 +103,7 @@ void ServerPlayer::recieveOpponentsMove(int x, int y) {
         }
     }
     message = play.c_str();
-// Write the exercise arguments to the socket
+    // Write the arguments to the socket
     if(x != -10 && y != -10) {
         int n = write(clientSocket, message, BUFFERSIZE*sizeof(char));
         if (n == -1) {
@@ -108,6 +113,9 @@ void ServerPlayer::recieveOpponentsMove(int x, int y) {
             throw "Error writing x to socket";
         }
         if (n == 0) {
+            if(x == -3 && y == -3) {
+                throw "Game closed";
+            }
             throw "Error, opponent disconnected!";
         }
     }
@@ -121,7 +129,7 @@ Info ServerPlayer::getMove() {
     ////// catch
 
     //Read the result from the server
-    int n, x, y;
+    int n;
     char buffer[BUFFERSIZE];
     Info newInfo;
     do {
@@ -130,7 +138,7 @@ Info ServerPlayer::getMove() {
             throw "Error reading x from socket";
         }
         if (n == 0) {
-            throw "Error, opponent disconnected!";
+            throw "Game closed";
         }
         if(strcmp(buffer, "close") == 0) {
             newInfo.x = -3;
@@ -191,6 +199,7 @@ void ServerPlayer::clientMenu() {
         cin >> oper;
         if(oper == 0) {
             close(clientSocket);
+            delete recieve;
             throw "You requested to cancel.\n";
         }
         if(oper == 1 || oper == 3) {
@@ -212,9 +221,11 @@ void ServerPlayer::clientMenu() {
         // sending the command to the server
         n = write(clientSocket, message, BUFFERSIZE*sizeof(char));
         if (n == -1) {
+            delete recieve;
             throw "Error writing command to socket";
         }
         if (n == 0) {
+            delete recieve;
             throw "Error, connection disconnected!";
         }
         // reading the servers answer from the socket
@@ -222,9 +233,11 @@ void ServerPlayer::clientMenu() {
             do {
                 n = read(clientSocket, recieve, BUFFERSIZE * sizeof(char));
                 if (n == -1) {
+                    delete recieve;
                     throw "Error reading command from socket";
                 }
                 if (n == 0) {
+                    delete recieve;
                     throw "Error, connection disconnected!";
                 }
             } while (strcmp(recieve, "") == 0);
@@ -235,9 +248,11 @@ void ServerPlayer::clientMenu() {
             n = read(clientSocket, &sizeOfList, sizeof(sizeOfList));
             // for problems with reading from the socket
             if (n == -1) {
+                delete recieve;
                 throw "Error reading command from socket";
             }
             if (n == 0) {
+                delete recieve;
                 throw "Error, connection disconnected!";
             }
             char *list = new char[BUFFERSIZE];
@@ -245,13 +260,17 @@ void ServerPlayer::clientMenu() {
             n = read(clientSocket, list, BUFFERSIZE * sizeof(char));
             // for problems with reading from the socket
             if (n == -1) {
+                delete list;
+                delete recieve;
                 throw "Error reading command from socket";
             }
             if (n == 0) {
+                delete list;
+                delete recieve;
                 throw "Error, connection disconnected!";
             }
             printer.printGamesList(sizeOfList, list);
-            free(list);
+            delete list;
             reconnect();
             continue;
             // in option "join" - entering a name that isn't on the list
@@ -268,11 +287,13 @@ void ServerPlayer::clientMenu() {
     try {
         startGame();
     } catch (const char* msg) {
+        delete recieve;
         throw msg;
     }
+    delete recieve;
 }
 
-string ServerPlayer::translateOperation(int oper, string name) {
+string ServerPlayer::translateOperation(int oper, string &name) {
     switch(oper) {
         case 1:
             return "start " + name;

@@ -17,6 +17,7 @@ void Server::runServer() {
     Handler handler;
     int *clientSocket = new int[1];
     if (serverSocket == -1) {
+        delete clientSocket;
         throw "Error opening socket";
     }
     struct sockaddr_in serverAddress;
@@ -25,6 +26,7 @@ void Server::runServer() {
     serverAddress.sin_addr.s_addr = INADDR_ANY;
     serverAddress.sin_port = htons(port);
     if (bind(serverSocket, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) == -1) {
+        delete clientSocket;
         throw "Error on binding";
     }
     // Start listening to incoming connections

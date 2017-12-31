@@ -54,7 +54,7 @@ public:
     void recieveOpponentsMove(int x, int y);
     bool needPrint();
     void clientMenu();
-    string translateOperation(int oper, string name);
+    string translateOperation(int oper, string &name);
 private:
     type playerType;
     //the IP of the server the player connects to.

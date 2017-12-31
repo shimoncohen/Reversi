@@ -2,7 +2,7 @@
 # Nadav Spitzer 302228275
 
 a.out: compileAll
-	g++ *.o -o ../../exe/Server.out
+	g++ *.o -lpthread -o ../../exe/Server.out
 	rm -f *.o
 
 compileAll: *.h *.cpp
