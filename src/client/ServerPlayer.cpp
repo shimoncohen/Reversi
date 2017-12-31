@@ -72,7 +72,7 @@ void ServerPlayer::startGame() {
 
 void ServerPlayer::recieveOpponentsMove(int x, int y) {
     string play = "play ";
-    char message[BUFFERSIZE];
+    char message[BUFFERSIZE] = {0};
     if(x == CLOSE && y == CLOSE) {
         play = "close";
     } else if(x == END && y == END) {
@@ -119,7 +119,7 @@ void ServerPlayer::recieveOpponentsMove(int x, int y) {
 Info ServerPlayer::getMove() {
     //Read the result from the server
     int n;
-    char buffer[BUFFERSIZE];
+    char buffer[BUFFERSIZE] = {0};
     Info newInfo;
     do {
         n = read(clientSocket, buffer, BUFFERSIZE*sizeof(char));
@@ -284,7 +284,7 @@ string ServerPlayer::translateOperation(int oper, string &name) {
 Info ServerPlayer::extractCommandAndArgs(char* buffer) {
     Info parsed;
     int i = 0, args = 0;
-    string command, arguments[TWO] = {0};
+    string command, arguments[TWO];
     for(i; i < BUFFERSIZE; i++) {
         if(buffer[i] != '\0') {
             if(buffer[i] != ' ') {

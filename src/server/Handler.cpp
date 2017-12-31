@@ -65,9 +65,7 @@ void Handler::closeThreads() {
 void* Handler::handleClient(void* handleArgs) {
     CommandsManager cm;
     CommandAndArgs commandAndArgs;
-    vector<string> tempArguments;
-    char buffer[BUFFERSIZE];
-    string command;
+    char buffer[BUFFERSIZE] = {0};
     HandleArgs *handleArgs1 = (HandleArgs*)handleArgs;
     // locking the vector of games to prevent changes.
     pthread_mutex_lock(&gamesLockHandlerHandleClient);
@@ -105,10 +103,7 @@ void* Handler::handleGame(void* handleArgs) {
     HandleArgs *handleArgs1 = (HandleArgs*)handleArgs;
     int n, temp;
     int playerNum = FIRST, firstPlayer, secondPlayer;
-    string startMessage = STARTMESSAGE;
-    char buffer[BUFFERSIZE];
-    // lock the vector of games.
-    // lock the vector of threads.
+    char buffer[BUFFERSIZE] = {0};
     // lock the vector of games.
     pthread_mutex_lock(&gamesLockHandlerHandleGame);
     vector<Game*> &tempGames = *handleArgs1->games;

@@ -86,6 +86,7 @@ void Game::doOneTurn(vector<Point> options) {
                 waitingPlayer->recieveOpponentsMove(END, END);
             } else {
                 waitingPlayer->recieveOpponentsMove(CLOSE, CLOSE);
+                throw "Game closed";
             }
             break;
         }

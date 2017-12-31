@@ -95,13 +95,14 @@ void* Server::acceptNewClient(void *acceptStruct) {
     pthread_mutex_lock(&lockServerAccept);
     int isRunning = *acceptStruct1->running;
     pthread_mutex_unlock(&lockServerAccept);
+    int tempClientSocket = 0;
     // as long as server is running
     while (isRunning) {
         cout << "Waiting for client connections..." << endl;
         struct sockaddr_in firstClientAddress;
         socklen_t firstClientAddressLen;
         // accepting the client
-        int tempClientSocket = accept(serverSocket, (struct sockaddr *) &firstClientAddress,
+        tempClientSocket = accept(serverSocket, (struct sockaddr *) &firstClientAddress,
                                               &firstClientAddressLen);
         pthread_mutex_lock(&lockServerAccept);
         *acceptStruct1->clientSocket = tempClientSocket;

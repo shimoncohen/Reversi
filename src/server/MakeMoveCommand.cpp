@@ -10,7 +10,7 @@ void MakeMoveCommand::execute(vector<string> args, vector<Game*> &games,
     string moveString = "Play " + args[0] + " " + args[1];
     int tempPlayer, i;
 //    const char *message = moveString.c_str();
-    char message[BUFFERSIZE];
+    char message[BUFFERSIZE] = {0};
     strcpy(message, moveString.c_str());
     // locking the games vector to prevent changes.
     pthread_mutex_lock(&gamesLockMove);
