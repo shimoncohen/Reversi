@@ -17,7 +17,7 @@ void Server::runServer() {
     Handler handler;
     int *clientSocket = new int[1];
     if (serverSocket == -1) {
-        delete clientSocket;
+        delete[] clientSocket;
         throw "Error opening socket";
     }
     struct sockaddr_in serverAddress;
@@ -26,7 +26,7 @@ void Server::runServer() {
     serverAddress.sin_addr.s_addr = INADDR_ANY;
     serverAddress.sin_port = htons(port);
     if (bind(serverSocket, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) == -1) {
-        delete clientSocket;
+        delete[] clientSocket;
         throw "Error on binding";
     }
     // Start listening to incoming connections
@@ -38,7 +38,7 @@ void Server::runServer() {
     try {
         pthread_create(&thread, NULL, waitForCloseMessage, (void *)info);
     } catch (const char *msg) {
-        delete clientSocket;
+        delete[] clientSocket;
         throw msg;
     }
     // Accept a new client connection
@@ -50,7 +50,7 @@ void Server::runServer() {
     try {
         pthread_create(&thread, NULL, acceptNewClient, (void *) acceptStruct);
     } catch (const char *msg) {
-        delete clientSocket;
+        delete[] clientSocket;
         throw msg;
     }
     // as long as exit command has not been entered
@@ -61,7 +61,7 @@ void Server::runServer() {
         }
         pthread_mutex_unlock(&lockServer);
     }
-    delete clientSocket;
+    delete[] clientSocket;
 }
 
 void* Server::acceptNewClient(void *acceptStruct) {

@@ -199,7 +199,7 @@ void ServerPlayer::clientMenu() {
         cin >> oper;
         if(oper == 0) {
             close(clientSocket);
-            delete recieve;
+            delete[] recieve;
             throw "You requested to cancel.\n";
         }
         if(oper == 1 || oper == 3) {
@@ -221,11 +221,11 @@ void ServerPlayer::clientMenu() {
         // sending the command to the server
         n = write(clientSocket, message, BUFFERSIZE*sizeof(char));
         if (n == -1) {
-            delete recieve;
+            delete[] recieve;
             throw "Error writing command to socket";
         }
         if (n == 0) {
-            delete recieve;
+            delete[] recieve;
             throw "Error, connection disconnected!";
         }
         // reading the servers answer from the socket
@@ -233,11 +233,11 @@ void ServerPlayer::clientMenu() {
             do {
                 n = read(clientSocket, recieve, BUFFERSIZE * sizeof(char));
                 if (n == -1) {
-                    delete recieve;
+                    delete[] recieve;
                     throw "Error reading command from socket";
                 }
                 if (n == 0) {
-                    delete recieve;
+                    delete[] recieve;
                     throw "Error, connection disconnected!";
                 }
             } while (strcmp(recieve, "") == 0);
@@ -248,11 +248,11 @@ void ServerPlayer::clientMenu() {
             n = read(clientSocket, &sizeOfList, sizeof(sizeOfList));
             // for problems with reading from the socket
             if (n == -1) {
-                delete recieve;
+                delete[] recieve;
                 throw "Error reading command from socket";
             }
             if (n == 0) {
-                delete recieve;
+                delete[] recieve;
                 throw "Error, connection disconnected!";
             }
             char *list = new char[BUFFERSIZE];
@@ -260,17 +260,17 @@ void ServerPlayer::clientMenu() {
             n = read(clientSocket, list, BUFFERSIZE * sizeof(char));
             // for problems with reading from the socket
             if (n == -1) {
-                delete list;
-                delete recieve;
+                delete[] list;
+                delete[] recieve;
                 throw "Error reading command from socket";
             }
             if (n == 0) {
-                delete list;
-                delete recieve;
+                delete[] list;
+                delete[] recieve;
                 throw "Error, connection disconnected!";
             }
             printer.printGamesList(sizeOfList, list);
-            delete list;
+            delete[] list;
             reconnect();
             continue;
             // in option "join" - entering a name that isn't on the list
@@ -287,10 +287,10 @@ void ServerPlayer::clientMenu() {
     try {
         startGame();
     } catch (const char* msg) {
-        delete recieve;
+        delete[] recieve;
         throw msg;
     }
-    delete recieve;
+    delete[] recieve;
 }
 
 string ServerPlayer::translateOperation(int oper, string &name) {
