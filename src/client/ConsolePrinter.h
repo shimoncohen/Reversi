@@ -27,7 +27,6 @@ public:
     void printWinMessage(char winner);
     void printClientMenu();
     void gameDeniedMessage(string msg);
-    //void gameNotExist();
     void gameNotOption();
     void printGamesList(int sizeOfList, char* list);
 };

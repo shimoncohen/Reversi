@@ -60,7 +60,6 @@ void ServerPlayer::startGame() {
         throw "Game closed";
     }
     playerNum = buffer[0];
-    cout << "player num: " << playerNum << endl;
     printer.connectedToServerMessage();
     if(playerNum == 1) {
         printer.waitingForConnectionMessage();

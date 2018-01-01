@@ -82,11 +82,12 @@ void Game::doOneTurn(vector<Point> options) {
         }
         // in case the game ends
         if(end) {
-            if(x == END && y == END) {
-                waitingPlayer->recieveOpponentsMove(END, END);
-            } else {
+            if(x == CLOSE && y == CLOSE) {
                 waitingPlayer->recieveOpponentsMove(CLOSE, CLOSE);
+                delete printer;
                 throw "Game closed";
+            } else {
+                waitingPlayer->recieveOpponentsMove(END, END);
             }
             break;
         }

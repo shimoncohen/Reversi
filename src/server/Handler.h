@@ -15,11 +15,17 @@
 #define FOUR 4
 #define BUFFERSIZE 200
 
+/*
+ * Holds a command and its arguments after extraction
+ */
 typedef struct CommandAndArgs {
     string command;
     vector<string> args;
 }CommandAndArgs;
 
+/*
+ * Holds info needed by the static functions
+ */
 typedef struct HandleArgs {
     int socket;
     Game* game;

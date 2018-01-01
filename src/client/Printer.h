@@ -135,10 +135,34 @@ public:
      * operation: print a win message according to the player who won.
     */
     virtual void printWinMessage(char winner) = 0;
+    /*
+     * function name: printClientMenu.
+     * input: none.
+     * output: none.
+     * operation: prints the server clients menu.
+    */
     virtual void printClientMenu() = 0;
+    /*
+     * function name: gameDeniedMessage.
+     * input: none.
+     * output: none.
+     * operation: prints the message sent from the server.
+    */
     virtual void gameDeniedMessage(string msg) = 0;
-    //virtual void gameNotExist() = 0;
+    /*
+     * function name: gameNotOption.
+     * input: none.
+     * output: none.
+     * operation: prints a message indicating that the game mode chosen isnt an option.
+    */
     virtual void gameNotOption() = 0;
+    /*
+     * function name: printGamesList.
+     * input: the size of the game list and the list itself to print.
+     * output: none.
+     * operation: prints the list of available games sent from the server.
+     *            if the list is empty then print an appropriate message.
+    */
     virtual void printGamesList(int sizeOfList, char* list) = 0;
 };
 
