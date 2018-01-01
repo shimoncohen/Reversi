@@ -21,12 +21,13 @@ CommandsManager::~CommandsManager() {
 }
 
 void CommandsManager::executeCommand(string command, vector<string> args, vector<Game*> &games,
-                                     vector<pthread_t*> &threadVector, int client) {
+                                     vector<pthread_t*> &threadVector, pthread_mutex_t &gamesLock,
+                                     pthread_mutex_t &threadsLock,int client) {
     // creating the command
     Command *commandObj = commandsMap[command];
     try {
         // executing the command
-        commandObj->execute(args, games, threadVector, client);
+        commandObj->execute(args, games, threadVector, gamesLock, threadsLock, client);
     } catch (const char* msg) {
         throw msg;
     }

@@ -21,12 +21,12 @@ public:
     /*
 	 * function name: execute.
 	 * input: vector of string, a vector of all the games in the server, a vector
-     * of all the threads running currently, the number of client's socket.
+     * of all the threads running currently, the number of client's socket and a mutex lock.
 	 * output: none.
      * operation: executes the command according to its type.
     */
-    virtual void execute(vector<string> args, vector<Game*> &games,
-                         vector<pthread_t*> &threadVector, int client = 0) = 0;
+    virtual void execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector,
+                         pthread_mutex_t &gamesLock, pthread_mutex_t &threadsLock, int client = 0) = 0;
     /*
 	 * function name: ~Command.
 	 * input: none.

@@ -25,6 +25,8 @@ typedef struct HandleArgs {
     Game* game;
     vector<Game*> *games;
     vector<pthread_t*> *threadVector;
+    pthread_mutex_t *gamesLock;
+    pthread_mutex_t *threadsLock;
 }HandleArgs;
 
 /*

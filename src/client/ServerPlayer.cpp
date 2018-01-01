@@ -47,7 +47,7 @@ void ServerPlayer::connectToServer() {
 }
 
 void ServerPlayer::startGame() {
-// Create a socket point
+    // Create a socket point
     ConsolePrinter printer;
     char buffer[BUFFERSIZE];
     int playerNum = 0, n = 0;

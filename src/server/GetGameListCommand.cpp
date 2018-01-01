@@ -3,15 +3,13 @@
 
 #include "GetGameListCommand.h"
 
-pthread_mutex_t gamesLockList;
-
 void GetGameListCommand::execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector,
-                                 int client) {
+                                 pthread_mutex_t &gamesLock, pthread_mutex_t &threadsLock, int client) {
     int n, size = 0;
     string list = "";
     const char* send;
     // locking the vector of the games to prevent changes
-    pthread_mutex_lock(&gamesLockList);
+    pthread_mutex_lock(&gamesLock);
     for(int i = 0; i < games.size(); i++) {
         if(games[i]->getStatus() == 0) {
             // appending the name of waiting games (with status == 0) to the list
@@ -20,8 +18,8 @@ void GetGameListCommand::execute(vector<string> args, vector<Game*> &games, vect
             list.append("\n");
         }
     }
-    // unloc the vector
-    pthread_mutex_unlock(&gamesLockList);
+    // unlock the vector
+    pthread_mutex_unlock(&gamesLock);
 
     size = list.size();
     // sending the size of the list

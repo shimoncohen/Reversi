@@ -3,17 +3,15 @@
 
 #include "MakeMoveCommand.h"
 
-pthread_mutex_t gamesLockMove;
-
-void MakeMoveCommand::execute(vector<string> args, vector<Game*> &games,
-                              vector<pthread_t*> &threadVector, int client) {
+void MakeMoveCommand::execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector,
+                              pthread_mutex_t &gamesLock, pthread_mutex_t &threadsLock, int client) {
     string moveString = "Play " + args[0] + " " + args[1];
     int tempPlayer, i;
 //    const char *message = moveString.c_str();
     char message[BUFFERSIZE] = {0};
     strcpy(message, moveString.c_str());
     // locking the games vector to prevent changes.
-    pthread_mutex_lock(&gamesLockMove);
+    pthread_mutex_lock(&gamesLock);
     for(i = 0; i < games.size(); i++) {
         // searching for a specific  player socket.
         if(games[i]->getFirstPlayer() == client) {
@@ -29,5 +27,5 @@ void MakeMoveCommand::execute(vector<string> args, vector<Game*> &games,
         }
     }
     // unlock the vector.
-    pthread_mutex_unlock(&gamesLockMove);
+    pthread_mutex_unlock(&gamesLock);
 }

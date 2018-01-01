@@ -16,7 +16,8 @@
  */
 class StartCommand : public Command {
 public:
-    void execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector, int client = 0);
+    void execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector,
+                 pthread_mutex_t &gamesLock, pthread_mutex_t &threadsLock, int client = 0);
 };
 
 

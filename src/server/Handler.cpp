@@ -3,26 +3,23 @@
 
 #include "Handler.h"
 
-// creating mutexes
-pthread_mutex_t gamesLockHandlerRun;
-pthread_mutex_t gamesLockHandlerCloseThreads;
-pthread_mutex_t gamesLockHandlerHandleClient;
-pthread_mutex_t gamesLockHandlerHandleGame;
-pthread_mutex_t gamesLockHandlerDeleteGame;
-pthread_mutex_t gamesLockHandlerDeleteThread;
+pthread_mutex_t gamesLock;
+pthread_mutex_t threadsLock;
 
 void Handler::run(int clientSocket) {
     int n;
     pthread_t thread;
     HandleArgs *handleArgs = new HandleArgs();
-    pthread_mutex_lock(&gamesLockHandlerRun);
+    pthread_mutex_lock(&gamesLock);
     handleArgs->games = &games;
-    pthread_mutex_unlock(&gamesLockHandlerRun);
-    pthread_mutex_lock(&gamesLockHandlerRun);
+    pthread_mutex_unlock(&gamesLock);
+    pthread_mutex_lock(&threadsLock);
     handleArgs->threadVector = &threadVector;
-    pthread_mutex_unlock(&gamesLockHandlerRun);
+    pthread_mutex_unlock(&threadsLock);
     handleArgs->game = NULL;
     handleArgs->socket = clientSocket;
+    handleArgs->gamesLock = &gamesLock;
+    handleArgs->threadsLock = &threadsLock;
     try {
         n = pthread_create(&thread, NULL, handleClient, (void*)handleArgs);
     } catch (const char* msg) {
@@ -36,7 +33,7 @@ void Handler::run(int clientSocket) {
 
 void Handler::closeThreads() {
     // locking the vector of games to prevent changes.
-    pthread_mutex_lock(&gamesLockHandlerCloseThreads);
+    pthread_mutex_lock(&gamesLock);
     int size = games.size();
     for(int i = size - 1; i >= 0; i--) {
         int first = games[i]->getFirstPlayer();
@@ -51,15 +48,15 @@ void Handler::closeThreads() {
         }
     }
     // unlock the vector.
-    pthread_mutex_unlock(&gamesLockHandlerCloseThreads);
+    pthread_mutex_unlock(&gamesLock);
     // locking the vector of games to prevent changes.
-    pthread_mutex_lock(&gamesLockHandlerCloseThreads);
+    pthread_mutex_lock(&threadsLock);
     size = threadVector.size();
     for(int i = size - 1; i >= 0; i--) {
         threadVector.pop_back();
     }
     // unlock the vector.
-    pthread_mutex_unlock(&gamesLockHandlerCloseThreads);
+    pthread_mutex_unlock(&threadsLock);
 }
 
 void* Handler::handleClient(void* handleArgs) {
@@ -68,15 +65,15 @@ void* Handler::handleClient(void* handleArgs) {
     char buffer[BUFFERSIZE] = {0};
     HandleArgs *handleArgs1 = (HandleArgs*)handleArgs;
     // locking the vector of games to prevent changes.
-    pthread_mutex_lock(&gamesLockHandlerHandleClient);
+    pthread_mutex_lock(&gamesLock);
     vector<Game*>& temp = *handleArgs1->games;
     // unlock the vector.
-    pthread_mutex_unlock(&gamesLockHandlerHandleClient);
+    pthread_mutex_unlock(&gamesLock);
     // locking the vector of threads to prevent changes.
-    pthread_mutex_lock(&gamesLockHandlerHandleClient);
+    pthread_mutex_lock(&threadsLock);
     vector<pthread_t*> &threadTemp = *handleArgs1->threadVector;
     // unlock the vector.
-    pthread_mutex_unlock(&gamesLockHandlerHandleClient);
+    pthread_mutex_unlock(&threadsLock);
     // reading the command from the client.
     int n = read(handleArgs1->socket, buffer, BUFFERSIZE*sizeof(char));
     if (n == -1) {
@@ -90,8 +87,8 @@ void* Handler::handleClient(void* handleArgs) {
     // converting the command.
     commandAndArgs = extractCommandAndArgs(buffer);
     try {
-        cm.executeCommand(commandAndArgs.command, commandAndArgs.args, temp, threadTemp,
-                          handleArgs1->socket);
+        cm.executeCommand(commandAndArgs.command, commandAndArgs.args, temp, threadTemp, *handleArgs1->gamesLock,
+                          *handleArgs1->threadsLock, handleArgs1->socket);
     } catch (const char* msg) {
         throw msg;
     }
@@ -105,28 +102,28 @@ void* Handler::handleGame(void* handleArgs) {
     int playerNum = FIRST, firstPlayer, secondPlayer;
     char buffer[BUFFERSIZE] = {0};
     // lock the vector of games.
-    pthread_mutex_lock(&gamesLockHandlerHandleGame);
+    pthread_mutex_lock(&gamesLock);
     vector<Game*> &tempGames = *handleArgs1->games;
     // unlock the vector.
-    pthread_mutex_unlock(&gamesLockHandlerHandleGame);
-    pthread_mutex_lock(&gamesLockHandlerHandleGame);
+    pthread_mutex_unlock(&gamesLock);
+    pthread_mutex_lock(&threadsLock);
     vector<pthread_t*> &threadTemp = *handleArgs1->threadVector;
     // unloc the vector.
-    pthread_mutex_unlock(&gamesLockHandlerHandleGame);
-    pthread_mutex_lock(&gamesLockHandlerHandleGame);
+    pthread_mutex_unlock(&threadsLock);
+    pthread_mutex_lock(&gamesLock);
     Game *currentGame = handleArgs1->game;
     // unlock the vector.
-    pthread_mutex_unlock(&gamesLockHandlerHandleGame);
+    pthread_mutex_unlock(&gamesLock);
     // lock the the current game.
-    pthread_mutex_lock(&gamesLockHandlerHandleGame);
+    pthread_mutex_lock(&gamesLock);
     firstPlayer = currentGame->getFirstPlayer();
     // unlock the game.
-    pthread_mutex_unlock(&gamesLockHandlerHandleGame);
+    pthread_mutex_unlock(&gamesLock);
     // lock the current game.
-    pthread_mutex_lock(&gamesLockHandlerHandleGame);
+    pthread_mutex_lock(&gamesLock);
     secondPlayer = currentGame->getSecondPlayer();
     // unlock the game.
-    pthread_mutex_unlock(&gamesLockHandlerHandleGame);
+    pthread_mutex_unlock(&gamesLock);
     // writing the position number to the first player.
     n = write(firstPlayer, &playerNum, sizeof(int));
     if (n == -1) {
@@ -160,8 +157,8 @@ void* Handler::handleGame(void* handleArgs) {
         if(commandAndArgs.command.compare("End") != 0 && commandAndArgs.command.compare("NoMoves") != 0) {
             try {
                 // executing the command
-                cm.executeCommand(commandAndArgs.command, commandAndArgs.args,
-                                  tempGames, threadTemp, currentClient);
+                cm.executeCommand(commandAndArgs.command, commandAndArgs.args, tempGames, threadTemp,
+                                  *handleArgs1->gamesLock, *handleArgs1->threadsLock,currentClient);
             } catch (const char *msg) {
                 throw msg;
             }
@@ -176,15 +173,15 @@ void* Handler::handleGame(void* handleArgs) {
     // end of game
     // Close communication with the client.
     // lock the vector of games.
-    pthread_mutex_lock(&gamesLockHandlerHandleGame);
+    pthread_mutex_lock(&gamesLock);
     deleteGame(*handleArgs1->games, handleArgs1->game->getName());
     // unlock the vector.
-    pthread_mutex_unlock(&gamesLockHandlerHandleGame);
+    pthread_mutex_unlock(&gamesLock);
     // lock the vector of threads.
-    pthread_mutex_lock(&gamesLockHandlerHandleGame);
+    pthread_mutex_lock(&threadsLock);
     deleteThread(*handleArgs1->threadVector, handleArgs1->game->getThread());
     // unlock the vector.
-    pthread_mutex_unlock(&gamesLockHandlerHandleGame);
+    pthread_mutex_unlock(&threadsLock);
 
     close(firstPlayer);
     close(secondPlayer);
@@ -235,7 +232,7 @@ CommandAndArgs Handler::extractCommandAndArgs(char* buffer) {
 void Handler::deleteGame(vector<Game*> &games, string gameName) {
     int i = 0;
     // lock the vector of games to prevent changes.
-    pthread_mutex_lock(&gamesLockHandlerDeleteGame);
+    pthread_mutex_lock(&gamesLock);
     int size = games.size();
     for (i; i < size; i++) {
         // if the game's name in the list is equal to the game's name we sent, we will erase it from the list.
@@ -244,13 +241,13 @@ void Handler::deleteGame(vector<Game*> &games, string gameName) {
         }
     }
     // unlock the vector.
-    pthread_mutex_unlock(&gamesLockHandlerDeleteGame);
+    pthread_mutex_unlock(&gamesLock);
 }
 
 void Handler::deleteThread(vector<pthread_t *> &threads, pthread_t pthread) {
     int i = 0;
     // lock the vector of threads to prevent changes.
-    pthread_mutex_lock(&gamesLockHandlerDeleteThread);
+    pthread_mutex_lock(&threadsLock);
     int size = threads.size();
     for (i; i < size; i++) {
         // if the thread in the list is equal to the thread we sent, we will erase it from the list.
@@ -259,7 +256,7 @@ void Handler::deleteThread(vector<pthread_t *> &threads, pthread_t pthread) {
         }
     }
     // unlock the vector.
-    pthread_mutex_unlock(&gamesLockHandlerDeleteThread);
+    pthread_mutex_unlock(&threadsLock);
 }
 
 void Handler::printThreadAndGamesVectorSize() {

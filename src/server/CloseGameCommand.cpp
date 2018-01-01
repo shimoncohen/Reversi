@@ -3,13 +3,11 @@
 
 #include "CloseGameCommand.h"
 
-pthread_mutex_t lockClose;
-
-void CloseGameCommand::execute(vector<string> args, vector<Game*> &games,
-                               vector<pthread_t*> &threadVector, int client) {
+void CloseGameCommand::execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector,
+                               pthread_mutex_t &gamesLock, pthread_mutex_t &threadsLock, int client) {
     int i, tempPlayer;
     // locking the vector of games to prevent changes
-    pthread_mutex_lock(&lockClose);
+    pthread_mutex_lock(&gamesLock);
     for(i = 0; i < games.size(); i++) {
         // searching for the current player's socket in the vector
         if (games[i]->getFirstPlayer() == client) {
@@ -27,9 +25,5 @@ void CloseGameCommand::execute(vector<string> args, vector<Game*> &games,
             break;
         }
     }
-    // in case the vector is still locked
-//    if(i >= games.size()) {
-//        pthread_mutex_unlock(&lockClose);
-//    }
-    pthread_mutex_unlock(&lockClose);
+    pthread_mutex_unlock(&gamesLock);
 }

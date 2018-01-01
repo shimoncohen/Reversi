@@ -3,13 +3,11 @@
 
 #include "StartCommand.h"
 
-// creating mutexes
-pthread_mutex_t gamesLockStart;
-
-void StartCommand::execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector, int client) {
+void StartCommand::execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector,
+                           pthread_mutex_t &gamesLock, pthread_mutex_t &threadsLock, int client) {
     Game* newGame = NULL;
     // locking the vector of games to prevent changes.
-    pthread_mutex_lock(&gamesLockStart);
+    pthread_mutex_lock(&gamesLock);
     for(int i = 0; i < games.size(); i++) {
         // checking if the game exists.
         if(games[i]->getName().compare(args[0]) == 0) {
@@ -17,7 +15,7 @@ void StartCommand::execute(vector<string> args, vector<Game*> &games, vector<pth
         }
     }
     // unlock the vector.
-    pthread_mutex_unlock(&gamesLockStart);
+    pthread_mutex_unlock(&gamesLock);
     if(newGame != NULL) {
         // in case the game already exists.
         write(client, &EXISTS, EXISTSIZE * sizeof(char));
@@ -27,8 +25,8 @@ void StartCommand::execute(vector<string> args, vector<Game*> &games, vector<pth
     write(client, &DOSENTEXIST, DOSENTEXISTSIZE * sizeof(char));
     newGame = new Game(args[0], client, 0);
     // locking the vector of games to prevent changes.
-    pthread_mutex_lock(&gamesLockStart);
+    pthread_mutex_lock(&gamesLock);
     games.push_back(newGame);
     // unlock the vector.
-    pthread_mutex_unlock(&gamesLockStart);
+    pthread_mutex_unlock(&gamesLock);
 }

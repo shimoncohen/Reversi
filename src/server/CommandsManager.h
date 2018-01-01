@@ -43,7 +43,7 @@ public:
      * operation: creates the desired command and executes the command according to its type.
     */
     void executeCommand(string command, vector <string> args, vector<Game*> &games, vector<pthread_t*> &threadVector,
-                        int client = 0);
+                        pthread_mutex_t &gamesLock, pthread_mutex_t &threadsLock, int client = 0);
 private:
     map<string, Command *> commandsMap;
 };
