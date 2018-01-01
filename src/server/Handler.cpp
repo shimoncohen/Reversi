@@ -231,8 +231,6 @@ CommandAndArgs Handler::extractCommandAndArgs(char* buffer) {
 
 void Handler::deleteGame(vector<Game*> &games, string gameName) {
     int i = 0;
-    // lock the vector of games to prevent changes.
-    pthread_mutex_lock(&gamesLock);
     int size = games.size();
     for (i; i < size; i++) {
         // if the game's name in the list is equal to the game's name we sent, we will erase it from the list.
@@ -240,14 +238,10 @@ void Handler::deleteGame(vector<Game*> &games, string gameName) {
             games.erase(games.begin() + i);
         }
     }
-    // unlock the vector.
-    pthread_mutex_unlock(&gamesLock);
 }
 
 void Handler::deleteThread(vector<pthread_t *> &threads, pthread_t pthread) {
     int i = 0;
-    // lock the vector of threads to prevent changes.
-    pthread_mutex_lock(&threadsLock);
     int size = threads.size();
     for (i; i < size; i++) {
         // if the thread in the list is equal to the thread we sent, we will erase it from the list.
@@ -255,8 +249,6 @@ void Handler::deleteThread(vector<pthread_t *> &threads, pthread_t pthread) {
             threads.erase(threads.begin() + i);
         }
     }
-    // unlock the vector.
-    pthread_mutex_unlock(&threadsLock);
 }
 
 void Handler::printThreadAndGamesVectorSize() {
