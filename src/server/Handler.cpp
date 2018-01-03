@@ -53,6 +53,7 @@ void Handler::closeThreads() {
     pthread_mutex_lock(&threadsLock);
     size = threadVector.size();
     for(int i = size - 1; i >= 0; i--) {
+        pthread_cancel(*threadVector[i]);
         threadVector.pop_back();
     }
     // unlock the vector.
@@ -246,6 +247,7 @@ void Handler::deleteThread(vector<pthread_t *> &threads, pthread_t pthread) {
     for (i; i < size; i++) {
         // if the thread in the list is equal to the thread we sent, we will erase it from the list.
         if (*threads.at(i) == pthread) {
+            pthread_cancel(*threads[i]);
             threads.erase(threads.begin() + i);
         }
     }

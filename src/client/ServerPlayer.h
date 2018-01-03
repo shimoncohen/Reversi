@@ -35,11 +35,11 @@ public:
     void connectToServer();
     /*
 	 * function name: startGame.
-	 * input: none.
+	 * input: operation indicating if the player started or joined the game.
 	 * output: none.
 	 * operation: sets the players as black and white, and prints a message of start game.
 	*/
-    void startGame();
+    void startGame(int operation);
     /*
 	 * function name: getMove.
 	 * input: none.

@@ -46,11 +46,15 @@ void ServerPlayer::connectToServer() {
     }
 }
 
-void ServerPlayer::startGame() {
+void ServerPlayer::startGame(int operation) {
     // Create a socket point
     ConsolePrinter printer;
     char buffer[BUFFERSIZE];
     int playerNum = 0, n = 0;
+    printer.connectedToServerMessage();
+    if(operation == 1) {
+        printer.waitingForConnectionMessage();
+    }
     // reading the player's number
     n = read(clientSocket, buffer, BUFFERSIZE*sizeof(char));
     if (n == -1) {
@@ -60,9 +64,7 @@ void ServerPlayer::startGame() {
         throw "Game closed";
     }
     playerNum = buffer[0];
-    printer.connectedToServerMessage();
     if(playerNum == 1) {
-        printer.waitingForConnectionMessage();
         playerType = whitePlayer;
     } else if(playerNum == 2) {
         playerType = blackPlayer;
@@ -261,7 +263,7 @@ void ServerPlayer::clientMenu() {
         flag = true;
     }
     try {
-        startGame();
+        startGame(oper);
     } catch (const char* msg) {
         throw msg;
     }
