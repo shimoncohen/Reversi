@@ -14,7 +14,6 @@ Handler::~Handler() {
     delete this->pool;
 }
 void Handler::run(int clientSocket) {
-    //int n;
     pthread_t thread;
     HandleArgs *handleArgs = new HandleArgs();
     pthread_mutex_lock(&gamesLock);
