@@ -15,7 +15,7 @@
 #define SECOND 2
 #define FOUR 4
 #define BUFFERSIZE 200
-#define NUMOFTHREADS 2
+#define NUMOFTHREADS 5
 
 /*
  * Holds a command and its arguments after extraction
