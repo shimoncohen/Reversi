@@ -21,7 +21,7 @@ set(TEST_FILES src/client/Tests/ClientTests.cpp src/client/Tests/ServerTests.cpp
 set(SERVER_FILES src/server/MakeMoveCommand.cpp src/server/MakeMoveCommand.h
         src/server/Command.h src/server/StartCommand.cpp
         src/server/StartCommand.h src/server/CommandsManager.cpp src/server/CommandsManager.h
-        src/server/Game.cpp src/server/Game.h src/server/Server.cpp src/server/Server.h src/server/CloseGameCommand.cpp src/server/CloseGameCommand.h src/server/JoinGameCommand.cpp src/server/JoinGameCommand.h src/server/GetGameListCommand.cpp src/server/GetGameListCommand.h src/server/Handler.cpp src/server/Handler.h)
+        src/server/Game.cpp src/server/Game.h src/server/Server.cpp src/server/Server.h src/server/CloseGameCommand.cpp src/server/CloseGameCommand.h src/server/JoinGameCommand.cpp src/server/JoinGameCommand.h src/server/GetGameListCommand.cpp src/server/GetGameListCommand.h src/server/Handler.cpp src/server/Handler.h src/server/Task.h src/server/ThreadPool.cpp src/server/ThreadPool.h)
 
 add_executable(game ${SOURCE_FILES} src/client/main.cpp)
 add_executable(server ${SERVER_FILES} src/server/main.cpp)
