@@ -10,6 +10,7 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include "Game.h"
+#include "ThreadPool.h"
 
 using namespace std;
 
@@ -26,7 +27,8 @@ public:
      * operation: executes the command according to its type.
     */
     virtual void execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector,
-                         pthread_mutex_t &gamesLock, pthread_mutex_t &threadsLock, int client = 0) = 0;
+                         pthread_mutex_t &gamesLock, pthread_mutex_t &threadsLock,
+                         ThreadPool& pool, int client = 0) = 0;
     /*
 	 * function name: ~Command.
 	 * input: none.

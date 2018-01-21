@@ -21,7 +21,7 @@ void ThreadPool::addTask(Task *task) {
     tasksQueue.push(task);
 }
 
-void ThreadPool::executeTasks() {
+void ThreadPool::executeTasks() { 
     while(!stopped) {
         pthread_mutex_lock(&lock);
         if (!tasksQueue.empty()) {

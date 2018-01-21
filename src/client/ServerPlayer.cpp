@@ -49,6 +49,8 @@ void ServerPlayer::connectToServer() {
 void ServerPlayer::startGame(int operation) {
     // Create a socket point
     ConsolePrinter printer;
+    string play = "ok";
+    char message[BUFFERSIZE] = {0};
     char buffer[BUFFERSIZE];
     int playerNum = 0, n = 0;
     printer.connectedToServerMessage();
@@ -56,14 +58,24 @@ void ServerPlayer::startGame(int operation) {
         printer.waitingForConnectionMessage();
     }
     // reading the player's number
-    n = read(clientSocket, buffer, BUFFERSIZE*sizeof(char));
+    n = read(clientSocket, buffer, BUFFERSIZE * sizeof(char));
     if (n == -1) {
         throw "Error reading player num";
     }
-    if(strcmp(buffer, "close") == 0) {
+    if (strcmp(buffer, "close") == 0) {
         throw "Game closed";
     }
-    playerNum = buffer[0];
+    if (buffer[0] == 'P') {
+        play = "again";
+        strcpy(message, play.c_str());
+        n = write(clientSocket, message, BUFFERSIZE * sizeof(char));
+        if (n == -1) {
+            throw "Error writing back to server";
+        }
+        playerNum = 2;
+    } else {
+        playerNum = buffer[0];
+    }
     if(playerNum == 1) {
         playerType = whitePlayer;
     } else if(playerNum == 2) {

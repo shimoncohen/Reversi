@@ -4,11 +4,12 @@
 #include "JoinGameCommand.h"
 
 void joinGameCommand::execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector,
-                               pthread_mutex_t &gamesLock, pthread_mutex_t &threadsLock, int client) {
-    int i = 0, n;
+                               pthread_mutex_t &gamesLock, pthread_mutex_t &threadsLock, ThreadPool& pool, int client) {
+    int i = 0;
+    //int n;
     int secondPlayer;
     Game* joined = NULL;
-    // locing the vector of games to prevent changes.
+    // locking the vector of games to prevent changes.
     pthread_mutex_lock(&gamesLock);
     for(i; i < games.size(); i++) {
         // joining the game by ensuring the name is the same, and that the game's status is 0.
@@ -21,7 +22,6 @@ void joinGameCommand::execute(vector<string> args, vector<Game*> &games, vector<
     // unlock the vector.
     pthread_mutex_unlock(&gamesLock);
     if(joined != NULL) {
-        pthread_t thread;
         // locking the game to prevent changes.
         pthread_mutex_lock(&gamesLock);
         secondPlayer = joined->getSecondPlayer();
@@ -50,24 +50,17 @@ void joinGameCommand::execute(vector<string> args, vector<Game*> &games, vector<
         pthread_mutex_unlock(&gamesLock);
         handleArgs->socket = client;
         try {
-            n = pthread_create(&thread, NULL, Handler::handleGame, (void*)handleArgs);
+            pool.addTask(new Task(Handler::handleGame, (void*)handleArgs));
             // locking the game to prevent changes.
             pthread_mutex_lock(&gamesLock);
-            handleArgs->game->setThread(thread);
             // unlock the vector.
             pthread_mutex_unlock(&gamesLock);
             // locking the threads vector to prevent changes.
             pthread_mutex_lock(&threadsLock);
-            // inserting the thread to the list
-            threadVector.push_back(&thread);
             // unlock the vector.
             pthread_mutex_unlock(&threadsLock);
         } catch (const char* msg) {
             throw msg;
-        }
-        if (n) {
-            cout << "Error: unable to create thread" << endl;
-            exit(-1);
         }
     } else {
         // in case the game doesn't exist we sent a proper message.

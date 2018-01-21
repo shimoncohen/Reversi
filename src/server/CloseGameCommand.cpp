@@ -4,7 +4,7 @@
 #include "CloseGameCommand.h"
 
 void CloseGameCommand::execute(vector<string> args, vector<Game*> &games, vector<pthread_t*> &threadVector,
-                               pthread_mutex_t &gamesLock, pthread_mutex_t &threadsLock, int client) {
+                               pthread_mutex_t &gamesLock, pthread_mutex_t &threadsLock, ThreadPool& pool, int client) {
     int i, tempPlayer;
     // locking the vector of games to prevent changes
     pthread_mutex_lock(&gamesLock);
