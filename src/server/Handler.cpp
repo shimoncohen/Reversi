@@ -6,15 +6,8 @@
 pthread_mutex_t gamesLock;
 pthread_mutex_t threadsLock;
 
-Handler::Handler() {
-    this->pool = new ThreadPool(NUMOFTHREADS);
-}
-
-Handler::~Handler() {
-    delete this->pool;
-}
 void Handler::run(int clientSocket) {
-    //int n;
+    int n;
     pthread_t thread;
     HandleArgs *handleArgs = new HandleArgs();
     pthread_mutex_lock(&gamesLock);
@@ -28,15 +21,14 @@ void Handler::run(int clientSocket) {
     handleArgs->gamesLock = &gamesLock;
     handleArgs->threadsLock = &threadsLock;
     try {
-        //n = pthread_create(&thread, NULL, handleClient, (void*)handleArgs);
-        pool->addTask(new Task(handleClient, (void*)handleArgs));
+        n = pthread_create(&thread, NULL, handleClient, (void*)handleArgs);
     } catch (const char* msg) {
         throw msg;
     }
-//    if (n) {
-//        cout << "Error: unable to create thread" << endl;
-//        exit(-1);
-//    }
+    if (n) {
+        cout << "Error: unable to create thread" << endl;
+        exit(-1);
+    }
 }
 
 void Handler::closeThreads() {

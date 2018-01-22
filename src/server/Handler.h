@@ -6,7 +6,6 @@
 
 #include "CommandsManager.h"
 #include "Game.h"
-#include "ThreadPool.h"
 #include <vector>
 #include <string.h>
 #include <cstdlib>
@@ -15,7 +14,6 @@
 #define SECOND 2
 #define FOUR 4
 #define BUFFERSIZE 200
-#define NUMOFTHREADS 5
 
 /*
  * Holds a command and its arguments after extraction
@@ -31,7 +29,6 @@ typedef struct CommandAndArgs {
 typedef struct HandleArgs {
     int socket;
     Game* game;
-    ThreadPool *pool;
     vector<Game*> *games;
     vector<pthread_t*> *threadVector;
     pthread_mutex_t *gamesLock;
@@ -44,8 +41,6 @@ typedef struct HandleArgs {
  */
 class Handler {
 public:
-    Handler();
-    ~Handler();
     /*
 	 * function name: run.
 	 * input: the number of the player's socket.
@@ -79,7 +74,13 @@ private:
     vector<Game*> games;
     // the threads of the games in the server
     vector<pthread_t*> threadVector;
-    ThreadPool *pool;
+    /*
+	 * function name: printThreadVectorSize.
+	 * input: none.
+	 * output: none.
+     * operation: prints the current sizes of the thread vector and games vector.
+    */
+    void printThreadAndGamesVectorSize();
     /*
 	 * function name: extractCommandAndArgs.
 	 * input: a buffer string with the command the server read.
